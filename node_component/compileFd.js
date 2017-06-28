@@ -95,7 +95,7 @@ let compileFd =
         uri : "" ,
 
     } ,
-    init : function ( injSrcStr , globPgp , baseUrl , putPath ) 
+    init : function ( globPgp , baseUrl , putPath , injSrcStr ) 
     {
         nodeCommonLib.init ( baseUrl ) ;
         let $this = this ;
@@ -212,7 +212,7 @@ let compileFd =
                                     } ;
                                     
                                     compileFd.init 
-                                    ( injSrcStr , globPgp , baseUrl , putPath )  ;
+                                    ( globPgp , baseUrl , putPath , injSrcStr )  ;
                                     let st01 = setTimeout 
                                     (
                                         function ()

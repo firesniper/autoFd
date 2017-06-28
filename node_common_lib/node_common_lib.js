@@ -402,7 +402,7 @@ let node_common_lib =
                             newPgp = Object.assign ( newPgp , PHTMap[ mapKeys[ i ] ] )
                             // .unique () ;
                         } ;
-                        PHTMap[ ".sassReg" ] = PHTMap[ ".cassReg" ] = PHTMap[ ".lessReg" ] ;
+                        PHTMap[ ".sassReg" ] = PHTMap[ ".scssReg" ] = PHTMap[ ".lessReg" ] ;
                         console.log ( "newPgp:" , newPgp ) ;
                         PHTMap.allReg = newPgp ;
                         console.log ( "PHTMap:" , PHTMap ) ;
