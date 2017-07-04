@@ -39,25 +39,130 @@ let node_common_lib =
                         } ;
                     }
                 } ,
-                "validSrcFileFromUri" : {
+                "haveCtt" : {
+                    enumerable  : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( cttExp )
+                    {
+                        let args = Array.prototype.slice.call ( arguments ) ;
+                        let _this = this.toString () ;
+                        if ( !cttExp ) 
+                        { 
+                            console.error ( new ReferenceError ( "cttExp is null" ) ) ; 
+                            return ; 
+                        } ;
+                        let data = _this ;
+
+                        
+                            let pmA01 = new Promise
+                            (
+                                function ( resolve , rejection )
+                                {
+                                    console.log ( "pmA01 resolve:" , resolve ) ;
+                                    // data = "promise" ;
+                                    fs.openSync 
+                                    ( 
+                                        _this.toString () , 
+                                        "rs" ,
+                                        function ( err , fd , c )
+                                        {
+                                            console.log ( "haveCtt err:" , err ) ;
+                                            console.log ( "haveCttfd:" , fd ) ;
+                                            console.log ( "haveCtt c:" , c ) ;
+                                            data = 
+                                            err
+                                            ? 
+                                            _this 
+                                            : 
+                                            fs.readFileSync ( _this.toString () , "utf-8" )
+                                            ;
+                                            
+                                        } 
+                                    ) ;
+                                    
+                                } 
+                                
+                            ) ;
+                         
+                        console.log ( "Promise data:" , data ) ;
+                        console.log ( "pmA01:" , pmA01 ) ;
+                        
+                        
+                       
+                        pmA01  
+                        .then
+                        (
+                            function ( resolve ) 
+                            {
+                                console.log ( "haveCtt resolve:" , resolve ) ;
+                            } ,
+                            function ( rejected , data )
+                            {
+                                console.log ( "pmA01 rejected:" , rejected ) ;
+                                console.log ( "pmA01 rejected flag:" , rejected ? true : false ) ;
+                                console.log ( "pmA01 data:" , data ) ;
+                                console.log ( "pmA01 rejected.Error:" , rejected.Error ) ;
+
+                                // data = rejected ? 33 : 1 ;
+                            }
+                        )
+                        .catch
+                        (
+                            function ( reason )
+                            {
+                                console.log ( "reason:" , reason ) ;
+                            }
+                        ) ;
+
+                        console.log ( "haveCtt data:" , data ) ;
+                        let resFlag = null ;
+                        switch ( cttExp.constructor.name )
+                        {
+                            case "RegExp" : 
+                                resFlag = cttExp.test ( data )  ;
+                            break ;
+                            case "String" :
+                                resFlag = data.indexOf ( "<"+ cttExp ) > -1 ;
+                            break ;
+                        } ;
+                        return resFlag ;
+                        
+                        
+                    }
+                } ,
+                "validFileGetStat" : {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
                     value : function ()
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        console.log ( "_this:" ,  _this.toString()   ) ;
+                        let _this = this.toString () ;
+                        console.log ( "_this:" ,  _this.toString ()   ) ;
                         let data = fs.readFileSync (  _this.toString() ,"utf-8" ) ;
-                        let ext = _this.resolveUri () .ext ;
+                        let isEmpty = data ? true : false ;
+                        let fileExt = _this.resolveUri () .ext ;
+                        let isMarkUpExt = 
+                        fileExt.match 
+                        ( 
+                            // /(?:.htm|.html)/ig
+                            new RegExp ( "(?:" + $this.markUpExtAry.join ( "|" ) + ")" , "ig" ) 
+                        ) ? true : false ;
+                        let htmlFlag = data.indexOf ( "<html" ) > -1 ;
                         let headFlag = data.indexOf ( "<head" ) > -1 ;
                         let bodyFlag = data.indexOf ( "<body" ) > -1 ;
+                        let isHtmlContent = htmlFlag || headFlag || bodyFlag ;
                         let res = 
                         {
                             uri : _this ,
+                            "isEmpty" : isEmpty ,
+                            "data" : data ,
+                            "isMarkUpExt" : isMarkUpExt ,
+                            "isHtmlCtt" : isHtmlContent ,
                             head : headFlag ,
                             body : bodyFlag ,
-                            ext : ext 
+                            "ext" : fileExt 
                         } ;
                         Object.fileState = $this.fileState = res ;
                         console.log ( "$this:" , $this ) ;
@@ -129,7 +234,20 @@ let node_common_lib =
                     }
                 }
                 ,
-                "toTagRegStrPg" : {
+                "isEleInAry" : {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( extAry )
+                    {
+                        let args = Array.prototype.slice.call ( arguments ) ;
+                        let _this = this ;
+                        extAry = extAry ? extAry : $this.nonMarkUpExtAry ;
+                        return extAry.hasEle ( _this ) ;
+                            
+                    }
+                } ,
+                "toTagRegStrPgp" : {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -137,7 +255,9 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
-                        let res = _this.match
+                        console.log ( "$this.fileState:" , $this.fileState ) ;
+                        let res = 
+                        _this.match
                         ( 
                             new RegExp 
                             ( 
@@ -172,20 +292,7 @@ let node_common_lib =
                     }
                 } 
                 ,
-                "isEleInAry" : {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( extAry )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        extAry = extAry ? extAry : $this.nonMarkUpExtAry ;
-                        return extAry.hasEle ( _this ) ;
-                            
-                    }
-                } ,
-                "getContentWrap" : {
+                "getRegPgpFromStat" : {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -193,15 +300,9 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
-                        console.log ( "%this:" ,  this ) ;
-                        if (  _this.constructor.name != "String" )
-                        { 
-                            throw new TypeError ( "isn't String type" ) ; 
-                            // return ;
-                        } ;
                         let parentNodeDef = "all" ;
                         let parentNodeCom = "global" ;
-                        
+                        console.log ( "_this.haveCtt: " , _this.haveCtt ( "<" + parentNode ) ) ;
                         parentNode = 
                         (
                             parentNode   
@@ -217,7 +318,8 @@ let node_common_lib =
                                 $this.fileState.ext.isEleInAry ( $this.markUpExtAry ) 
                                 ? 
                                 ( 
-                                    _this.indexOf ( "<" + parentNode ) > -1 ? 
+                                    // _this.indexOf ( "<" + parentNode ) > -1 ? 
+                                    _this.haveCtt ( "<" + parentNode ) ? 
                                     parentNode : 
                                     parentNodeCom 
                                 )
@@ -231,37 +333,73 @@ let node_common_lib =
                         parentNodeDef ;
 
                         console.log ( "parentNode2:" , parentNode ) ;
-                        let parentTagRegStrPg = parentNode.toTagRegStrPg () ;
-                        console.log ( "parentTagRegStrPg:" , parentTagRegStrPg ) ;
-                        let allDomStr = _this.tokenToPlaceHolder ( parentNode ) ;
+                        let placeHolderTokenMap = String.prototype.placeHolderTokenMapFn ()[ parentNode + "Reg" ] ;
+                        let parentTagRegStrPgp = parentNode.toTagRegStrPgp () ;
+                        console.log ( "parentTagRegStrPgp:" , parentTagRegStrPgp ) ;
+
+                        return {
+                            "placeHolderTokenMap" : placeHolderTokenMap ,
+                            "parentTagRegStrPgp" : parentTagRegStrPgp
+                        } ;
+                    }
+                } ,
+                
+                "getContentWrap" : {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( placeHolderTokenMap , parentTagRegStrPgp )
+                    {
+                        let args = Array.prototype.slice.call ( arguments ) ;
+                        let _this = this ;
+                        console.log ( "%this:" ,  this ) ;
+                        if (  _this.constructor.name != "String" )
+                        { 
+                            throw new TypeError ( "isn't String type" ) ; 
+                            // return ;
+                        } ;
+                        
+                       /* let placeHolderTokenMap = String.prototype.placeHolderTokenMapFn ()[ parentNode + "Reg" ] ;
+                        let parentTagRegStrPgp = parentNode.toTagRegStrPgp () ;
+                        console.log ( "parentTagRegStrPgp:" , parentTagRegStrPgp ) ;*/
+
+                        let allDomStr = _this.tokenToPlaceHolder 
+                        ( 
+                            null ,
+                            placeHolderTokenMap 
+                        ) ;
                         console.log ( "allDomStr:" , allDomStr ) ;
-                        console.log ( "parentTagRegStrPg.wrapAndContent:" , parentTagRegStrPg.wrapAndContent ) ;
+                        console.log ( "parentTagRegStrPgp.wrapAndContent:" , parentTagRegStrPgp.wrapAndContent ) ;
                         let partDomStr = allDomStr.match 
                         ( 
-                              parentTagRegStrPg.wrapAndContent  
+                            parentTagRegStrPgp.wrapAndContent  
                         ) ;
                         console.log ( "partDomStr:" , partDomStr ) ;
 
-                        let parentWrapAry = partDomStr.hasNullPointer().content[ 0 ].match 
-                        (  parentTagRegStrPg.wrap ) ;
+                        let parentWrapAry = partDomStr.hasNullPointer ().content[ 0 ].match 
+                        (  parentTagRegStrPgp.wrap ) ;
                         console.log ( "parentWrapAry:" ,  parentWrapAry ) ;
 
                         let domContentStr = partDomStr[ 0 ]
                         .replace 
                         (  
-                             parentTagRegStrPg.wrap != /(?:)/ig ?
-                             parentTagRegStrPg.wrap : "" 
+                             parentTagRegStrPgp.wrap != /(?:)/ig ?
+                             parentTagRegStrPgp.wrap : "" 
                             , 
                             "" 
-                        )
+                        ) 
                         // .rSpace_aNl ( ) ;
                         // console.log ( "domContentStr:" , domContentStr ) ;
                         console.log ( "domContentStr:" , domContentStr ) ;
                         // let partDomStr3 = domContentStr.split ( "\n" ) ; 
-                        let domContentStr2 = domContentStr.placeHolderToToken ( parentNode ) ;
+                        let domContentStr2 = domContentStr.placeHolderToToken 
+                        ( 
+                            null ,
+                            placeHolderTokenMap 
+                        ) ;
                         console.log ( "domContentStr2:" , domContentStr2 ) ;
                         let domContentAry = domContentStr2.split ( "\n" ) ; 
-                        let nonNullAry = domContentAry.hasNullPointer().content ;
+                        let nonNullAry = domContentAry.hasNullPointer ().content ;
                         console.log ( "nonNullAry:" , nonNullAry ) ;
                         return { 
                             "partDomStr" : partDomStr[ 0 ] ,
@@ -417,9 +555,9 @@ let node_common_lib =
                     {
                         console.log ( "parentNode:" , parentNode ) ;
                         let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = args[ 1 ] ? args[ 1 ] : this ;
+                        let _this = this ;
                         phTokenMap = phTokenMap ? 
-                        phTokenMap : String.prototype.placeHolderTokenMapFn()[ parentNode + "Reg" ] ;
+                        phTokenMap : String.prototype.placeHolderTokenMapFn ()[ parentNode + "Reg" ] ;
                         console.log ( "phTokenMap:" , phTokenMap ) ;
                         let resTkToPh = _this ;
                         for ( let ele in phTokenMap )
@@ -449,7 +587,7 @@ let node_common_lib =
                         let _this = this ;
                         // console.log ( "this:" , this ) ;
                         phTokenMap = phTokenMap ? 
-                        phTokenMap : String.prototype.placeHolderTokenMapFn()[ parentNode + "Reg" ] ;
+                        phTokenMap : String.prototype.placeHolderTokenMapFn ()[ parentNode + "Reg" ] ;
                         let phRes = _this ;
                         console.log ( "phTokenMap:" , phTokenMap ) ;
                         for ( let ele in phTokenMap )

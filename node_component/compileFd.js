@@ -7,8 +7,13 @@ console.log ( "begin" ) ;
 let getResLessSassStr = function ( srcDataStr , fileExt )
 {
     console.log ( "srcDataStr:" ,  srcDataStr ) ;
+    let regPgpFileExt = srcDataStr.getRegPgpFromStat ( fileExt ) ;
 
-    let lessSassStr = srcDataStr.getContentWrap ( fileExt ).partDomStr ;
+    let lessSassStr = srcDataStr.getContentWrap 
+    ( 
+        regPgpFileExt.placeHolderTokenMap ,
+        regPgpFileExt.parentTagRegStrPgp
+    ).partDomStr ;
     console.log ( "lessSassStr:" , lessSassStr ) ;
     let lessSassStr2 = lessSassStr.placeHolderToToken ( fileExt ) ;
     console.log ( "lessSassStr2:" , lessSassStr2 ) ;
@@ -21,8 +26,13 @@ let getResLessSassStr = function ( srcDataStr , fileExt )
 let getResNonMakeUpStr = function ( srcDataStr , fileExt )
 {
     console.log ( "srcDataStr:" ,  srcDataStr ) ;
+    let regPgpFileExt = srcDataStr.getRegPgpFromStat ( fileExt ) ;
 
-    let nmuStr = srcDataStr.getContentWrap ( fileExt ).partDomStr ;
+    let nmuStr = srcDataStr.getContentWrap 
+    ( 
+        regPgpFileExt.placeHolderTokenMap ,
+        regPgpFileExt.parentTagRegStrPgp
+    ).partDomStr ;
     console.log ( "nmuStr:" , nmuStr ) ;
     let nmuStr2 = nmuStr.placeHolderToToken ( fileExt ) ;
     console.log ( "nmuStr2:" , nmuStr2 ) ;
@@ -33,7 +43,13 @@ let getResJsStr2 = function ( srcDataStr , fileExt )
 {
     console.log ( "srcDataStr :" , srcDataStr ) ;
     console.log ( "fileExt2:" , fileExt ) ;    
-    let jsStr = srcDataStr.getContentWrap ( fileExt ).partDomStr ;
+    let regPgpFileExt = srcDataStr.getRegPgpFromStat ( fileExt ) ;
+
+    let jsStr = srcDataStr.getContentWrap 
+    ( 
+        regPgpFileExt.placeHolderTokenMap ,
+        regPgpFileExt.parentTagRegStrPgp
+    ).partDomStr ;
     console.log ( "jsStr:" , jsStr ) ;
     let jsStr2 = jsStr.placeHolderToToken ( fileExt ) ;
     console.log ( "jsStr2:" , jsStr2 ) ;
@@ -44,10 +60,19 @@ let getResJsStr2 = function ( srcDataStr , fileExt )
 let getResHTMLStr = function ( srcDataStr , injSrcStr , fileExt )
 {
     console.log ( "srcDataStr:" ,  srcDataStr ) ;
-    let targetAryA1 = srcDataStr.getContentWrap ( "head" ).contentAry ;
+    let regPgpHead = srcDataStr.getRegPgpFromStat ( "head" ) ;
+    let targetAryA1 = srcDataStr.getContentWrap 
+    ( 
+        regPgpHead.placeHolderTokenMap ,
+        regPgpHead.parentTagRegStrPgp
+    ).contentAry ;
     console.log ( "targetAryA1:" , targetAryA1 ) ;
     
-    let sourceDataPgp = injSrcStr.getContentWrap ( "head" ) ;
+    let sourceDataPgp = injSrcStr.getContentWrap 
+    ( 
+        regPgpHead.placeHolderTokenMap ,
+        regPgpHead.parentTagRegStrPgp
+    ) ;
     console.log ( "sourceDataPgp.contentAry:" , sourceDataPgp.contentAry ) ;
 
     let resDiffAry = targetAryA1.excludeOverlap ( sourceDataPgp.contentAry ) ;
@@ -75,7 +100,13 @@ let getResHTMLStr = function ( srcDataStr , injSrcStr , fileExt )
         let bodyStr3 = bodyStr[ 0 ].placeHolderToToken () ;
         console.log ( "bodyStr3:" , bodyStr3 ) ;
     } ;*/
-    let bodyStr = srcDataStr.getContentWrap ( "body" ).partDomStr ;
+    let regPgpBody = srcDataStr.getRegPgpFromStat ( "body" ) ;
+
+    let bodyStr = srcDataStr.getContentWrap 
+    ( 
+        regPgpBody.placeHolderTokenMap ,
+        regPgpBody.parentTagRegStrPgp
+    ).partDomStr ;
     let bodyStr2 = bodyStr.placeHolderToToken ( "body" ) ;
     let resData3 = resData2.replace ( /<body.*>.*<\/body>/ig , bodyStr2 ) ;
     console.log ( "bodyStr2:" , bodyStr2 ) ;
@@ -145,7 +176,7 @@ let compileFd =
                                 let _thisPath = this.path ;
                                 console.log ( "this.path:" , this.path ) ;
 
-                                $this.fileState = _this.path.validSrcFileFromUri () ;
+                                $this.fileState = _this.path.validFileGetStat () ;
                                 let outputDir = putPath && putPath.outputDir ? putPath.outputDir : _this.path.resolveUri ().dir ;
          
                                 let outputUri =  _this.path.getOutputUri ( outputDir ) ;
@@ -158,10 +189,7 @@ let compileFd =
                                 fileExt 
                                 ? 
                                 ( 
-                                    fileExt.match ( 
-                                        // /(?:.htm|.html)/ig
-                                        new RegExp ( "(?:" + nodeCommonLib.markUpExtAry.join ( "|" ) + ")" , "ig" ) 
-                                    ) 
+                                    $this.fileState.isMarkUpExt
                                     ?
                                     getResHTMLStr ( srcDataStr , injSrcStr , fileExt ) 
                                     :
