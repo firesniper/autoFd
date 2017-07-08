@@ -7,15 +7,14 @@ console.log ( "begin" ) ;
 let getResLessSassStr = function ( srcDataStr , fileExt )
 {
     console.log ( "srcDataStr:" ,  srcDataStr ) ;
-    let regPgpFileExt = srcDataStr.getRegPgpFromStat ( fileExt ) ;
+    let regPgp = srcDataStr.getRegPgpFromState (  ) ;
 
-    let lessSassStr = srcDataStr.getContentWrap 
+    let lessSassStr = srcDataStr.getCttWrap 
     ( 
-        regPgpFileExt.placeHolderTokenMap ,
-        regPgpFileExt.parentTagRegStrPgp
-    ).partDomStr ;
+        regPgp.placeHolderTokenMap  
+    ).selectWrapCttStr ;
     console.log ( "lessSassStr:" , lessSassStr ) ;
-    let lessSassStr2 = lessSassStr.placeHolderToToken ( fileExt ) ;
+    let lessSassStr2 = lessSassStr.placeHolderToToken ( regPgp.placeHolderTokenMap ) ;
     console.log ( "lessSassStr2:" , lessSassStr2 ) ;
 
     
@@ -26,15 +25,14 @@ let getResLessSassStr = function ( srcDataStr , fileExt )
 let getResNonMakeUpStr = function ( srcDataStr , fileExt )
 {
     console.log ( "srcDataStr:" ,  srcDataStr ) ;
-    let regPgpFileExt = srcDataStr.getRegPgpFromStat ( fileExt ) ;
+    let regPgp = srcDataStr.getRegPgpFromState (  ) ;
 
-    let nmuStr = srcDataStr.getContentWrap 
+    let nmuStr = srcDataStr.getCttWrap 
     ( 
-        regPgpFileExt.placeHolderTokenMap ,
-        regPgpFileExt.parentTagRegStrPgp
-    ).partDomStr ;
+        regPgp.placeHolderTokenMap  
+    ).selectWrapCttStr ;
     console.log ( "nmuStr:" , nmuStr ) ;
-    let nmuStr2 = nmuStr.placeHolderToToken ( fileExt ) ;
+    let nmuStr2 = nmuStr.placeHolderToToken ( regPgp.placeHolderTokenMap ) ;
     console.log ( "nmuStr2:" , nmuStr2 ) ;
     return nmuStr2 ;
 } ;
@@ -43,15 +41,14 @@ let getResJsStr2 = function ( srcDataStr , fileExt )
 {
     console.log ( "srcDataStr :" , srcDataStr ) ;
     console.log ( "fileExt2:" , fileExt ) ;    
-    let regPgpFileExt = srcDataStr.getRegPgpFromStat ( fileExt ) ;
+    let regPgp = srcDataStr.getRegPgpFromState ( regPgp.placeHolderTokenMap ) ;
 
-    let jsStr = srcDataStr.getContentWrap 
+    let jsStr = srcDataStr.getCttWrap 
     ( 
-        regPgpFileExt.placeHolderTokenMap ,
-        regPgpFileExt.parentTagRegStrPgp
-    ).partDomStr ;
+        regPgp.placeHolderTokenMap  
+    ).selectWrapCttStr ;
     console.log ( "jsStr:" , jsStr ) ;
-    let jsStr2 = jsStr.placeHolderToToken ( fileExt ) ;
+    let jsStr2 = jsStr.placeHolderToToken ( regPgp.placeHolderTokenMap ) ;
     console.log ( "jsStr2:" , jsStr2 ) ;
         
     return jsStr2 ;
@@ -60,32 +57,33 @@ let getResJsStr2 = function ( srcDataStr , fileExt )
 let getResHTMLStr = function ( srcDataStr , injSrcStr , fileExt )
 {
     console.log ( "srcDataStr:" ,  srcDataStr ) ;
-    let regPgpHead = srcDataStr.getRegPgpFromStat ( "head" ) ;
-    let targetAryA1 = srcDataStr.getContentWrap 
+    let regPgpHead = srcDataStr.getRegPgpFromState ( "head" ) ;
+    console.log ( "regPgpHead:" , regPgpHead ) ;
+    let targetAryA1 = srcDataStr.getCttWrap 
     ( 
         regPgpHead.placeHolderTokenMap ,
         regPgpHead.parentTagRegStrPgp
-    ).contentAry ;
+    ).selectCttAry ;
     console.log ( "targetAryA1:" , targetAryA1 ) ;
     
-    let sourceDataPgp = injSrcStr.getContentWrap 
+    let sourceDataPgp = injSrcStr.getCttWrap 
     ( 
         regPgpHead.placeHolderTokenMap ,
         regPgpHead.parentTagRegStrPgp
     ) ;
-    console.log ( "sourceDataPgp.contentAry:" , sourceDataPgp.contentAry ) ;
+    console.log ( "sourceDataPgp.selectCttAry:" , sourceDataPgp.selectCttAry ) ;
 
-    let resDiffAry = targetAryA1.excludeOverlap ( sourceDataPgp.contentAry ) ;
+    let resDiffAry = targetAryA1.excludeOverlap ( sourceDataPgp.selectCttAry ) ;
     console.log ( " resDiffAry:" ,  resDiffAry ) ;
 
     let resDiffAry2 = targetAryA1.concat ( resDiffAry ) ;
     console.log ( " resDiffAry2:" ,  resDiffAry2 ) ;
 
-    let parentWrapAry = sourceDataPgp.parentWrapAry ;
-    let headStr4 = ( parentWrapAry[ 0 ] + "\n" + resDiffAry2.join( "\n" ) + "\n" + parentWrapAry[ parentWrapAry.length - 1 ] ) ;
+    let selectWrapAry = sourceDataPgp.selectWrapAry ;
+    let headStr4 = ( selectWrapAry[ 0 ] + "\n" + resDiffAry2.join( "\n" ) + "\n" + selectWrapAry[ selectWrapAry.length - 1 ] ) ;
     console.log ( "headStr4:" , headStr4 ) ;
     
-    let resData = srcDataStr.tokenToPlaceHolder( "global" ) ;
+    let resData = srcDataStr.tokenToPlaceHolder ( null , "global" ) ;
     console.log ( "resData:" , resData ) ;
     let resData2 = resData.replace ( /<head.*>.*<\/head>/ig , headStr4 ) ;
     console.log ( "resData2:" , resData2  ) ;
@@ -100,18 +98,23 @@ let getResHTMLStr = function ( srcDataStr , injSrcStr , fileExt )
         let bodyStr3 = bodyStr[ 0 ].placeHolderToToken () ;
         console.log ( "bodyStr3:" , bodyStr3 ) ;
     } ;*/
-    let regPgpBody = srcDataStr.getRegPgpFromStat ( "body" ) ;
-
-    let bodyStr = srcDataStr.getContentWrap 
+    console.log ( "srcDataStr2:" , srcDataStr ) 
+    let regPgpBody = srcDataStr.getRegPgpFromState ( "body" ) ;
+    console.log ( "regPgpBody:" , regPgpBody ) ;
+    console.log ( "regPgpBody.parentTagRegStrPgp:" , regPgpBody.parentTagRegStrPgp ) ;
+    let bodyStr = srcDataStr.getCttWrap 
     ( 
         regPgpBody.placeHolderTokenMap ,
         regPgpBody.parentTagRegStrPgp
-    ).partDomStr ;
-    let bodyStr2 = bodyStr.placeHolderToToken ( "body" ) ;
-    let resData3 = resData2.replace ( /<body.*>.*<\/body>/ig , bodyStr2 ) ;
-    console.log ( "bodyStr2:" , bodyStr2 ) ;
+    ).selectWrapCttStr ;
 
-    let resData4 = resData3.placeHolderToToken ( "global" ) ;
+    console.log ( "bodyStr:" , bodyStr ) ;
+    let bodyStr2 = bodyStr.placeHolderToToken ( regPgpBody.placeHolderTokenMap ) ;
+    console.log ( "bodyStr2:" , bodyStr2 ) ;
+    let resData3 = resData2.replace ( /<body.*>.*<\/body>/ig , bodyStr2 ) ;
+    console.log ( "resData3:" , resData3 ) ;
+
+    let resData4 = resData3.placeHolderToToken ( null , "global" ) ;
     console.log ( "resData4:" , resData4  ) ;
 
     return resData4 ;
@@ -126,8 +129,14 @@ let compileFd =
         uri : "" ,
 
     } ,
-    init : function ( globPgp , baseUrl , putPath , injSrcStr ) 
+    init : function ( initParams ) 
     {
+        let globPgp     = initParams.globPgp ;
+        let regPattAry  = initParams.globPgp.regPattAry ;
+        let cwd         = initParams.globPgp.cwd ? initParams.globPgp.cwd : "./" ;
+        let baseUrl     = initParams.baseUrl ;
+        let outputDir   = initParams.outputDir ;
+        let injSrcStr   = initParams.injSrcStr ;
         nodeCommonLib.init ( baseUrl ) ;
         let $this = this ;
         console.log ( "$this:" , $this ) ;
@@ -142,13 +151,13 @@ let compileFd =
             glob 
             ( 
                 '{' 
-                + globPgp.regPattAry.join ( "," ) 
+                + regPattAry.join ( "," ) 
                 + '}' 
                 ,
  
                 { 
  
-                    "cwd" : globPgp.cwd ? globPgp.cwd : "./" , 
+                    "cwd" : cwd ? cwd : "./" , 
                     mark : true 
                 } , 
                 function ( err , fileList )
@@ -176,8 +185,9 @@ let compileFd =
                                 let _thisPath = this.path ;
                                 console.log ( "this.path:" , this.path ) ;
 
-                                $this.fileState = _this.path.validFileGetStat () ;
-                                let outputDir = putPath && putPath.outputDir ? putPath.outputDir : _this.path.resolveUri ().dir ;
+                                Object.validDatas.fileState = _this.path.validFileGetState () ;
+                                console.log ( "Object.validDatas.fileState:" , Object.validDatas.fileState ) ;
+                                outputDir = outputDir ? outputDir : _this.path.resolveUri ().dir ;
          
                                 let outputUri =  _this.path.getOutputUri ( outputDir ) ;
                                 console.log ( "outputUri：" , outputUri ) ;
@@ -189,7 +199,7 @@ let compileFd =
                                 fileExt 
                                 ? 
                                 ( 
-                                    $this.fileState.isMarkUpExt
+                                    Object.validDatas.fileState.isMarkUpExt
                                     ?
                                     getResHTMLStr ( srcDataStr , injSrcStr , fileExt ) 
                                     :
@@ -234,13 +244,13 @@ let compileFd =
                                         _this.path , 
                                         fsWatchHandle
                                     ) ;*/
-                                    globPgp = {
+                                    initParams.globPgp = {
                                         "cwd" : "./" ,
                                         "regPattAry" : [ _this.path , "" ]
                                     } ;
                                     
                                     compileFd.init 
-                                    ( globPgp , baseUrl , putPath , injSrcStr )  ;
+                                    ( initParams )  ;
                                     let st01 = setTimeout 
                                     (
                                         function ()

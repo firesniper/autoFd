@@ -2,12 +2,7 @@ let fs = require ( "fs" ) ;
 
 let node_common_lib = 
 {
-    nonMarkUpExtAry : [ ".js" , ".css" , ".less" , ".sass" , ".scss" , ".txt" ] ,
-    markUpExtAry : [ ".html" , ".htm" , ".xhtml" , ".xml" ] ,
-    extLabelAry : [ "all" , "global" ] ,
-    commonLabelAry : [] ,
-    combineLabelAry : [ "lessSassScss" ] ,
-    "fileState" : {} ,
+    
     init : function ( baseUrl )
     {
         let $this = this ;
@@ -15,9 +10,180 @@ let node_common_lib =
         console.log ( "_this:" , this ) ;*/
         Object.defineProperties
         (
+            Object ,
+            {
+                "baseUrl" :
+                {
+                    enumerable : true ,
+                    configurable : false ,
+                    writable : true ,
+                    value : baseUrl 
+                } ,
+                "validDatas" :
+                {
+                    enumerable : true ,
+                    configurable : true ,
+                    writable : true ,
+                    value : 
+                    {
+                        nonMarkUpExtAry : [ ".js" , ".css" , ".less" , ".sass" , ".scss" , ".txt" ] ,
+                        markUpExtAry : [ ".html" , ".htm" , ".xhtml" , ".xml" ] ,
+                        extLabelAry : [ "all" , "global" ] ,
+                        commonLabelAry : [] ,
+                        combineLabelAry : [ "lessSassScss" ] ,
+                        "fileState" : {} ,
+                    }
+                } ,
+                "placeHolderTokenMap" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : 
+                    {
+                        "allReg" : {} ,
+                        "globalReg" :
+                        {
+                            "$PH_n_r"  :   [ /(?:\n)/ig , "\n" ] ,
+                            "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
+                            "$PH_space":   [ /(?: )/ig , " " ] 
+                        }
+                        ,
+                        "headReg" : 
+                        {
+                            // "$PH_n_r"  :   [ /(?:\n|\r)/ig , "\n" ] ,
+                            // "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
+                            // "$PH_space":   [ /(?: )/ig , " " ] 
+                        } ,
+                        "bodyReg" : 
+                        {
+                            "$PH_url"  :   
+                            [ 
+                                /(?:url\(.*\:\d+\/)/ig , 
+                                "url(" + baseUrl + "\/" 
+                            ] 
+                            ,
+                            "$PH_src"  :   
+                            [ 
+                                /(?:src.*=.*(?:'|").*\:\d+\/)/ig , 
+                                'src = "' + baseUrl + "\/" 
+                            ]
+                        } ,
+                        ".htmlReg" :  { } ,
+                        ".htmReg" : { } ,
+                        ".lessReg" :
+                        {
+                            "$PH_baseUri" :
+                            [
+                                /(?:baseUri:.*(?:;|$PH_n_r))/ig , 
+                                "baseUri:'" + baseUrl + "';" 
+                            ]
+                        } ,
+                        ".sassReg" :
+                        { } ,
+                        ".scssReg" :
+                        {  } ,
+                        ".jsReg" :
+                        {
+                            "$PH_reglationA1" :
+                            [
+                                /\\\/\//ig  , 
+                                "\\//" 
+                            ] ,
+                            "$PH_fileProtocal" :
+                            [
+                                /file:\/\/\//ig  , 
+                                "file:///" 
+                            ] ,
+                            "$PH_httpProtocal" :
+                            [
+                                /http:\/\//ig  , 
+                                "http://" 
+                            ] ,
+                            
+                            "$PH_console" :
+                            [
+                                /console.log.*(?:;|$PH_n_r)/ig  , 
+                                "" 
+                            ] ,
+                            "$PH_line" :
+                            [
+                                /\/\/.*(?:\r\n|\t|\x09|\cI|)/ig , 
+                                "" 
+                            ] ,
+                            "$PH_block" :
+                            [
+                                /\/\*.*\*\//ig , 
+                                "" 
+                            ]
+                        } 
+                        
+                    } 
+                } ,
+                "placeHolderTokenMapFn" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( PHTMap )
+                    {
+                        PHTMap = PHTMap ? PHTMap : Object.placeHolderTokenMap ;
+                        
+                        console.log ( "PHTMap:" , PHTMap ) ;
+                        // phtm.all = {} ;
+                        /*for ( let ele in phtm ) 
+                        {
+                            Object.keys ( phtm ) ;
+                        } ;*/
+                        // PHTMap.bodyReg = Object.assign ( PHTMap.bodyReg , PHTMap.headReg ) ;
+                        // let newPgp = {} ;
+                        PHTMap[ ".htmReg" ] = PHTMap[ ".htmlReg" ] = Object.assign ( PHTMap[ ".htmlReg" ] , PHTMap[ "headReg" ] , PHTMap[ "bodyReg" ] ) ;
+                        for 
+                        ( 
+                            let i = 2 , mapKeys = Object.keys ( PHTMap ) ; 
+                            i < mapKeys.length ; 
+                            i ++ 
+                        )
+                        {
+                            PHTMap[ mapKeys[ i ] ] = Object.assign ( PHTMap[ mapKeys[ i ] ] , PHTMap.globalReg )
+                            // .unique () ;
+                            PHTMap.allReg = Object.assign ( PHTMap.allReg , PHTMap[ mapKeys[ i ] ] )
+                            // .unique () ;
+                        } ;
+                        
+                        PHTMap[ ".sassReg" ] = PHTMap[ ".scssReg" ] = PHTMap[ ".lessReg" ] ;
+                        console.log ( "PHTMap.allReg:" , PHTMap.allReg ) ;
+                        // PHTMap.allReg = newPgp ;
+                        console.log ( "PHTMap:" , PHTMap ) ;
+                        return PHTMap ;
+                    }  
+                }  ,
+            }
+        ) ,
+        Object.defineProperties
+        (
+            Object.placeHolderTokenMap ,
+            {
+                placeHolderTokenMapFn :
+                {
+                    enuemerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : 
+                    function ( pgp )
+                    {
+                        pgp = pgp ? pgp : this ;
+                        return Object.placeHolderTokenMapFn ( this ) ;
+                    } 
+                }
+            }
+        ) ;
+        Object.defineProperties
+        (
             String.prototype ,
             {
-                "resolveUri" : {
+                "resolveUri" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -39,7 +205,8 @@ let node_common_lib =
                         } ;
                     }
                 } ,
-                "haveCtt" : {
+                "hasCtt" : 
+                {
                     enumerable  : false ,
                     configurable : true ,
                     writable : true ,
@@ -47,6 +214,7 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this.toString () ;
+                        console.log ( "cttExp:" , cttExp ) ;
                         if ( !cttExp ) 
                         { 
                             console.error ( new ReferenceError ( "cttExp is null" ) ) ; 
@@ -67,9 +235,9 @@ let node_common_lib =
                                         "rs" ,
                                         function ( err , fd , c )
                                         {
-                                            console.log ( "haveCtt err:" , err ) ;
-                                            console.log ( "haveCttfd:" , fd ) ;
-                                            console.log ( "haveCtt c:" , c ) ;
+                                            console.log ( "hasCtt err:" , err ) ;
+                                            console.log ( "hasCttfd:" , fd ) ;
+                                            console.log ( "hasCtt c:" , c ) ;
                                             data = 
                                             err
                                             ? 
@@ -95,7 +263,7 @@ let node_common_lib =
                         (
                             function ( resolve ) 
                             {
-                                console.log ( "haveCtt resolve:" , resolve ) ;
+                                console.log ( "hasCtt resolve:" , resolve ) ;
                             } ,
                             function ( rejected , data )
                             {
@@ -115,7 +283,7 @@ let node_common_lib =
                             }
                         ) ;
 
-                        console.log ( "haveCtt data:" , data ) ;
+                        console.log ( "hasCtt data:" , data ) ;
                         let resFlag = null ;
                         switch ( cttExp.constructor.name )
                         {
@@ -123,7 +291,9 @@ let node_common_lib =
                                 resFlag = cttExp.test ( data )  ;
                             break ;
                             case "String" :
-                                resFlag = data.indexOf ( "<"+ cttExp ) > -1 ;
+                                resFlag = data.indexOf ( cttExp ) > -1 ;
+                                console.log ( "resFlag:" , resFlag ) ;
+                                Object.validDatas.fileState[ "has_" + cttExp ] = resFlag ;
                             break ;
                         } ;
                         return resFlag ;
@@ -131,11 +301,12 @@ let node_common_lib =
                         
                     }
                 } ,
-                "validFileGetStat" : {
+                "validFileGetState" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ()
+                    value : function ( ctt )
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this.toString () ;
@@ -147,7 +318,7 @@ let node_common_lib =
                         fileExt.match 
                         ( 
                             // /(?:.htm|.html)/ig
-                            new RegExp ( "(?:" + $this.markUpExtAry.join ( "|" ) + ")" , "ig" ) 
+                            new RegExp ( "(?:" + Object.validDatas.markUpExtAry.join ( "|" ) + ")" , "ig" ) 
                         ) ? true : false ;
                         let htmlFlag = data.indexOf ( "<html" ) > -1 ;
                         let headFlag = data.indexOf ( "<head" ) > -1 ;
@@ -162,16 +333,30 @@ let node_common_lib =
                             "isHtmlCtt" : isHtmlContent ,
                             head : headFlag ,
                             body : bodyFlag ,
-                            "ext" : fileExt 
+                            "ext" : fileExt ,
+                            "hasChildNode" : false 
                         } ;
-                        Object.fileState = $this.fileState = res ;
+                        
+
+                        Object.fileState = Object.validDatas.fileState = res ;
+                        if ( ctt )
+                        {
+                            let cttFlag = data.hasCtt ( ctt ) ; 
+                            if ( ctt.constructor.name == "String" )
+                            { 
+                                res[ "has_" + ctt ] = cttFlag ;     
+                            } ;
+
+                        } ;
+                        console.log ( "Object.fileState:" , Object.fileState ) ;
                         console.log ( "$this:" , $this ) ;
                         console.log ( "node_common_lib:" , node_common_lib ) ;
 
                         return res ;
                     }
                 } ,
-                "validDesDirFileFromUri" : {
+                "validDesDirFileFromUri" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -207,7 +392,8 @@ let node_common_lib =
                         ) ;
                     }
                 } ,
-                "rSpace_aNl" : {
+                "rSpace_aNl" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -222,7 +408,8 @@ let node_common_lib =
                         // .replace ( /\/>.*</ig , "/>\n<" ) ;
                     }
                 } ,
-                "caseQuote" : {
+                "caseQuote" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -234,7 +421,8 @@ let node_common_lib =
                     }
                 }
                 ,
-                "isEleInAry" : {
+                "isEleInAry" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -242,12 +430,13 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
-                        extAry = extAry ? extAry : $this.nonMarkUpExtAry ;
+                        extAry = extAry ? extAry : Object.validDatas.nonMarkUpExtAry ;
                         return extAry.hasEle ( _this ) ;
                             
                     }
                 } ,
-                "toTagRegStrPgp" : {
+                "toTagRegStrPgp" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -255,15 +444,15 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
-                        console.log ( "$this.fileState:" , $this.fileState ) ;
+                        console.log ( "Object.fileState:" , Object.fileState ) ;
                         let res = 
                         _this.match
                         ( 
                             new RegExp 
                             ( 
                                 "(?:" 
-                                + $this.nonMarkUpExtAry
-                                .concat ( $this.extLabelAry )
+                                + Object.validDatas.nonMarkUpExtAry
+                                .concat ( Object.validDatas.extLabelAry )
                                 .join( "|" ) 
                                 + ")" 
                                 , 
@@ -272,12 +461,12 @@ let node_common_lib =
                         ) 
                         ? 
                         { 
-                            wrapAndContent : ".*" ,
+                            wrapAndCtt : ".*" ,
                             wrap : ""
                         }  
                         : 
                         { 
-                            wrapAndContent : new RegExp 
+                            wrapAndCtt : new RegExp 
                             ( 
                                 "<" + _this + ".*>.*<\\/" + _this + ">" ,
                                 "ig"
@@ -292,49 +481,54 @@ let node_common_lib =
                     }
                 } 
                 ,
-                "getRegPgpFromStat" : {
+                "getRegPgpFromState" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( parentNode )
+                    value : function ( selectNode )
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
-                        let parentNodeDef = "all" ;
-                        let parentNodeCom = "global" ;
-                        console.log ( "_this.haveCtt: " , _this.haveCtt ( "<" + parentNode ) ) ;
-                        parentNode = 
+                        let childNodeDef = "all" ;
+                        let selectNodeCom = "global" ;
+                        console.log ( "_this.hasCtt: " , _this.hasCtt ( "<" + 
+                        selectNode ) ) ;
+                        selectNode = 
                         (
-                            parentNode   
+                            selectNode != selectNodeCom 
                         ) 
                         ?
                         (
-                            (
-                                parentNode != parentNodeDef && 
-                                parentNode != parentNodeCom 
-                            ) 
-                            ?
-                            (
-                                $this.fileState.ext.isEleInAry ( $this.markUpExtAry ) 
-                                ? 
-                                ( 
-                                    // _this.indexOf ( "<" + parentNode ) > -1 ? 
-                                    _this.haveCtt ( "<" + parentNode ) ? 
-                                    parentNode : 
-                                    parentNodeCom 
-                                )
+                            Object.validDatas.fileState.ext.isEleInAry ( Object.validDatas.markUpExtAry ) 
+                            ? 
+                            ( 
+                                // _this.indexOf ( "<" + selectNode ) > -1 ? 
+                                _this.hasCtt ( "<" + selectNode ) 
+                                ?
+                                selectNode
                                 :
-                                parentNode 
+                                selectNodeCom 
                             )
                             :
-                            parentNode
-                        ) 
+                            selectNode 
+                        )
                         :
-                        parentNodeDef ;
+                        selectNodeCom
+                        ;
 
-                        console.log ( "parentNode2:" , parentNode ) ;
-                        let placeHolderTokenMap = String.prototype.placeHolderTokenMapFn ()[ parentNode + "Reg" ] ;
-                        let parentTagRegStrPgp = parentNode.toTagRegStrPgp () ;
+                        console.log ( "selectNode2:" , selectNode ) ;
+                        let placeHolderTokenMap = Object.placeHolderTokenMapFn ()
+                        [ 
+                            Object.validDatas.fileState.ext 
+                            // selectNode
+                            + "Reg" 
+                        ] ;
+
+                       /* console.log ( "Object.placeHolderTokenMap:" , Object.placeHolderTokenMap.placeHolderTokenMapFn ) ;
+                        console.log ( "Object.placeHolderTokenMap:" , Object.placeHolderTokenMap.placeHolderTokenMapFn ( Object.placeHolderTokenMap ) ) ;*/
+
+                        let parentTagRegStrPgp = selectNode ? selectNode.toTagRegStrPgp () : null ;
                         console.log ( "parentTagRegStrPgp:" , parentTagRegStrPgp ) ;
 
                         return {
@@ -344,7 +538,8 @@ let node_common_lib =
                     }
                 } ,
                 
-                "getContentWrap" : {
+                "getCttWrap" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -359,205 +554,75 @@ let node_common_lib =
                             // return ;
                         } ;
                         
-                       /* let placeHolderTokenMap = String.prototype.placeHolderTokenMapFn ()[ parentNode + "Reg" ] ;
-                        let parentTagRegStrPgp = parentNode.toTagRegStrPgp () ;
+                       /* let placeHolderTokenMap = Object.placeHolderTokenMapFn ()[ selectNode + "Reg" ] ;
+                        let parentTagRegStrPgp = selectNode.toTagRegStrPgp () ;
                         console.log ( "parentTagRegStrPgp:" , parentTagRegStrPgp ) ;*/
-
-                        let allDomStr = _this.tokenToPlaceHolder 
+                        console.log ( "placeHolderTokenMap:" , placeHolderTokenMap ) ;
+                        let allStr = _this.tokenToPlaceHolder 
                         ( 
-                            null ,
                             placeHolderTokenMap 
                         ) ;
-                        console.log ( "allDomStr:" , allDomStr ) ;
-                        console.log ( "parentTagRegStrPgp.wrapAndContent:" , parentTagRegStrPgp.wrapAndContent ) ;
-                        let partDomStr = allDomStr.match 
-                        ( 
-                            parentTagRegStrPgp.wrapAndContent  
-                        ) ;
-                        console.log ( "partDomStr:" , partDomStr ) ;
+                        console.log ( "allStr:" , allStr ) ;
 
-                        let parentWrapAry = partDomStr.hasNullPointer ().content[ 0 ].match 
-                        (  parentTagRegStrPgp.wrap ) ;
-                        console.log ( "parentWrapAry:" ,  parentWrapAry ) ;
+                        let selectWrapCttStr = null ;
+                        let selectCttAry2 = null ;
+                        let selectWrapAry = null ;
+                        if ( parentTagRegStrPgp )
+                        {
+                            console.log ( "parentTagRegStrPgp :" , parentTagRegStrPgp ) ;
+                            selectWrapCttStr = allStr.match 
+                            ( 
+                                parentTagRegStrPgp.wrapAndCtt  
+                            ) ;
+                            console.log ( "selectWrapCttStr:" , selectWrapCttStr ) ;
 
-                        let domContentStr = partDomStr[ 0 ]
-                        .replace 
-                        (  
-                             parentTagRegStrPgp.wrap != /(?:)/ig ?
-                             parentTagRegStrPgp.wrap : "" 
-                            , 
-                            "" 
-                        ) 
-                        // .rSpace_aNl ( ) ;
-                        // console.log ( "domContentStr:" , domContentStr ) ;
-                        console.log ( "domContentStr:" , domContentStr ) ;
-                        // let partDomStr3 = domContentStr.split ( "\n" ) ; 
-                        let domContentStr2 = domContentStr.placeHolderToToken 
-                        ( 
-                            null ,
-                            placeHolderTokenMap 
-                        ) ;
-                        console.log ( "domContentStr2:" , domContentStr2 ) ;
-                        let domContentAry = domContentStr2.split ( "\n" ) ; 
-                        let nonNullAry = domContentAry.hasNullPointer ().content ;
-                        console.log ( "nonNullAry:" , nonNullAry ) ;
-                        return { 
-                            "partDomStr" : partDomStr[ 0 ] ,
-                            "contentAry" : nonNullAry ,
-                            "parentWrapAry" : parentWrapAry
+                            selectWrapAry = selectWrapCttStr.hasNullPointer ().content[ 0 ].match 
+                            ( parentTagRegStrPgp.wrap ) ;
+                            console.log ( "selectWrapAry:" ,  selectWrapAry ) ;
+
+                            let selectCttStr = selectWrapCttStr[ 0 ]
+                            .replace 
+                            (  
+                                parentTagRegStrPgp.wrap   
+                                , 
+                                "" 
+                            ) 
+                            // .rSpace_aNl ( ) ;
+                            // console.log ( "selectCttStr:" , selectCttStr ) ;
+                            console.log ( "selectCttStr:" , selectCttStr ) ;
+                            // let selectWrapCttStr3 = selectCttStr.split ( "\n" ) ; 
+                            let selectCttStr2 = selectCttStr.placeHolderToToken 
+                            ( 
+                                placeHolderTokenMap 
+                            ) ;
+                            console.log ( "selectCttStr2:" , selectCttStr2 ) ;
+                            let selectCttAry = selectCttStr2.split ( "\n" ) ; 
+                            selectCttAry2 = selectCttAry.hasNullPointer ().content ;
+                            console.log ( "selectCttAry2:" , selectCttAry2 ) ;
                         } ;
-                    } 
-                } ,
-                "placeHolderTokenMap" : {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : {
-                        "all" : {} ,
-                        "headReg" :
-                            {
-                            "$PH_n_r"  :   [ /(?:\n|\r)/ig , "\n" ] ,
-                            "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
-                            "$PH_space":   [ /(?: )/ig , " " ] 
-                        }
-                        ,
-                        "bodyReg" : {
-                            "$PH_url"  :   [ 
-                                /(?:url\(.*\:\d+\/)/ig , 
-                                "url(" + baseUrl + "\/" 
-                                ] 
-                                ,
-                            "$PH_src"  :   [ 
-                                /(?:src.*=.*(?:'|").*\:\d+\/)/ig , 
-                                'src = "' + baseUrl + "\/" 
-                                ]
-                        }
                         
-
+                        return { 
+                            "selectWrapCttStr" : selectWrapCttStr ? selectWrapCttStr[ 0 ] : allStr ,
+                            "selectCttAry" : selectCttAry2 ,
+                            "selectWrapAry" : selectWrapAry
+                        } ;
                     } 
                 } ,
-                "placeHolderTokenMapFn" : {
+                
+                "tokenToPlaceHolder" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ()
+                    value : function ( phTokenMap , fileExt )
                     {
-                        let PHTMap = 
-                        {
-                            "allReg" : {} ,
-                            "globalReg" :
-                            {
-                                "$PH_n_r"  :   [ /(?:\n)/ig , "\n" ] ,
-                                "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
-                                "$PH_space":   [ /(?: )/ig , " " ] 
-                            }
-                            ,
-                            "headReg" : {
-                                // "$PH_n_r"  :   [ /(?:\n|\r)/ig , "\n" ] ,
-                                // "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
-                                // "$PH_space":   [ /(?: )/ig , " " ] 
-                            } ,
-                            "bodyReg" : 
-                            {
-                                "$PH_url"  :   
-                                [ 
-                                    /(?:url\(.*\:\d+\/)/ig , 
-                                    "url(" + baseUrl + "\/" 
-                                ] 
-                                ,
-                                "$PH_src"  :   
-                                [ 
-                                    /(?:src.*=.*(?:'|").*\:\d+\/)/ig , 
-                                    'src = "' + baseUrl + "\/" 
-                                ]
-                            } ,
-                            ".lessReg" :
-                            {
-                                "$PH_baseUri" :
-                                [
-                                    /(?:baseUri:.*(?:;|$PH_n_r))/ig , 
-                                    "baseUri:'" + baseUrl + "';" 
-                                ]
-                            } ,
-                            ".sassReg" :
-                            { } ,
-                            ".scssReg" :
-                            {  } ,
-                            ".jsReg" :
-                            {
-                                
-                                 "$PH_reglationA1" :
-                                [
-                                    /\\\/\//ig  , 
-                                    "\\//" 
-                                ] ,
-                                "$PH_fileProtocal" :
-                                [
-                                    /file:\/\/\//ig  , 
-                                    "file:///" 
-                                ] ,
-                                "$PH_httpProtocal" :
-                                [
-                                    /http:\/\//ig  , 
-                                    "http://" 
-                                ] ,
-                                
-                                "$PH_console" :
-                                [
-                                    /console.log.*(?:;|$PH_n_r)/ig  , 
-                                    "" 
-                                ] ,
-                                "$PH_line" :
-                                [
-                                    /\/\/.*(?:\r\n|\t|\x09|\cI|)/ig , 
-                                    "" 
-                                ] ,
-                                "$PH_block" :
-                                [
-                                    /\/\*.*\*\//ig , 
-                                    "" 
-                                ]
-                            } 
-                            
-                        } ;
-                        console.log ( "PHTMap:" , PHTMap ) ;
-                        // phtm.all = {} ;
-                        /*for ( let ele in phtm ) 
-                        {
-                            Object.keys ( phtm ) ;
-                        } ;*/
-                        // PHTMap.bodyReg = Object.assign ( PHTMap.bodyReg , PHTMap.headReg ) ;
-                        let newPgp = {} ;
-                        for 
-                        ( 
-                            let i = 2 , mapKeys = Object.keys ( PHTMap ) ; 
-                            i < mapKeys.length ; 
-                            i ++ 
-                        )
-                        {
-                            PHTMap[ mapKeys[ i ] ] = Object.assign ( PHTMap[ mapKeys[ i ] ] , PHTMap.globalReg )
-                            // .unique () ;
-                            newPgp = Object.assign ( newPgp , PHTMap[ mapKeys[ i ] ] )
-                            // .unique () ;
-                        } ;
-                        PHTMap[ ".sassReg" ] = PHTMap[ ".scssReg" ] = PHTMap[ ".lessReg" ] ;
-                        console.log ( "newPgp:" , newPgp ) ;
-                        PHTMap.allReg = newPgp ;
-                        console.log ( "PHTMap:" , PHTMap ) ;
-                        return PHTMap ;
-                    }  
-                }  ,
-                "tokenToPlaceHolder" : {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( parentNode , phTokenMap )
-                    {
-                        console.log ( "parentNode:" , parentNode ) ;
+                        console.log ( "fileExt:" , fileExt ) ;
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
+                        fileExt = fileExt ? fileExt : Object.validDatas.fileState.ext ;
                         phTokenMap = phTokenMap ? 
-                        phTokenMap : String.prototype.placeHolderTokenMapFn ()[ parentNode + "Reg" ] ;
+                        phTokenMap : 
+                        Object.placeHolderTokenMapFn ()[ fileExt + "Reg" ] ;
                         console.log ( "phTokenMap:" , phTokenMap ) ;
                         let resTkToPh = _this ;
                         for ( let ele in phTokenMap )
@@ -577,17 +642,19 @@ let node_common_lib =
                         return resTkToPh.match ( /[^\f\n\r\t\v]/ig ).join ( "" ) ;        
                     }
                 } ,
-                "placeHolderToToken" : {
+                "placeHolderToToken" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( parentNode , phTokenMap )
+                    value : function ( phTokenMap , fileExt )
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
                         // console.log ( "this:" , this ) ;
+                        fileExt = fileExt ? fileExt : Object.validDatas.fileState.ext ;
                         phTokenMap = phTokenMap ? 
-                        phTokenMap : String.prototype.placeHolderTokenMapFn ()[ parentNode + "Reg" ] ;
+                        phTokenMap : Object.placeHolderTokenMapFn ()[ fileExt + "Reg" ] ;
                         let phRes = _this ;
                         console.log ( "phTokenMap:" , phTokenMap ) ;
                         for ( let ele in phTokenMap )
@@ -611,7 +678,8 @@ let node_common_lib =
         (
             Array.prototype ,
             {
-                "hasEle" : {
+                "hasEle" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -631,7 +699,8 @@ let node_common_lib =
                         return res ;
                     }
                 } ,
-                "getReadStreamAry" : {
+                "getReadStreamAry" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -648,7 +717,8 @@ let node_common_lib =
                         return readStreamAry ;
                     }
                 } ,
-                "hasNullPointer" : {
+                "hasNullPointer" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -686,7 +756,8 @@ let node_common_lib =
                         } ;
                     }
                 } ,
-                "unique" : {
+                "unique" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -696,7 +767,8 @@ let node_common_lib =
                             ( new Set ( this ) ) ;
                     }
                 } ,
-                "unique2" : {
+                "unique2" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -750,7 +822,8 @@ let node_common_lib =
                         return res ;
                     }
                 } ,
-                "excludeOverlap" : {
+                "excludeOverlap" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -790,7 +863,8 @@ let node_common_lib =
                         return ary ;
                     }
                 } ,
-                "insertEle" : {
+                "insertEle" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -812,7 +886,8 @@ let node_common_lib =
         (
             String.prototype ,
             {
-                "formatToRegStr" : {
+                "formatToRegStr" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -843,7 +918,8 @@ let node_common_lib =
                         
                     } 
                 } ,
-                "countOf" : {
+                "countOf" : 
+                {
                     enumerable : false ,
                     configuratble : true ,
                     writable : true ,
@@ -863,7 +939,8 @@ let node_common_lib =
                         return tokenCount ;
                     } 
                 } ,
-                "backNumIndexOf" : {
+                "backNumIndexOf" : 
+                {
                     enumerable : false ,
                     configuratble : true ,
                     writable : true ,
@@ -885,7 +962,8 @@ let node_common_lib =
                         return resIndex ;
                     } 
                 } ,
-                "getOutputUri" : {
+                "getOutputUri" : 
+                {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
@@ -906,7 +984,8 @@ let node_common_lib =
                         return outputUri ;
                     }
                 } ,
-                "rmSuffix" : {
+                "rmSuffix" : 
+                {
                     enumerable : false ,
                     configuratble : true ,
                     writable : true ,
@@ -931,7 +1010,42 @@ let node_common_lib =
                 }
             }
         ) ; 
-
+        Object.defineProperties
+        (
+            // 对Date的扩展，将 Date 转化为指定格式的String   
+            // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   
+            // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)   
+            // 例子：   
+            // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423   
+            // (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18   
+            Date.prototype ,
+            {
+                Format :
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : false ,
+                    value : function ( fmt )   
+                    { //author: meizz   
+                    var o = {   
+                        "M+" : this.getMonth()+1,                 //月份   
+                        "d+" : this.getDate(),                    //日   
+                        "h+" : this.getHours(),                   //小时   
+                        "m+" : this.getMinutes(),                 //分   
+                        "s+" : this.getSeconds(),                 //秒   
+                        "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+                        "S"  : this.getMilliseconds()             //毫秒   
+                    };   
+                    if(/(y+)/.test(fmt))   
+                        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+                    for(var k in o)   
+                        if(new RegExp("("+ k +")").test(fmt))   
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+                    return fmt;   
+                    }
+                }
+            }
+        ) ;
     }
      
 } ;
