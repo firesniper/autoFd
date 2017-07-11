@@ -1,4 +1,4 @@
-let compileFd = require ( "D:/ProgramFiles/node_me/autoFd/node_component/compileFd.js" ) ;
+let compileFd = require ( "D:/ProgramFiles/node_me/autoFd/node_component/compileFd" ) ;
  
 let laboRatInputDir = "E:/SERVER_CODES/DIVI_WORKING/TEST/cs_trade_a03_g_02/node_js/laboRat/" ; 
 compileFd.init 
@@ -10,6 +10,7 @@ compileFd.init
             "regPattAry" : 
             [ 
                 laboRatInputDir + '*.dev.htm' , 
+                laboRatInputDir + "autoFd_new1/" + '**/*.dev.js' , 
                 laboRatInputDir + '*.dev.js' , 
                 laboRatInputDir + '*.dev.less' ,        
                 laboRatInputDir + '*.dev.scss' ,
@@ -36,14 +37,14 @@ compileFd.init
 
 ) ;
 
-let copyDir = require ( "D:/ProgramFiles/node_me/autoFd/node_component/copyDir_2" ) ;
+/*let copyDir = require ( "D:/ProgramFiles/node_me/autoFd/node_component/copyDir_2" ) ;
 copyDir.init
 (
     {
         putPath :
         {
             src : "e:\\d2" ,
-            dest : "e:\\d2" 
+            dest : "e:\\d1" 
         } ,
         globPgp :
         {
@@ -53,4 +54,4 @@ copyDir.init
         } ,
         baseUrl : "baseUrl1"
     }
-) ;
+) ;*/

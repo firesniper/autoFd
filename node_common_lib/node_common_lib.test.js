@@ -1,4 +1,4 @@
-let nodeLib = require ( "../node_common_lib/node_common_lib" ) ;
+let nodeLib = require ( "D:/ProgramFiles/node_me/autoFd/node_common_lib/node_common_lib" ) ;
 let fs = require ( "fs" ) ;
 console.log ( "nodeLib:" ,  nodeLib )　;
 nodeLib.init ( "" ) ;

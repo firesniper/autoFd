@@ -1,6 +1,6 @@
 let fs = require ( "fs" ) ;
 let glob = require ( "glob" ) ;
-let nodeCommonLib = require ( "../node_common_lib/node_common_lib.js" ) ;
+let nodeCommonLib = require ( "D:/ProgramFiles/node_me/autoFd/node_common_lib/node_common_lib" ) ;
 
 console.log ( "begin" ) ;
 
@@ -144,7 +144,7 @@ let compileFd =
         // let inputUri = putPath.inputUri ;
         console.log ( "nodeCommonLib:" , nodeCommonLib ) ;
 
-
+        console.log ( "initParams.outputDir:" , initParams.outputDir ) ;
 
         let promiseA01 = Promise.resolve 
         (
@@ -187,8 +187,8 @@ let compileFd =
 
                                 Object.validDatas.fileState = _this.path.validFileGetState () ;
                                 console.log ( "Object.validDatas.fileState:" , Object.validDatas.fileState ) ;
-                                outputDir = outputDir ? outputDir : _this.path.resolveUri ().dir ;
-         
+                                /*outputDir = outputDir ? outputDir : _this.path.resolveUri ().dir ;
+                                console.log ( "191_outputDir:" , outputDir ) ;*/
                                 let outputUri =  _this.path.getOutputUri ( outputDir ) ;
                                 console.log ( "outputUri：" , outputUri ) ;
 

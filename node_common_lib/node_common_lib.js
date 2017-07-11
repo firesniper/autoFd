@@ -1,5 +1,6 @@
 let fs = require ( "fs" ) ;
 
+
 let node_common_lib = 
 {
     
@@ -44,28 +45,26 @@ let node_common_lib =
                         "allReg" : {} ,
                         "globalReg" :
                         {
-                            "$PH_n_r"  :   [ /(?:\n)/ig , "\n" ] ,
+                            "$PH_r_n"  :   [ /(?:\r\n|\r|\n)/ig , "\n" ] ,
                             "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
                             "$PH_space":   [ /(?: )/ig , " " ] 
                         }
                         ,
                         "headReg" : 
                         {
-                            // "$PH_n_r"  :   [ /(?:\n|\r)/ig , "\n" ] ,
-                            // "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
-                            // "$PH_space":   [ /(?: )/ig , " " ] 
+                            
                         } ,
                         "bodyReg" : 
                         {
                             "$PH_url"  :   
                             [ 
-                                /(?:url\(.*\:\d+\/)/ig , 
+                                /(?:url\([^\:)]*\:\d+\/)/ig , 
                                 "url(" + baseUrl + "\/" 
                             ] 
                             ,
                             "$PH_src"  :   
                             [ 
-                                /(?:src.*=.*(?:'|").*\:\d+\/)/ig , 
+                                /(?:src[^=]*=[^'")]*(?:'|")[^\:]*\:\d+\/)/ig , 
                                 'src = "' + baseUrl + "\/" 
                             ]
                         } ,
@@ -75,7 +74,7 @@ let node_common_lib =
                         {
                             "$PH_baseUri" :
                             [
-                                /(?:baseUri:.*(?:;|$PH_n_r))/ig , 
+                                /(?:baseUri[^\:]*:[^\r\n;]*(?:\r\n|\r|\n;))/ig , 
                                 "baseUri:'" + baseUrl + "';" 
                             ]
                         } ,
@@ -85,37 +84,57 @@ let node_common_lib =
                         {  } ,
                         ".jsReg" :
                         {
+                            // "$PH_r_n"  :  [ /(?:\r\n|\r|\n)/ig , "\n" ] , 
+                            // "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
+                            // "$PH_space":   [ /(?: )/ig , " " ] ,
+                            // "$PH_leftBlock" : 
+                            // [
+                            //     /\/\*/ig ,
+                            //     "/*"
+                            // ] ,
+                            // "$PH_rightBlock" : 
+                            // [
+                            //     /\*\//ig ,
+                            //     "*/"
+                            // ] ,
+                            
                             "$PH_reglationA1" :
                             [
                                 /\\\/\//ig  , 
                                 "\\//" 
-                            ] ,
+                            ] 
+                            ,
                             "$PH_fileProtocal" :
                             [
                                 /file:\/\/\//ig  , 
                                 "file:///" 
-                            ] ,
+                            ] 
+                            ,
                             "$PH_httpProtocal" :
                             [
                                 /http:\/\//ig  , 
                                 "http://" 
-                            ] ,
-                            
-                            "$PH_console" :
-                            [
-                                /console.log.*(?:;|$PH_n_r)/ig  , 
-                                "" 
-                            ] ,
-                            "$PH_line" :
-                            [
-                                /\/\/.*(?:\r\n|\t|\x09|\cI|)/ig , 
-                                "" 
-                            ] ,
+                            ] 
+                            ,
                             "$PH_block" :
                             [
-                                /\/\*.*\*\//ig , 
+                                /\/\*[^\*\/]*\*\//ig , 
                                 "" 
-                            ]
+                            ] 
+                            ,
+                            "$PH_line" :
+                            [
+                                /\/\/[^;\r\n\t]*(?: *; *)(?:\r\n|\r|\n|\t)/ig ,
+                                // /\/\/[^;$PH_r_n\t]*(?:;|$PH_r_n|\t)/ig , 
+                                "" 
+                            ] 
+                            ,
+                            "$PH_console" :
+                            [
+                                /console.log[^;\r\n\t]*(?:\) *; *)(?:\r\n|\r|\n|\t)/ig  , 
+                                "" 
+                            ] 
+                            
                         } 
                         
                     } 
@@ -137,7 +156,8 @@ let node_common_lib =
                         } ;*/
                         // PHTMap.bodyReg = Object.assign ( PHTMap.bodyReg , PHTMap.headReg ) ;
                         // let newPgp = {} ;
-                        PHTMap[ ".htmReg" ] = PHTMap[ ".htmlReg" ] = Object.assign ( PHTMap[ ".htmlReg" ] , PHTMap[ "headReg" ] , PHTMap[ "bodyReg" ] ) ;
+                        // PHTMap[ ".jsReg" ] = Object.assign ( PHTMap[ "globalReg" ] , PHTMap[ ".jsReg" ] ) ;
+                        PHTMap[ ".htmReg" ] = PHTMap[ ".htmlReg" ] = Object.assign ( PHTMap[ "headReg" ] , PHTMap[ "bodyReg" ] , PHTMap[ ".htmlReg" ] ) ;
                         for 
                         ( 
                             let i = 2 , mapKeys = Object.keys ( PHTMap ) ; 
@@ -191,6 +211,7 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice ( arguments ) ;
                         let _this = this ;
+                        console.log ( "resolveUri_this:" , _this ) ;
                         return {
                             dir : _this.slice ( 0 , _this.lastIndexOf ( "/" ) ) ,
                             file : _this.slice 
@@ -229,25 +250,33 @@ let node_common_lib =
                                 {
                                     console.log ( "pmA01 resolve:" , resolve ) ;
                                     // data = "promise" ;
-                                    fs.openSync 
-                                    ( 
-                                        _this.toString () , 
-                                        "rs" ,
-                                        function ( err , fd , c )
-                                        {
-                                            console.log ( "hasCtt err:" , err ) ;
-                                            console.log ( "hasCttfd:" , fd ) ;
-                                            console.log ( "hasCtt c:" , c ) ;
-                                            data = 
-                                            err
-                                            ? 
-                                            _this 
-                                            : 
-                                            fs.readFileSync ( _this.toString () , "utf-8" )
-                                            ;
-                                            
-                                        } 
-                                    ) ;
+                                    try
+                                    {
+                                        fs.openSync 
+                                        ( 
+                                            _this.toString () , 
+                                            "rs" ,
+                                            function ( err , fd , c )
+                                            {
+                                                console.log ( "hasCtt err:" , err ) ;
+                                                console.log ( "hasCttfd:" , fd ) ;
+                                                console.log ( "hasCtt c:" , c ) ;
+                                                data = 
+                                                err
+                                                ? 
+                                                _this 
+                                                : 
+                                                fs.readFileSync ( _this.toString () , "utf-8" )
+                                                ;
+                                                
+                                            } 
+                                        ) ;
+                                    }
+                                    catch ( err ) 
+                                    {
+                                        console.info ( "err:" , err ) ;
+                                    }
+                                    
                                     
                                 } 
                                 
@@ -633,7 +662,7 @@ let node_common_lib =
                                 ele  
                             ) ;
                         } ;
-                                /*resTkToPh = resTkToPh.replace ( /(?:\n|\r)/ig , "$PH_n_r" )
+                                /*resTkToPh = resTkToPh.replace ( /(?:\n|\r)/ig , "$PH_r_n" )
                                 .replace ( /(?:\t\|\x09|\cI|\v)/ig , "$PH_t" ) 
                                 .replace ( /(?: )/ig , "$PH_space" ) */
                                 /*.match ( /[^\f\n\r\t\v]/ig )
@@ -665,7 +694,7 @@ let node_common_lib =
                                 phTokenMap[ ele ][ 1 ] 
                             ) ;
                         } ;
-                        // phRes = _this.replace ( new RegExp ( "(?:\\$PH_n_r\\$){1,}"  ) , "\n" ) ;
+                        // phRes = _this.replace ( new RegExp ( "(?:\\$PH_r_n\\$){1,}"  ) , "\n" ) ;
                         console.log ( "phRes:" , phRes ) ;
                         return phRes ;
                         
@@ -971,8 +1000,10 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
+                        console.log ( "getOutputUri_this:" , this ) ;
+                        console.log ( "getOutputUri_outputDir:" , outputDir2 = outputDir ) 
                         outputDir = outputDir ? outputDir : this.resolveUri ().dir ;
-         
+                        console.log ( "outputDir:" , outputDir ) ;
                         let outputUri = 
                         (
                                 outputDir

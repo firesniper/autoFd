@@ -1,6 +1,9 @@
 var fs = require( 'fs' ),
     stat = fs.stat;
 let glob = require ( "glob" ) ;
+let nodeLib = require 
+( "D:/ProgramFiles/node_me/autoFd/node_common_lib/node_common_lib" ) ;
+nodeLib.init () ;
 /*
  * 复制目录中的所有文件包括子目录
  * @param{ String } 需要复制的目录
