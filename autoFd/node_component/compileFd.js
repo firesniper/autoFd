@@ -132,7 +132,14 @@ let compileFd =
     init : function ( initParams ) 
     {
         let globPgp     = initParams.globPgp ;
-        let regPattAry  = initParams.globPgp.regPattAry ;
+        let regPattAry  = 
+        initParams.globPgp.regPattAry ? 
+        function ( )
+        {
+            initParams.globPgp.regPattAry.push ( "" ) ;
+            return initParams.globPgp.regPattAry ;
+        } () 
+        : initParams.globPgp.regPattAry ;
         let cwd         = initParams.globPgp.cwd ? initParams.globPgp.cwd : "./" ;
         let outputDir   = initParams.outputDir ;
         let injSrcStr   = initParams.injSrcStr ;

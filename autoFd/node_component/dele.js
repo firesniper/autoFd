@@ -97,16 +97,24 @@ var deleteFd = function ( src )
     // arguments.callee ( src ) ;
 } ;
 
-let dele = function ( rmRegAry , cwd )
+let dele = function ( params , cbFn , cbParams )
 {
-    /*let rmRegAry = initParams.rmRegAry ;
-    let cwd = initParams.cwd ? initParams.cwd : "./" ;*/
-    
+    let regPattAry    = params.regPattAry ? 
+    function ()
+    {
+        params.regPattAry.push ( "" ) ;
+        return params.regPattAry ;
+    } ()
+    : params.regPattAry ;
+    let cwd         = params.cwd ? params.cwd : "./" ;
+    cbParams    = cbParams ? cbParams : undefined ; 
+    cbFn        = cbFn ? cbFn : new Function ;
+
     glob 
     ( 
         
         '{' 
-        + rmRegAry.join ( "," ) 
+        + regPattAry.join ( "," ) 
         + '}' 
         ,
         { 
@@ -229,14 +237,11 @@ let dele = function ( rmRegAry , cwd )
                     }
                 ) ;*/
             } ;
-             
-                 
-                    
-                
-            
-            
+
         } 
     ) ;
-}
+
+    cbFn ()
+} ;
 
 module.exports = dele ;

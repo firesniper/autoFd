@@ -1,11 +1,14 @@
-let compileFd = require ( "../node_component/compileFd" ) ;
-let copyDir = require ( "../node_component/copyDir_2" ) ;
-let dele = require ( "../node_component/dele" ) ;
+let autoFdRoot = "D:/ProgramFiles/node_me/autoFd/" ;
+let autoFdCompo = autoFdRoot + "/node_component/" ;
+let compileFd = require ( autoFdRoot + "/node_component/compileFd" ) ;
+let copyDir = require ( autoFdRoot + "/node_component/copyDir_2" ) ;
+let dele = require ( autoFdRoot + "/node_component/dele" ) ;
 
 let desktop = "C:/Users/Administrator/Desktop/" ;
-let self = "E:/SERVER_CODES/DIVI_WORKING/TEST/cs_trade_a03_g_02/node_js/" ;
-let laboRatInputDir = "E:/SERVER_CODES/DIVI_WORKING/TEST/cs_trade_a03_g_02/node_js/laboRat/" ;
-let repo_autoFd = "E:/SERVER_CODES/DIVI_WORKING/TEST/cs_trade_a03_g_02/node_js/repo_autoFd/" ;
+let cwr = "E:/SERVER_CODES/DIVI_WORKING/TEST/cs_trade_a03_g_02/" ;
+let node_js = cwr + "/node_js/" ;
+let laboRat = cwr + "/node_js/laboRat/" ;
+let repo_autoFd = cwr + "/node_js/repo_autoFd/" ;
 let autoFdDir = repo_autoFd + "autoFd/" ;
 let autoFd_ol = repo_autoFd + "autoFd_ol/" ;
  
@@ -17,12 +20,11 @@ compileFd.init
             // "cwd" : "./" ,
             "regPattAry" : 
             [ 
-                laboRatInputDir + '*.dev.htm' , 
+                laboRat + '*.dev.htm' , 
                 autoFd_ol + '**/*.dev.js' , 
-                laboRatInputDir + '*.dev.js' , 
-                laboRatInputDir + '*.dev.less' ,        
-                laboRatInputDir + '*.dev.scss' ,
-                "" 
+                laboRat + '*.dev.js' , 
+                laboRat + '*.dev.less' ,        
+                laboRat + '*.dev.scss' 
             ]
         } ,
         srcBaseUrl : "http://localhost:211" ,
@@ -57,16 +59,19 @@ copyDir
 
 dele
 (
-    [
-        autoFd_ol + "/.git/" ,
-        autoFd_ol + "/autoFd_ol/" ,
-        autoFd_ol + "/origin/" ,
-        autoFd_ol + "/un/" ,
-        autoFd_ol + "/*.[^md]" ,
-        ""
-    ] 
-    ,
-    "./"
+    {
+        rmRegAry :
+        [
+            autoFd_ol + "/.git/" ,
+            autoFd_ol + "/autoFd_ol/" ,
+            autoFd_ol + "/origin/" ,
+            autoFd_ol + "/un/" ,
+            autoFd_ol + "/*.[^md]" ,
+        ] 
+        ,
+        "cwd" : "./"
+    }
+    
 ) ;
 /*let copyDir = require ( "D:/ProgramFiles/node_me/autoFd/node_component/copyDir_2" ) ;
 copyDir.init

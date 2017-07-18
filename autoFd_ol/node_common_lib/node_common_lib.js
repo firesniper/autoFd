@@ -248,31 +248,36 @@ let node_common_lib =
                     {
                         let _this = this ;
                         let allStr = _this ;
-                         
-                        let urlStr = allStr.match ( /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.]+)(?:\\|\/)?(?:[\\\/\w\.]+)?(?:'|")?/ig ) ;
-                        //console.log ( "urlStr:" , urlStr ) ;
-                        let schemaRegStr = "((?:http|https):)?\\/\\/(?:localhost|127.0.0.1|[\\w\\.]+)" ;
-                        let schemaStr = urlStr[ 0 ].match ( new RegExp ( schemaRegStr ) , "ig" ) ;
-                        //console.log ( "schemaStr:" , schemaStr ) ;
+                        // let allStr = "<img src = 'http://www.abc.com/firesniper/adb/def/ghi/jkm/aaa.html' />" ;
+                        let schemaRegStr = `((?:http|https):)?\\/\\/(?:localhost|127.0.0.1|[\\w\\.-]+):?\\d*(?:\\\\|\\/)?` ;
+                        let virRegPattStr = `([\\w\\.-]+(?:\\\\|\\/)?)` ;
+                        let virRegStr = virRegPattStr + `{` + 0 + `,` + num + `}` ;
+                        console.log ( "virRegStr:" , virRegStr ) ;
+                        let virReg = new RegExp ( virRegStr , `ig` ) ;
+                        console.log ( "allStr.match ( virReg ):" , allStr.match ( virReg ) ) ;
+                        let urlRegStr = `(?:'|")?` + schemaRegStr + virRegPattStr + "*" + `(?:'|")?` ;
+                        // let urlStr = allStr.match ( /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.-]+):?\d*(?:\\|\/)?([\w\.-]+(?:\\|\/)?)*(?:'|")?/ig ) ;
+                        let urlStr = allStr.match ( new RegExp ( urlRegStr , `ig` ) ) ;
+                        console.log ( "urlStr:" , urlStr ) ;
+                        let schemaStr = urlStr[ 0 ].match ( new RegExp ( schemaRegStr , `ig` ) ) ;
+                        console.log ( "schemaStr:" , schemaStr ) ;
                         let strStart = urlStr[ 0 ].indexOf ( schemaStr [ 0 ] ) + schemaStr [ 0 ].length ;
-                        //console.log ( "strStart:" ,  strStart ) ;
+                        console.log ( "strStart:" ,  strStart ) ;
                         let fdStr = urlStr[ 0 ].slice ( strStart ) ;
-                        //console.log ( "fdStr:" , fdStr ) ;
-                        let virRegStr = "((?:\\/{1,1}|\\\\{1,1})\\w+)" + "{" + 1 + "," + num + "}" ;
-                        let virReg = new RegExp ( "((?:\\/{1,1}|\\\\{1,1})\\w+)" + "{" + 1 + "," + num + "}" , "ig" ) ;
-                        //console.log ( "allStr.match ( virReg ):" , allStr.match ( virReg ) ) ;
+                        console.log ( "fdStr:" , fdStr ) ;
                         let virPathStr = fdStr.match ( virReg ) ;
-                        //console.log ( "virPathStr:" , virPathStr ) ;
+                        console.log ( "virPathStr:" , virPathStr ) ;
                         let scm_vir = allStr.match 
                         (
+                            // /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.]+)((?:\\|\/)\w+){0,4}(?:'|")?/ig 
                             new RegExp ( schemaRegStr + virRegStr ) 
                         ) ;
-                        //console.log ( "scm_vir:" , scm_vir ) ;
+                        console.log ( "scm_vir:" , scm_vir ) ;
                         return {
                             "urlStr" : urlStr ,
                             "schemaStr" : schemaStr ,
                             "virPathStr" : virPathStr ,
-                            "scm_vir" : scm_vir
+                            "baseUrl" : scm_vir
                         } ;
                     } 
                 } ,
@@ -418,26 +423,31 @@ let node_common_lib =
                         let isEmpty = data ? true : false ;
                         let fileExt = _this.resolveUri () .ext ;
                         let isMarkUpExt = 
-                        fileExt.match 
                         ( 
-                            // /(?:.htm|.html)/ig
-                            new RegExp ( "(?:" + Object.validDatas.markUpExtAry.join ( "|" ) + ")" , "ig" ) 
-                        ) ? true : false ;
+                            new RegExp 
+                            ( 
+                                `(?:` + Object.validDatas.markUpExtAry.join ( `|` ) + `)` , `ig` 
+                            ) 
+                        ).test ( fileExt ) 
+                        ? 
+                        true 
+                        : 
+                        false ;
                         let htmlFlag = data.indexOf ( "<html" ) > -1 ;
                         let headFlag = data.indexOf ( "<head" ) > -1 ;
                         let bodyFlag = data.indexOf ( "<body" ) > -1 ;
                         let isHtmlContent = htmlFlag || headFlag || bodyFlag ;
                         let res = 
                         {
-                            uri : _this ,
-                            "isEmpty" : isEmpty ,
-                            "data" : data ,
-                            "isMarkUpExt" : isMarkUpExt ,
-                            "isHtmlCtt" : isHtmlContent ,
-                            head : headFlag ,
-                            body : bodyFlag ,
-                            "ext" : fileExt ,
-                            "hasChildNode" : false 
+                            "uri"           : _this ,
+                            "isEmpty"       : isEmpty ,
+                            "data"          : data ,
+                            "isMarkUpExt"   : isMarkUpExt ,
+                            "isHtmlCtt"     : isHtmlContent ,
+                            "head"          : headFlag ,
+                            "body"          : bodyFlag ,
+                            "ext"           : fileExt ,
+                            "hasChildNode"  : false 
                         } ;
                         
 
