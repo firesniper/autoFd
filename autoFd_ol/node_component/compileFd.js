@@ -56,37 +56,37 @@ let getResJsStr2 = function ( srcDataStr , fileExt )
 
 let getResHTMLStr = function ( srcDataStr , injSrcStr , fileExt )
 {
-    //console.log ( "srcDataStr:" ,  srcDataStr ) ;
+    console.log ( "srcDataStr:" ,  srcDataStr ) ;
     let regPgpHead = srcDataStr.getRegPgpFromState ( "head" ) ;
-    //console.log ( "regPgpHead:" , regPgpHead ) ;
+    console.log ( "regPgpHead:" , regPgpHead ) ;
     let targetAryA1 = srcDataStr.getCttWrap 
     ( 
         regPgpHead.placeHolderTokenMap ,
         regPgpHead.parentTagRegStrPgp
     ).selectCttAry ;
-    //console.log ( "targetAryA1:" , targetAryA1 ) ;
+    console.log ( "targetAryA1:" , targetAryA1 ) ;
     
     let sourceDataPgp = injSrcStr.getCttWrap 
     ( 
         regPgpHead.placeHolderTokenMap ,
         regPgpHead.parentTagRegStrPgp
     ) ;
-    //console.log ( "sourceDataPgp.selectCttAry:" , sourceDataPgp.selectCttAry ) ;
+    console.log ( "sourceDataPgp.selectCttAry:" , sourceDataPgp.selectCttAry ) ;
 
     let resDiffAry = targetAryA1.excludeOverlap ( sourceDataPgp.selectCttAry ) ;
-    //console.log ( " resDiffAry:" ,  resDiffAry ) ;
+    console.log ( " resDiffAry:" ,  resDiffAry ) ;
 
     let resDiffAry2 = targetAryA1.concat ( resDiffAry ) ;
-    //console.log ( " resDiffAry2:" ,  resDiffAry2 ) ;
+    console.log ( " resDiffAry2:" ,  resDiffAry2 ) ;
 
     let selectWrapAry = sourceDataPgp.selectWrapAry ;
     let headStr4 = ( selectWrapAry[ 0 ] + "\n" + resDiffAry2.join( "\n" ) + "\n" + selectWrapAry[ selectWrapAry.length - 1 ] ) ;
-    //console.log ( "headStr4:" , headStr4 ) ;
+    console.log ( "headStr4:" , headStr4 ) ;
     
     let resData = srcDataStr.tokenToPlaceHolder ( null , "global" ) ;
-    //console.log ( "resData:" , resData ) ;
+    console.log ( "resData:" , resData ) ;
     let resData2 = resData.replace ( /<head.*>.*<\/head>/ig , headStr4 ) ;
-    //console.log ( "resData2:" , resData2  ) ;
+    console.log ( "resData2:" , resData2  ) ;
     
     
     /*if ( srcDataStr.indexOf ( "<body" ) > -1 )

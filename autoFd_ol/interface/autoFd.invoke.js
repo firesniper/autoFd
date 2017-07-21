@@ -21,10 +21,10 @@ compileFd.init
             "regPattAry" : 
             [ 
                 laboRat + '*.dev.htm' , 
-                autoFd_ol + '**/*.dev.js' , 
-                laboRat + '*.dev.js' , 
-                laboRat + '*.dev.less' ,        
-                laboRat + '*.dev.scss' 
+                // autoFd_ol + '**/*.dev.js' , 
+                // laboRat + '*.dev.js' , 
+                // laboRat + '*.dev.less' ,        
+                // laboRat + '*.dev.scss' 
             ]
         } ,
         srcBaseUrl : "http://localhost:211" ,
@@ -60,7 +60,7 @@ copyDir
 dele
 (
     {
-        rmRegAry :
+        regPattAry :
         [
             autoFd_ol + "/.git/" ,
             autoFd_ol + "/autoFd_ol/" ,

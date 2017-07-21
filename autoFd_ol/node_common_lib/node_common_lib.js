@@ -290,18 +290,61 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice ( arguments ) ;
                         let _this = this ;
+                        let separator = _this.indexOf ( "/" ) > 0 ?
+                        "/" :
+                        _this.indexOf ( "\\" ) > 0 ? 
+                        "\\" : "" ;
+                        _this = _this.replace
+                        (
+                            /(?:\/)+/ig ,
+                            separator
+                        ) ;
                         //console.log ( "resolveUri_this:" , _this ) ;
+                        let dir = 
+                        separator == "" ?
+                        "" :
+                        _this.slice ( 0 , _this.lastIndexOf ( separator )  ) ;
+                        // let dir = _this.match ( /.+(?:\/|\\)/ig ) [ 0 ] ;
+
+                        let file = _this.slice 
+                        ( 
+                            separator == "" ?
+                            0 : 
+                            _this.lastIndexOf ( separator ) + 1 
+                            , 
+                            _this.lastIndexOf ( "." ) 
+                        ) ;
+                        /*let file = 
+                        _this.match 
+                        ( 
+                            _this.lastIndexOf ( separator ) + 1 , 
+                            _this.lastIndexOf ( "." ) 
+                        ) ;*/
+                        let fileBaseName = 
+                        file.slice
+                        (
+                            0 ,
+                            file.indexOf ( "." ) > 0 ? file.indexOf ( "." ) : file.length  
+                        ) ;
+                        let suffix = 
+                        file.indexOf ( "." ) == -1 ?
+                        "" : 
+                        file.slice 
+                        ( 
+                            file.indexOf ( "." )  
+                            // , 
+                            // file.lastIndexOf( "." ) 
+                        ) ;
+                        let ext = _this.slice
+                        (
+                            _this.lastIndexOf ( "." ) 
+                        ) ;
                         return {
-                            dir : _this.slice ( 0 , _this.lastIndexOf ( "/" ) ) ,
-                            file : _this.slice 
-                            ( 
-                                _this.lastIndexOf ( "/" ) , 
-                                _this.lastIndexOf ( "." ) 
-                            ) ,
-                            ext : _this.slice
-                            (
-                                _this.lastIndexOf ( "." ) 
-                            )
+                            "dir" : dir ,
+                            "file" : file ,
+                            "fileBaseName" : fileBaseName ,
+                            "suffix" : suffix ,
+                            "ext" : ext
                         } ;
                     }
                 } ,
@@ -1140,18 +1183,22 @@ let node_common_lib =
                     {
                         let args = Array.prototype.slice.call ( arguments ) ;
                         let _this = this ;
-                        let str1 = _this.slice ( _this.lastIndexOf ( "." ) ) ;
-                        /*_this = str1 == ".html" ? 
-                                _this : 
-                                str1 == ".htm" ? 
-                                _this.replace ( new RegExp ( str1 + "$" ) , ".html" )
-                                : null ;*/
+                       /* let str1 = _this.slice ( _this.lastIndexOf ( "." ) ) ;
                         let str2 = _this.slice ( _this.backNumIndexOf ( "." , 2 ) ) ;
                         let resStr = _this.replace 
                         ( 
                             new RegExp ( str2 + "$" ) , 
                             str1 == ".htm" ? ".html" : str1
-                        ) ;
+                        ) ;*/
+
+                        let filePgp = _this.resolveUri () ;
+                        let resStr = 
+                        filePgp.dir + "\\" 
+                        + 
+                        filePgp.fileBaseName 
+                        + 
+                        filePgp.ext ;
+
                         return resStr ;
                     } 
                 }

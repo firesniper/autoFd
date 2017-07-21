@@ -1,126 +1,126 @@
-let fs = require ( "fs" ) ;
+let pgp_fs = require ( "fs" ) ;
 
 
-let node_common_lib = 
+let pgp_node_common_lib = 
 {
     
-    init : function ( initParams )
+    fn_init : function ( pgp_params )
     {
-        initParams = initParams ? initParams :
+        pgp_params = pgp_params ? pgp_params :
         {
-            srcBaseUrl : "" ,
-            destBaseUrl : "" ,
-            destVirPath : 0 
+            str_srcBaseUrl : "" ,
+            str_destBaseUrl : "" ,
+            str_destVirPath : 0 
         } ;
         let $this = this ;
-        let srcBaseUrl  = initParams.srcBaseUrl ;
-        let destBaseUrl = initParams.destBaseUrl ;
-        console.log ( "destBaseUrl2:" , destBaseUrl ) ;
-        let destVirPath = initParams.destVirPath ;
+        let str_srcBaseUrl  = pgp_params.str_srcBaseUrl ;
+        let str_destBaseUrl = pgp_params.str_destBaseUrl ;
+        console.log ( "str_destBaseUrl2:" , str_destBaseUrl ) ;
+        let str_destVirPath = pgp_params.str_destVirPath ;
         // let destBaseUrlRegStr = 
         Object.defineProperties
         (
             Object ,
             {
-                "baseUrl" :
+                "str_baseUrl" :
                 {
                     enumerable : true ,
                     configurable : false ,
                     writable : true ,
-                    value : srcBaseUrl 
+                    value : str_srcBaseUrl 
                 } ,
-                "validDatas" :
+                "pgp_validDatas" :
                 {
                     enumerable : true ,
                     configurable : true ,
                     writable : true ,
                     value : 
                     {
-                        nonMarkUpExtAry : [ ".js" , ".css" , ".less" , ".sass" , ".scss" , ".txt" ] ,
-                        markUpExtAry : [ ".html" , ".htm" , ".xhtml" , ".xml" ] ,
-                        extLabelAry : [ "all" , "global" ] ,
-                        commonLabelAry : [] ,
-                        combineLabelAry : [ "lessSassScss" ] ,
-                        "fileState" : {} ,
+                        ary_nonMarkUpExt : [ ".js" , ".css" , ".less" , ".sass" , ".scss" , ".txt" ] ,
+                        ary_markUpExt : [ ".html" , ".htm" , ".xhtml" , ".xml" ] ,
+                        ary_extLabel : [ "all" , "global" ] ,
+                        ary_commonLabel : [] ,
+                        ary_combineLabel : [ "lessSassScss" ] ,
+                        pgp_fileState : {} ,
                     }
                 } ,
-                "placeHolderTokenMap" : 
+                "pgp_placeHolderTokenMap" : 
                 {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
                     value : 
                     {
-                        "allReg" : {} ,
-                        "globalReg" :
+                        "all_pgp" : {} ,
+                        "global_pgp" :
                         {
                             "$PH_r_n"  :   [ /(?:\r\n|\r|\n)/ig , "\n" ] ,
                             "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
                             "$PH_space":   [ /(?: )/ig , " " ] 
                         }
                         ,
-                        "headReg" : 
+                        "head_pgp" : 
                         {
                             
                         } ,
-                        "bodyReg" : 
+                        "body_pgp" : 
                         {
                             "$PH_baseUrl"  :   
                             [ 
                                  new RegExp 
                                  ( 
-                                     destBaseUrl ?
-                                     destBaseUrl :
-                                     `(?:(?:http|https)?:\\/\\/[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){` + 0 + `,` + destVirPath + `})` 
+                                     str_destBaseUrl ?
+                                     str_destBaseUrl :
+                                     `(?:(?:http|https)?:\\/\\/[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){` + 0 + `,` + str_destVirPath + `})` 
                                      , 
                                      `ig` 
                                  ) 
                                  , 
-                                 srcBaseUrl + "\/" 
+                                 str_srcBaseUrl + "\/" 
                             ] ,
                             /*"$PH_url"  :   
                             [ 
                                 new RegExp 
                                 ( 
-                                    destBaseUrl ?
-                                    destBaseUrl :
+                                    str_destBaseUrl ?
+                                    str_destBaseUrl :
                                     `(?:url\\([^:]+:[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){`
-                                        + 0 + `,` + destVirPath + `})` 
+                                        + 0 + `,` + str_destVirPath + `})` 
                                     ,
                                     `ig`
                                 ) , 
-                                "url(" + srcBaseUrl + "\/" 
+                                "url(" + str_srcBaseUrl + "\/" 
                             ] 
                             ,
                             "$PH_src"  :   
                             [ 
                                  new RegExp 
                                  ( 
-                                     destBaseUrl ?
-                                     destBaseUrl :
-                                     `(?:src[^=]=[^'"]*(?:'|")?[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){` + 0 + `,` + destVirPath + `})` 
+                                     str_destBaseUrl ?
+                                     str_destBaseUrl :
+                                     `(?:src[^=]=[^'"]*(?:'|")?[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){` + 0 + `,` + str_destVirPath + `})` 
                                      , 
                                      `ig` 
                                  ) 
                                  , 
-                                'src = "' + srcBaseUrl + "\/" 
+                                'src = "' + str_srcBaseUrl + "\/" 
                             ]*/
                         } ,
-                        ".htmlReg" :  { } ,
-                        ".htmReg" : { } ,
-                        ".lessReg" :
+                        ".html_pgp" :  { } ,
+                        ".htm_pgp" : { } ,
+                        ".less_pgp" :
                         {
                             "$PH_baseUri" :
                             [
                                 /(?:baseUri[^\:]*:[^\r\n;]*(?:\r\n|\r|\n;))/ig , 
-                                "baseUri:'" + srcBaseUrl + "';" 
+                                "baseUri:'" + str_srcBaseUrl + "';" 
                             ]
                         } ,
-                        ".sassReg" :
+                        ".sass_pgp" :
                         { } ,
-                        ".scssReg" :
+                        ".scss_pgp" :
                         {  } ,
-                        ".jsReg" :
+                        ".js_pgp" :
                         {
                             // "$PH_r_n"  :  [ /(?:\r\n|\r|\n)/ig , "\n" ] , 
                             // "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
@@ -176,774 +176,64 @@ let node_common_lib =
                         
                     } 
                 } ,
-                "placeHolderTokenMapFn" : 
+                "fnPgp_placeHolderTokenMap" : 
                 {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( PHTMap )
+                    value : function ( pgp_PHTMap )
                     {
-                        PHTMap = PHTMap ? PHTMap : Object.placeHolderTokenMap ;
+                        pgp_PHTMap = pgp_PHTMap ? pgp_PHTMap : Object.pgp_placeHolderTokenMap ;
                         
-                        // console.log ( "PHTMap:" , PHTMap ) ;
+                        // console.log ( "pgp_PHTMap:" , pgp_PHTMap ) ;
                         // phtm.all = {} ;
                         /*for ( let ele in phtm ) 
                         {
                             Object.keys ( phtm ) ;
                         } ;*/
-                        // PHTMap.bodyReg = Object.assign ( PHTMap.bodyReg , PHTMap.headReg ) ;
+                        // pgp_PHTMap.pgp_bodyReg = Object.assign ( pgp_PHTMap.pgp_bodyReg , pgp_PHTMap.pgp_headReg ) ;
                         // let newPgp = {} ;
-                        // PHTMap[ ".jsReg" ] = Object.assign ( PHTMap[ "globalReg" ] , PHTMap[ ".jsReg" ] ) ;
-                        PHTMap[ ".htmReg" ] = PHTMap[ ".htmlReg" ] = Object.assign ( PHTMap[ "headReg" ] , PHTMap[ "bodyReg" ] , PHTMap[ ".htmlReg" ] ) ;
+                        // pgp_PHTMap[ "pgp.jsReg" ] = Object.assign ( pgp_PHTMap[ "pgp_globalReg" ] , pgp_PHTMap[ "pgp.jsReg" ] ) ;
+                        pgp_PHTMap[ ".htm_pgp" ] = pgp_PHTMap[ ".html_pgp" ] = Object.assign 
+                        ( 
+                            pgp_PHTMap[ "head_pgp" ] , 
+                            pgp_PHTMap[ "body_pgp" ] , 
+                            pgp_PHTMap[ ".html_pgp" ] 
+                        ) ;
                         for 
                         ( 
-                            let i = 2 , mapKeys = Object.keys ( PHTMap ) ; 
-                            i < mapKeys.length ; 
+                            let i = 2 , ary_mapKeys = Object.keys ( pgp_PHTMap ) ; 
+                            i < ary_mapKeys.length ; 
                             i ++ 
                         )
                         {
-                            PHTMap[ mapKeys[ i ] ] = Object.assign ( PHTMap[ mapKeys[ i ] ] , PHTMap.globalReg )
+                            pgp_PHTMap[ ary_mapKeys[ i ] ] = Object.assign 
+                            ( 
+                                pgp_PHTMap[ ary_mapKeys[ i ] ] , 
+                                pgp_PHTMap [ "global_pgp" ] 
+                            )
                             // .unique () ;
-                            PHTMap.allReg = Object.assign ( PHTMap.allReg , PHTMap[ mapKeys[ i ] ] )
+                            pgp_PHTMap[ "all_pgp" ] = Object.assign 
+                            ( 
+                                pgp_PHTMap[ "all_pgp" ] , 
+                                pgp_PHTMap[ ary_mapKeys[ i ] ] 
+                            )
                             // .unique () ;
                         } ;
                         
-                        PHTMap[ ".sassReg" ] = PHTMap[ ".scssReg" ] = PHTMap[ ".lessReg" ] ;
-                        // console.log ( "PHTMap.allReg:" , PHTMap.allReg ) ;
-                        // PHTMap.allReg = newPgp ;
-                        // console.log ( "PHTMap:" , PHTMap ) ;
-                        return PHTMap ;
+                        pgp_PHTMap[ ".sass_pgp" ] = pgp_PHTMap[ ".scss_pgp" ] = pgp_PHTMap[ ".less_pgp" ] ;
+                        // console.log ( "pgp_PHTMap.pgp_allReg:" , pgp_PHTMap.pgp_allReg ) ;
+                        // pgp_PHTMap.pgp_allReg = newPgp ;
+                        // console.log ( "pgp_PHTMap:" , pgp_PHTMap ) ;
+                        return pgp_PHTMap ;
                     }  
                 }  ,
             }
         ) ,
         Object.defineProperties
         (
-            Object.placeHolderTokenMap ,
+            Object.prototype ,
             {
-                placeHolderTokenMapFn :
-                {
-                    enuemerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : 
-                    function ( pgp )
-                    {
-                        pgp = pgp ? pgp : this ;
-                        return Object.placeHolderTokenMapFn ( this ) ;
-                    } 
-                }
-            }
-        ) ;
-        Object.defineProperties
-        (
-            String.prototype ,
-            {
-                "getUrlGgp" :
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( num )
-                    {
-                        let _this = this ;
-                        let allStr = _this ;
-                        // let allStr = "<img src = 'http://www.abc.com/firesniper/adb/def/ghi/jkm/aaa.html' />" ;
-                        let schemaRegStr = `((?:http|https):)?\\/\\/(?:localhost|127.0.0.1|[\\w\\.-]+):?\\d*(?:\\\\|\\/)?` ;
-                        let virRegPattStr = `([\\w\\.-]+(?:\\\\|\\/)?)` ;
-                        let virRegStr = virRegPattStr + `{` + 0 + `,` + num + `}` ;
-                        console.log ( "virRegStr:" , virRegStr ) ;
-                        let virReg = new RegExp ( virRegStr , `ig` ) ;
-                        console.log ( "allStr.match ( virReg ):" , allStr.match ( virReg ) ) ;
-                        let urlRegStr = `(?:'|")?` + schemaRegStr + virRegPattStr + "*" + `(?:'|")?` ;
-                        // let urlStr = allStr.match ( /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.-]+):?\d*(?:\\|\/)?([\w\.-]+(?:\\|\/)?)*(?:'|")?/ig ) ;
-                        let urlStr = allStr.match ( new RegExp ( urlRegStr , `ig` ) ) ;
-                        console.log ( "urlStr:" , urlStr ) ;
-                        let schemaStr = urlStr[ 0 ].match ( new RegExp ( schemaRegStr , `ig` ) ) ;
-                        console.log ( "schemaStr:" , schemaStr ) ;
-                        let strStart = urlStr[ 0 ].indexOf ( schemaStr [ 0 ] ) + schemaStr [ 0 ].length ;
-                        console.log ( "strStart:" ,  strStart ) ;
-                        let fdStr = urlStr[ 0 ].slice ( strStart ) ;
-                        console.log ( "fdStr:" , fdStr ) ;
-                        let virPathStr = fdStr.match ( virReg ) ;
-                        console.log ( "virPathStr:" , virPathStr ) ;
-                        let scm_vir = allStr.match 
-                        (
-                            // /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.]+)((?:\\|\/)\w+){0,4}(?:'|")?/ig 
-                            new RegExp ( schemaRegStr + virRegStr ) 
-                        ) ;
-                        console.log ( "scm_vir:" , scm_vir ) ;
-                        return {
-                            "urlStr" : urlStr ,
-                            "schemaStr" : schemaStr ,
-                            "virPathStr" : virPathStr ,
-                            "baseUrl" : scm_vir
-                        } ;
-                    } 
-                } ,
-                "resolveUri" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ()
-                    {
-                        let args = Array.prototype.slice ( arguments ) ;
-                        let _this = this ;
-                        let separator = _this.indexOf ( "/" ) > 0 ?
-                        "/" :
-                        _this.indexOf ( "\\" ) > 0 ? 
-                        "\\" : "" ;
-                        _this = _this.replace
-                        (
-                            /(?:\/)+/ig ,
-                            separator
-                        ) ;
-                        //console.log ( "resolveUri_this:" , _this ) ;
-                        let dir = 
-                        separator == "" ?
-                        "" :
-                        _this.slice ( 0 , _this.lastIndexOf ( separator )  ) ;
-                        // let dir = _this.match ( /.+(?:\/|\\)/ig ) [ 0 ] ;
-
-                        let file = _this.slice 
-                        ( 
-                            separator == "" ?
-                            0 : 
-                            _this.lastIndexOf ( separator ) + 1 
-                            , 
-                            _this.lastIndexOf ( "." ) 
-                        ) ;
-                        /*let file = 
-                        _this.match 
-                        ( 
-                            _this.lastIndexOf ( separator ) + 1 , 
-                            _this.lastIndexOf ( "." ) 
-                        ) ;*/
-                        let fileBaseName = 
-                        file.slice
-                        (
-                            0 ,
-                            file.indexOf ( "." ) > 0 ? file.indexOf ( "." ) : file.length  
-                        ) ;
-                        let suffix = 
-                        file.indexOf ( "." ) == -1 ?
-                        "" : 
-                        file.slice 
-                        ( 
-                            file.indexOf ( "." )  
-                            // , 
-                            // file.lastIndexOf( "." ) 
-                        ) ;
-                        let ext = _this.slice
-                        (
-                            _this.lastIndexOf ( "." ) 
-                        ) ;
-                        return {
-                            "dir" : dir ,
-                            "file" : file ,
-                            "fileBaseName" : fileBaseName ,
-                            "suffix" : suffix ,
-                            "ext" : ext
-                        } ;
-                    }
-                } ,
-                "hasCtt" : 
-                {
-                    enumerable  : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( cttExp )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this.toString () ;
-                        //console.log ( "cttExp:" , cttExp ) ;
-                        if ( !cttExp ) 
-                        { 
-                            console.error ( new ReferenceError ( "cttExp is null" ) ) ; 
-                            return ; 
-                        } ;
-                        let data = _this ;
-
-                        
-                            let pmA01 = new Promise
-                            (
-                                function ( resolve , rejection )
-                                {
-                                    //console.log ( "pmA01 resolve:" , resolve ) ;
-                                    // data = "promise" ;
-                                    try
-                                    {
-                                        fs.openSync 
-                                        ( 
-                                            _this.toString () , 
-                                            "rs" ,
-                                            function ( err , fd , c )
-                                            {
-                                                //console.log ( "hasCtt err:" , err ) ;
-                                                //console.log ( "hasCttfd:" , fd ) ;
-                                                //console.log ( "hasCtt c:" , c ) ;
-                                                data = 
-                                                err
-                                                ? 
-                                                _this 
-                                                : 
-                                                fs.readFileSync ( _this.toString () , "utf-8" )
-                                                ;
-                                                
-                                            } 
-                                        ) ;
-                                    }
-                                    catch ( err ) 
-                                    {
-                                        console.info ( "err:" , err ) ;
-                                    }
-                                    
-                                    
-                                } 
-                                
-                            ) ;
-                         
-                        //console.log ( "Promise data:" , data ) ;
-                        //console.log ( "pmA01:" , pmA01 ) ;
-                        
-                        
-                       
-                        pmA01  
-                        .then
-                        (
-                            function ( resolve ) 
-                            {
-                                //console.log ( "hasCtt resolve:" , resolve ) ;
-                            } ,
-                            function ( rejected , data )
-                            {
-                                //console.log ( "pmA01 rejected:" , rejected ) ;
-                                //console.log ( "pmA01 rejected flag:" , rejected ? true : false ) ;
-                                //console.log ( "pmA01 data:" , data ) ;
-                                //console.log ( "pmA01 rejected.Error:" , rejected.Error ) ;
-
-                                // data = rejected ? 33 : 1 ;
-                            }
-                        )
-                        .catch
-                        (
-                            function ( reason )
-                            {
-                                //console.log ( "reason:" , reason ) ;
-                            }
-                        ) ;
-
-                        //console.log ( "hasCtt data:" , data ) ;
-                        let resFlag = null ;
-                        switch ( cttExp.constructor.name )
-                        {
-                            case "RegExp" : 
-                                resFlag = cttExp.test ( data )  ;
-                            break ;
-                            case "String" :
-                                resFlag = data.indexOf ( cttExp ) > -1 ;
-                                //console.log ( "resFlag:" , resFlag ) ;
-                                Object.validDatas.fileState[ "has_" + cttExp ] = resFlag ;
-                            break ;
-                        } ;
-                        return resFlag ;
-                        
-                        
-                    }
-                } ,
-                "validFileGetState" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( ctt )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this.toString () ;
-                        //console.log ( "_this:" ,  _this.toString ()   ) ;
-                        let data = fs.readFileSync (  _this.toString() ,"utf-8" ) ;
-                        let isEmpty = data ? true : false ;
-                        let fileExt = _this.resolveUri () .ext ;
-                        let isMarkUpExt = 
-                        ( 
-                            new RegExp 
-                            ( 
-                                `(?:` + Object.validDatas.markUpExtAry.join ( `|` ) + `)` , `ig` 
-                            ) 
-                        ).test ( fileExt ) 
-                        ? 
-                        true 
-                        : 
-                        false ;
-                        let htmlFlag = data.indexOf ( "<html" ) > -1 ;
-                        let headFlag = data.indexOf ( "<head" ) > -1 ;
-                        let bodyFlag = data.indexOf ( "<body" ) > -1 ;
-                        let isHtmlContent = htmlFlag || headFlag || bodyFlag ;
-                        let res = 
-                        {
-                            "uri"           : _this ,
-                            "isEmpty"       : isEmpty ,
-                            "data"          : data ,
-                            "isMarkUpExt"   : isMarkUpExt ,
-                            "isHtmlCtt"     : isHtmlContent ,
-                            "head"          : headFlag ,
-                            "body"          : bodyFlag ,
-                            "ext"           : fileExt ,
-                            "hasChildNode"  : false 
-                        } ;
-                        
-
-                        Object.fileState = Object.validDatas.fileState = res ;
-                        if ( ctt )
-                        {
-                            let cttFlag = data.hasCtt ( ctt ) ; 
-                            if ( ctt.constructor.name == "String" )
-                            { 
-                                res[ "has_" + ctt ] = cttFlag ;     
-                            } ;
-
-                        } ;
-                        //console.log ( "Object.fileState:" , Object.fileState ) ;
-                        //console.log ( "$this:" , $this ) ;
-                        //console.log ( "node_common_lib:" , node_common_lib ) ;
-
-                        return res ;
-                    }
-                } ,
-                "validDesDirFileFromUri" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( outputDir )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this.toString () ;
-                        outputDir = outputDir ? outputDir : _this.resolveUri ().dir ;
-                        if ( outputDir )
-                        {
-                            fs.exists 
-                            (
-                                outputDir
-                                ,
-                                function ( flag )
-                                {
-                                    if ( flag ) return ; 
-                                    fs.mkdirSync ( outputDir ) ;
-
-                                }
-                            ) ;
-                        } ;
-
-                        fs.open 
-                        ( 
-                            _this , 
-                            "w" , 
-                            function ( err , fd )  
-                            {
-                                //console.log ( "err:" , err ) ;
-                                //console.log ( "fd:" , fd ) ;
-                            }  
-                        ) ;
-                    }
-                } ,
-                "rSpace_aNl" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( a )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = args[ 0 ] ? args[ 0 ] : this ;
-                        return _this
-                        // .replace ( />.*</ig , ">\n<" ) 
-                        // .replace ( /^.*</ig , "<" )
-                        // .replace ( /\/.*>.*$/ig , ">" )
-                        // .replace ( /\/>.*</ig , "/>\n<" ) ;
-                    }
-                } ,
-                "caseQuote" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( a )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = args[ 0 ] ? args[ 0 ] : this ;
-                        return _this.toLowerCase().replace ( /(?:\'|\")/ig , "" ).replace ( / /ig , "" )  ;
-                    }
-                }
-                ,
-                "isEleInAry" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( extAry )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        extAry = extAry ? extAry : Object.validDatas.nonMarkUpExtAry ;
-                        return extAry.hasEle ( _this ) ;
-                            
-                    }
-                } ,
-                "toTagRegStrPgp" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ()
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        //console.log ( "Object.fileState:" , Object.fileState ) ;
-                        let res = 
-                        _this.match
-                        ( 
-                            new RegExp 
-                            ( 
-                                "(?:" 
-                                + Object.validDatas.nonMarkUpExtAry
-                                .concat ( Object.validDatas.extLabelAry )
-                                .join( "|" ) 
-                                + ")" 
-                                , 
-                                "ig" 
-                            )
-                        ) 
-                        ? 
-                        { 
-                            wrapAndCtt : ".*" ,
-                            wrap : ""
-                        }  
-                        : 
-                        { 
-                            wrapAndCtt : new RegExp 
-                            ( 
-                                "<" + _this + ".*>.*<\\/" + _this + ">" ,
-                                "ig"
-                            ) ,
-                            wrap : new RegExp 
-                            ( 
-                                "(?:<" + _this + ">|<\\/" + _this + ">)" , 
-                                "ig"
-                            )
-                        } ;
-                        return res ;
-                    }
-                } 
-                ,
-                "getRegPgpFromState" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( selectNode )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let childNodeDef = "all" ;
-                        let selectNodeCom = "global" ;
-                        /*console.log ( "_this.hasCtt: " , _this.hasCtt ( "<" + 
-                        selectNode ) ) ;*/
-                        selectNode = 
-                        (
-                            selectNode != selectNodeCom 
-                        ) 
-                        ?
-                        (
-                            Object.validDatas.fileState.ext.isEleInAry ( Object.validDatas.markUpExtAry ) 
-                            ? 
-                            ( 
-                                // _this.indexOf ( "<" + selectNode ) > -1 ? 
-                                _this.hasCtt ( "<" + selectNode ) 
-                                ?
-                                selectNode
-                                :
-                                selectNodeCom 
-                            )
-                            :
-                            selectNode 
-                        )
-                        :
-                        selectNodeCom
-                        ;
-
-                        //console.log ( "selectNode2:" , selectNode ) ;
-                        let placeHolderTokenMap = Object.placeHolderTokenMapFn ()
-                        [ 
-                            Object.validDatas.fileState.ext 
-                            // selectNode
-                            + "Reg" 
-                        ] ;
-
-                       /* console.log ( "Object.placeHolderTokenMap:" , Object.placeHolderTokenMap.placeHolderTokenMapFn ) ;
-                        console.log ( "Object.placeHolderTokenMap:" , Object.placeHolderTokenMap.placeHolderTokenMapFn ( Object.placeHolderTokenMap ) ) ;*/
-
-                        let parentTagRegStrPgp = selectNode ? selectNode.toTagRegStrPgp () : null ;
-                        console.log ( "parentTagRegStrPgp:" , parentTagRegStrPgp ) ;
-
-                        return {
-                            "placeHolderTokenMap" : placeHolderTokenMap ,
-                            "parentTagRegStrPgp" : parentTagRegStrPgp
-                        } ;
-                    }
-                } ,
-                
-                "getCttWrap" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( placeHolderTokenMap , parentTagRegStrPgp )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        console.log ( "%this:" ,  this ) ;
-                        if (  _this.constructor.name != "String" )
-                        { 
-                            throw new TypeError ( "isn't String type" ) ; 
-                            // return ;
-                        } ;
-                        
-                       /* let placeHolderTokenMap = Object.placeHolderTokenMapFn ()[ selectNode + "Reg" ] ;
-                        let parentTagRegStrPgp = selectNode.toTagRegStrPgp () ;
-                        console.log ( "parentTagRegStrPgp:" , parentTagRegStrPgp ) ;*/
-                        console.log ( "placeHolderTokenMap:" , placeHolderTokenMap ) ;
-                        let allStr = _this.tokenToPlaceHolder 
-                        ( 
-                            placeHolderTokenMap 
-                        ) ;
-                        console.log ( "allStr:" , allStr ) ;
-
-                        let selectWrapCttStr = null ;
-                        let selectCttAry2 = null ;
-                        let selectWrapAry = null ;
-                        if ( parentTagRegStrPgp )
-                        {
-                            console.log ( "parentTagRegStrPgp :" , parentTagRegStrPgp ) ;
-                            selectWrapCttStr = allStr.match 
-                            ( 
-                                parentTagRegStrPgp.wrapAndCtt  
-                            ) ;
-                            console.log ( "selectWrapCttStr:" , selectWrapCttStr ) ;
-
-                            selectWrapAry = selectWrapCttStr.hasNullPointer ().content[ 0 ].match 
-                            ( parentTagRegStrPgp.wrap ) ;
-                            console.log ( "selectWrapAry:" ,  selectWrapAry ) ;
-
-                            let selectCttStr = selectWrapCttStr[ 0 ]
-                            .replace 
-                            (  
-                                parentTagRegStrPgp.wrap   
-                                , 
-                                "" 
-                            ) 
-                            // .rSpace_aNl ( ) ;
-                            // console.log ( "selectCttStr:" , selectCttStr ) ;
-                            console.log ( "selectCttStr:" , selectCttStr ) ;
-                            // let selectWrapCttStr3 = selectCttStr.split ( "\n" ) ; 
-                            let selectCttStr2 = selectCttStr.placeHolderToToken 
-                            ( 
-                                placeHolderTokenMap 
-                            ) ;
-                            console.log ( "selectCttStr2:" , selectCttStr2 ) ;
-                            let selectCttAry = selectCttStr2.split ( "\n" ) ; 
-                            selectCttAry2 = selectCttAry.hasNullPointer ().content ;
-                            console.log ( "selectCttAry2:" , selectCttAry2 ) ;
-                        } ;
-                        
-                        return { 
-                            "selectWrapCttStr" : selectWrapCttStr ? selectWrapCttStr[ 0 ] : allStr ,
-                            "selectCttAry" : selectCttAry2 ,
-                            "selectWrapAry" : selectWrapAry
-                        } ;
-                    } 
-                } ,
-                
-                "tokenToPlaceHolder" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( phTokenMap , fileExt )
-                    {
-                        console.log ( "fileExt:" , fileExt ) ;
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        fileExt = fileExt ? fileExt : Object.validDatas.fileState.ext ;
-                        phTokenMap = phTokenMap ? 
-                        phTokenMap : 
-                        Object.placeHolderTokenMapFn ()[ fileExt + "Reg" ] ;
-                        console.log ( "phTokenMap:" , phTokenMap ) ;
-                        let resTkToPh = _this ;
-                        for ( let ele in phTokenMap )
-                        {
-                            resTkToPh = resTkToPh.replace 
-                            ( 
-                                phTokenMap[ ele ][ 0 ] , 
-                                ele  
-                            ) ;
-                        } ;
-                                /*resTkToPh = resTkToPh.replace ( /(?:\n|\r)/ig , "$PH_r_n" )
-                                .replace ( /(?:\t\|\x09|\cI|\v)/ig , "$PH_t" ) 
-                                .replace ( /(?: )/ig , "$PH_space" ) */
-                                /*.match ( /[^\f\n\r\t\v]/ig )
-                                .join ( "" ) ; */
-                        console.log ( "resTkToPh:" , resTkToPh ) ;
-                        return resTkToPh.match ( /[^\f\n\r\t\v]/ig ).join ( "" ) ;        
-                    }
-                } ,
-                "placeHolderToToken" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( phTokenMap , fileExt )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        // console.log ( "this:" , this ) ;
-                        fileExt = fileExt ? fileExt : Object.validDatas.fileState.ext ;
-                        phTokenMap = phTokenMap ? 
-                        phTokenMap : Object.placeHolderTokenMapFn ()[ fileExt + "Reg" ] ;
-                        let phRes = _this ;
-                        console.log ( "phTokenMap:" , phTokenMap ) ;
-                        for ( let ele in phTokenMap )
-                        {
-                            phRes = phRes.replace 
-                            ( 
-                                new RegExp ( "(?:\\" + ele + ")" , "ig" ) , 
-                                phTokenMap[ ele ][ 1 ] 
-                            ) ;
-                        } ;
-                        // phRes = _this.replace ( new RegExp ( "(?:\\$PH_r_n\\$){1,}"  ) , "\n" ) ;
-                        console.log ( "phRes:" , phRes ) ;
-                        return phRes ;
-                        
-                    }
-                }
-            }
-            
-        ) ;
-        Object.defineProperties
-        (
-            Array.prototype ,
-            {
-                "rmEle" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( idxAry )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let resAry = [] ;
-                        let inc = 0 ;
-                        idxAry = idxAry.constructor.name == "Array" ?
-                                idxAry :
-                                idxAry.constructor.name == "Number" ?
-                                [].push ( idxAry ) :
-                                null ; 
-                        hfA01 : for ( let i = 0 ; i < _this.length ; i ++ )
-                        {
-                            for ( let a = 0 ; a < idxAry.length ; a ++ )
-                            {
-                                if ( i == idxAry [ a ] )
-                                {
-                                     continue hfA01 ; 
-                                } ;
-                            } ;
-                             
-                            resAry [ inc ] = _this [ i ] ;
-                            inc ++ ;
-                        } ;
-                        return resAry ;
-                    }
-                } ,
-                "hasEle" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( val )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let res = false ;
-                        for ( let i = 0 ; i < _this.length ; i ++ ) 
-                        {
-                            if ( _this[ i ] == val )
-                            {
-                                res = true ;
-                                break ;
-                            } ;
-                        } ;
-                        return res ;
-                    }
-                } ,
-                "getReadStreamAry" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( )
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let readStreamAry = [] ;
-                        for ( let i = 0 ; i < _this.length ; i++ ) 
-                        {
-                            readStreamAry[ i ] = fs.createReadStream ( _this[ i ] ) ; 
-                            readStreamAry[ i ].setEncoding ( "utf-8" ) ;
-                        } ;
-                        return readStreamAry ;
-                    }
-                } ,
-                "hasNullPointer" : 
-                {
-                    enumerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : function ( val ) 
-                    {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let ary = [] ;
-                        let inc = 0 ;
-                        let flag = false ;
-                        hfA02 : for ( let i = 0 ; i < _this.length ; i++ )
-                        {
-                            if 
-                            (
-                                _this[ i ] == null || 
-                                _this[ i ] == undefined || 
-                                _this[ i ] == ""
-                            )
-                            {
-                                flag = true ;
-                                continue hfA02 ;
-                            }
-                            else 
-                            {
-                                
-                                ary[ inc ] = _this[ i ] ;
-                                ++inc ;
-                            } ;
-                            
-                        } ;
-                        console.log ( "ary:" , ary ) ;
-                        return { 
-                            flag : flag ,
-                            content : ary 
-                        } ;
-                    }
-                } ,
                 "unique" : 
                 {
                     enumerable : false ,
@@ -978,36 +268,770 @@ let node_common_lib =
                                 } ;
                             }
                         )
-                        return result;
+                        return result ;
+                    }
+                } 
+            } 
+        ) ;
+        Object.defineProperties
+        (
+            Object.pgp_placeHolderTokenMap ,
+            {
+                fnPgp_placeHolderTokenMap :
+                {
+                    enuemerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : 
+                    function ( pgp )
+                    {
+                        pgp = pgp ? pgp : this ;
+                        return Object.fnPgp_placeHolderTokenMap ( this ) ;
+                    } 
+                }
+            }
+        ) ;
+        Object.defineProperties
+        (
+            String.prototype ,
+            {
+                "fnPgp_getUrl" :
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( num )
+                    {
+                        let str_this = this ;
+                        let str_all = str_this ;
+                        // let str_all = "<img src = 'http://www.abc.com/firesniper/adb/def/ghi/jkm/aaa.html' />" ;
+                        let str_schemaReg = `((?:http|https):)?\\/\\/(?:localhost|127.0.0.1|[\\w\\.-]+):?\\d*(?:\\\\|\\/)?` ;
+                        let str_virRegPatt = `([\\w\\.-]+(?:\\\\|\\/)?)` ;
+                        let str_virReg = str_virRegPatt + `{` + 0 + `,` + num + `}` ;
+                        console.log ( "str_virReg:" , str_virReg ) ;
+                        let reg_virReg = new RegExp ( str_virReg , `ig` ) ;
+                        console.log ( "str_all.match ( reg_virReg ):" , str_all.match ( reg_virReg ) ) ;
+                        let str_urlReg = `(?:'|")?` + str_schemaReg + str_virRegPatt + "*" + `(?:'|")?` ;
+                        // let ary_url_str = str_all.match ( /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.-]+):?\d*(?:\\|\/)?([\w\.-]+(?:\\|\/)?)*(?:'|")?/ig ) ;
+                        let ary_url_str = str_all.match ( new RegExp ( str_urlReg , `ig` ) ) ;
+                        console.log ( "ary_url_str:" , ary_url_str ) ;
+                        let ary_schema_str = ary_url_str[ 0 ].match ( new RegExp ( str_schemaReg , `ig` ) ) ;
+                        console.log ( "ary_schema_str:" , ary_schema_str ) ;
+                        let str_start = ary_url_str[ 0 ].indexOf ( ary_schema_str [ 0 ] ) + ary_schema_str [ 0 ].length ;
+                        console.log ( "str_start:" ,  str_start ) ;
+                        let str_fd = ary_url_str[ 0 ].slice ( str_start ) ;
+                        console.log ( "str_fd:" , str_fd ) ;
+                        let virPath_str = str_fd.match ( reg_virReg ) ;
+                        console.log ( "virPath_str:" , virPath_str ) ;
+                        let scmVir_str = str_all.match 
+                        (
+                            // /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.]+)((?:\\|\/)\w+){0,4}(?:'|")?/ig 
+                            new RegExp ( str_schemaReg + str_virReg ) 
+                        ) ;
+                        console.log ( "scmVir_str:" , scmVir_str ) ;
+                        return {
+                            "ary_url_str" : ary_url_str ,
+                            "ary_schema_str" : ary_schema_str ,
+                            "virPath_str" : virPath_str ,
+                            "str_baseUrl" : scmVir_str
+                        } ;
+                    } 
+                } ,
+                "fnPgp_resolveUri" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ()
+                    {
+                        let ary_args = Array.prototype.slice ( arguments ) ;
+                        let str_this = this ;
+                        let str_separator = str_this.indexOf ( "/" ) > 0 ?
+                        "/" :
+                        str_this.indexOf ( "\\" ) > 0 ? 
+                        "\\" : "" ;
+                        str_this = str_this.replace
+                        (
+                            /(?:\/)+/ig ,
+                            str_separator
+                        ) ;
+                        //console.log ( "resolveUri_this:" , str_this ) ;
+                        let str_dir = 
+                        str_separator == "" ?
+                        "" :
+                        str_this.slice ( 0 , str_this.lastIndexOf ( str_separator ) + 1 ) ;
+                        // let str_dir = str_this.match ( /.+(?:\/|\\)/ig ) [ 0 ] ;
+
+                        let str_file = str_this.slice 
+                        ( 
+                            str_separator == "" ?
+                            0 : 
+                            str_this.lastIndexOf ( str_separator ) + 1 
+                            , 
+                            str_this.lastIndexOf ( "." ) 
+                        ) ;
+                        /*let str_file = 
+                        str_this.match 
+                        ( 
+                            str_this.lastIndexOf ( str_separator ) + 1 , 
+                            str_this.lastIndexOf ( "." ) 
+                        ) ;*/
+                        let str_fileBaseName = 
+                        str_file.slice
+                        (
+                            0 ,
+                            str_file.indexOf ( "." ) > 0 ? str_file.indexOf ( "." ) : str_file.length  
+                        ) ;
+                        let str_suffix = 
+                        str_file.indexOf ( "." ) == -1 ?
+                        "" : 
+                        str_file.slice 
+                        ( 
+                            str_file.indexOf ( "." )  
+                            // , 
+                            // str_file.lastIndexOf( "." ) 
+                        ) ;
+                        let str_ext = str_this.slice
+                        (
+                            str_this.lastIndexOf ( "." ) 
+                        ) ;
+                        return {
+                            "str_dir"           : str_dir ,
+                            "str_file"          : str_file ,
+                            "str_fileBaseName"  : str_fileBaseName ,
+                            "str_suffix"        : str_suffix ,
+                            "str_ext"           : str_ext
+                        } ;
                     }
                 } ,
-                "hasSamePointerInAry" :
+                "fnBol_hasCtt" : 
+                {
+                    enumerable  : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( any_cttExp )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this.toString () ;
+                        //console.log ( "any_cttExp:" , any_cttExp ) ;
+                        if ( !any_cttExp ) 
+                        { 
+                            console.error ( new ReferenceError ( "any_cttExp is null" ) ) ; 
+                            return ; 
+                        } ;
+                        let str_data = str_this ;
+
+                        
+                            let pmA01 = new Promise
+                            (
+                                function ( resolve , rejection )
+                                {
+                                    //console.log ( "pmA01 resolve:" , resolve ) ;
+                                    // str_data = "promise" ;
+                                    try
+                                    {
+                                        pgp_fs.openSync 
+                                        ( 
+                                            str_this.toString () , 
+                                            "rs" ,
+                                            function ( err , fd , c )
+                                            {
+                                                //console.log ( "fnBol_hasCtt err:" , err ) ;
+                                                //console.log ( "hasCttfd:" , fd ) ;
+                                                //console.log ( "fnBol_hasCtt c:" , c ) ;
+                                                str_data = 
+                                                err
+                                                ? 
+                                                str_this 
+                                                : 
+                                                pgp_fs.readFileSync ( str_this.toString () , "utf-8" )
+                                                ;
+                                                
+                                            } 
+                                        ) ;
+                                    }
+                                    catch ( err ) 
+                                    {
+                                        // console.info ( "err:" , err ) ;
+                                    }
+                                    
+                                    
+                                } 
+                                
+                            ) ;
+                         
+                        //console.log ( "Promise str_data:" , str_data ) ;
+                        //console.log ( "pmA01:" , pmA01 ) ;
+                        
+                        
+                       
+                        pmA01  
+                        .then
+                        (
+                            function ( resolve ) 
+                            {
+                                //console.log ( "fnBol_hasCtt resolve:" , resolve ) ;
+                            } ,
+                            function ( rejected , data )
+                            {
+                                //console.log ( "pmA01 rejected:" , rejected ) ;
+                                //console.log ( "pmA01 rejected bol_flag:" , rejected ? true : false ) ;
+                                //console.log ( "pmA01 data:" , data ) ;
+                                //console.log ( "pmA01 rejected.Error:" , rejected.Error ) ;
+
+                                // data = rejected ? 33 : 1 ;
+                            }
+                        )
+                        .catch
+                        (
+                            function ( reason )
+                            {
+                                //console.log ( "reason:" , reason ) ;
+                            }
+                        ) ;
+
+                        //console.log ( "fnBol_hasCtt str_data:" , str_data ) ;
+                        let bol_resFlag = null ;
+                        switch ( any_cttExp.constructor.name )
+                        {
+                            case "RegExp" : 
+                                bol_resFlag = any_cttExp.test ( str_data )  ;
+                            break ;
+                            case "String" :
+                                bol_resFlag = str_data.indexOf ( any_cttExp ) > -1 ;
+                                //console.log ( "bol_resFlag:" , bol_resFlag ) ;
+                                Object.pgp_validDatas.pgp_fileState[ "has_" + any_cttExp ] = bol_resFlag ;
+                            break ;
+                        } ;
+                        return bol_resFlag ;
+                        
+                        
+                    }
+                } ,
+                "fnPgp_validFileGetState" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( any_ctt )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this.toString () ;
+                        //console.log ( "str_this:" ,  str_this.toString ()   ) ;
+                        let str_data = pgp_fs.readFileSync ( str_this.toString() , "utf-8" ) ;
+                        let bol_isEmpty = str_data ? true : false ;
+                        let str_fileExt = str_this.fnPgp_resolveUri () .str_ext ;
+                        let bol_isMarkUpExt = 
+                        ( 
+                            new RegExp 
+                            ( 
+                                `(?:` + Object.pgp_validDatas.ary_markUpExt.join ( `|` ) + `)` , `ig` 
+                            ) 
+                        ).test ( str_fileExt ) 
+                        ? 
+                        true 
+                        : 
+                        false ;
+                        let bol_htmlFlag = str_data.indexOf ( "<html" ) > -1 ;
+                        let bol_headFlag = str_data.indexOf ( "<head" ) > -1 ;
+                        let bol_bodyFlag = str_data.indexOf ( "<body" ) > -1 ;
+                        let bol_isHtmlCtt = bol_htmlFlag || bol_headFlag || bol_bodyFlag ;
+                        let pgp_res = 
+                        {
+                            "str_uri"           : str_this ,
+                            "bol_isEmpty"       : bol_isEmpty ,
+                            "str_data"          : str_data ,
+                            "bol_isMarkUpExt"   : bol_isMarkUpExt ,
+                            "bol_isHtmlCtt"     : bol_isHtmlCtt ,
+                            "bol_headFlag"      : bol_headFlag ,
+                            "bol_bodyFlag"      : bol_bodyFlag ,
+                            "str_ext"           : str_fileExt ,
+                            "bol_hasChildNode"  : false 
+                        } ;
+                        
+
+                        Object.pgp_fileState = Object.pgp_validDatas.pgp_fileState = pgp_res ;
+                        if ( any_ctt )
+                        {
+                            let bol_cttFlag = str_data.fnBol_hasCtt ( any_ctt ) ; 
+                            if ( any_ctt.constructor.name == "String" )
+                            { 
+                                pgp_res[ "bol_has" + any_ctt ] = bol_cttFlag ;     
+                            } ;
+
+                        } ;
+                        //console.log ( "Object.pgp_fileState:" , Object.pgp_fileState ) ;
+                        //console.log ( "$this:" , $this ) ;
+                        //console.log ( "pgp_node_common_lib:" , pgp_node_common_lib ) ;
+
+                        return pgp_res ;
+                    }
+                } ,
+                "fn_validFdFromUri" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( str_outputDir )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this.toString () ;
+                        str_outputDir = str_outputDir ? str_outputDir : str_this.fnPgp_resolveUri ().str_dir ;
+                        if ( str_outputDir )
+                        {
+                            pgp_fs.exists 
+                            (
+                                str_outputDir
+                                ,
+                                function ( bol_flag )
+                                {
+                                    if ( bol_flag ) return ; 
+                                    pgp_fs.mkdirSync ( str_outputDir ) ;
+
+                                }
+                            ) ;
+                        } ;
+
+                        pgp_fs.open 
+                        ( 
+                            str_this , 
+                            "w" , 
+                            function ( err , fd )  
+                            {
+                                //console.log ( "err:" , err ) ;
+                                //console.log ( "fd:" , fd ) ;
+                            }  
+                        ) ;
+                    }
+                } ,
+                "rSpace_aNl" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( a )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = ary_args[ 0 ] ? ary_args[ 0 ] : this ;
+                        return str_this
+                        // .replace ( />.*</ig , ">\n<" ) 
+                        // .replace ( /^.*</ig , "<" )
+                        // .replace ( /\/.*>.*$/ig , ">" )
+                        // .replace ( /\/>.*</ig , "/>\n<" ) ;
+                    }
+                } ,
+                "fn_caseQuote" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( a )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = ary_args[ 0 ] ? ary_args[ 0 ] : this ;
+                        return str_this.toLowerCase ().replace ( /(?:\'|\")/ig , "" ).replace ( / /ig , "" )  ;
+                    }
+                }
+                ,
+                "fnBol_isEleInAry" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( ary_ext )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this ;
+                        ary_ext = ary_ext ? ary_ext : Object.pgp_validDatas.ary_nonMarkUpExt ;
+                        return ary_ext.fnBol_hasEle ( str_this ) ;
+                            
+                    }
+                } ,
+                "fnPgp_toTagReg" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ()
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this ;
+                        //console.log ( "Object.pgp_fileState:" , Object.pgp_fileState ) ;
+                        let pgp_res_reg = 
+                        str_this.match
+                        ( 
+                            new RegExp 
+                            ( 
+                                "(?:" 
+                                + Object.pgp_validDatas.ary_nonMarkUpExt
+                                .concat ( Object.pgp_validDatas.ary_extLabel )
+                                .join( "|" ) 
+                                + ")" 
+                                , 
+                                "ig" 
+                            )
+                        ) 
+                        ? 
+                        { 
+                            reg_wrapAndCtt : new RegExp ( ".*" ) ,
+                            reg_wrap : new RegExp ( "" )
+                        }  
+                        : 
+                        { 
+                            reg_wrapAndCtt : new RegExp 
+                            ( 
+                                "<" + str_this + ".*>.*<\\/" + str_this + ">" ,
+                                "ig"
+                            ) ,
+                            reg_wrap : new RegExp 
+                            ( 
+                                "(?:<" + str_this + ">|<\\/" + str_this + ">)" , 
+                                "ig"
+                            )
+                        } ;
+                        return pgp_res_reg ;
+                    }
+                } 
+                ,
+                "fnPgp_getRegPgpFromState" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( str_selectNode )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this.toString () ;
+                        let str_childNodeDef = "all" ;
+                        let str_selectNodeCom = "global" ;
+                        // console.log ( "PgpFromState_this:" , this ) ;
+                        console.log ( "str_selectNode:" , str_selectNode ) ;
+                        console.log ( "str_this.fnBol_hasCtt: " , str_this.fnBol_hasCtt ( "<" + 
+                        str_selectNode ) ) ;
+                        str_selectNode = 
+                        (
+                            str_selectNode != str_selectNodeCom 
+                        ) 
+                        ?
+                        (
+                            Object.pgp_validDatas.pgp_fileState.str_ext.fnBol_isEleInAry ( Object.pgp_validDatas.ary_markUpExt ) 
+                            ? 
+                            ( 
+                                // str_this.indexOf ( "<" + str_selectNode ) > -1 ? 
+                                str_this.fnBol_hasCtt ( "<" + str_selectNode ) 
+                                ?
+                                str_selectNode
+                                :
+                                str_selectNodeCom 
+                            )
+                            :
+                            str_selectNode 
+                        )
+                        :
+                        str_selectNodeCom
+                        ;
+
+                        console.log ( "selectNode2:" , str_selectNode ) ;
+                        console.log ( "Object.pgp_validDatas.pgp_fileState.str_ext:" , Object.pgp_validDatas.pgp_fileState.str_ext ) ;
+                        let pgp_placeHolderTokenMap = Object.fnPgp_placeHolderTokenMap ()
+                        [ 
+                            Object.pgp_validDatas.pgp_fileState.str_ext 
+                            // str_selectNode
+                            + "_pgp" 
+                        ] ;
+
+                        console.log ( "pgp_placeHolderTokenMap:" , pgp_placeHolderTokenMap ) ;
+                        // console.log ( "Object.pgp_placeHolderTokenMap:" , Object.pgp_placeHolderTokenMap.fnPgp_placeHolderTokenMap ( Object.pgp_placeHolderTokenMap ) ) ;
+
+                        let pgp_parentTag_reg = str_selectNode ? str_selectNode.fnPgp_toTagReg () : null ;
+                        console.log ( "pgp_parentTag_reg:" , pgp_parentTag_reg ) ;
+
+                        return {
+                            "pgp_placeHolderTokenMap" : pgp_placeHolderTokenMap ,
+                            "pgp_parentTag_reg" : pgp_parentTag_reg
+                        } ;
+                    }
+                } ,
+                
+                "fnPgp_getCttWrap" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( pgp_placeHolderTokenMap , pgp_parentTag_reg )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this ;
+                        // console.log ( "%this:" ,  this ) ;
+                        if (  str_this.constructor.name != "String" )
+                        { 
+                            throw new TypeError ( "isn't String type" ) ; 
+                            // return ;
+                        } ;
+                        
+                       /* let pgp_placeHolderTokenMap = Object.fnPgp_placeHolderTokenMap ()[ str_selectNode + "Reg" ] ;
+                        let pgp_parentTag_reg = str_selectNode.fnPgp_toTagReg () ;
+                        console.log ( "pgp_parentTag_reg:" , pgp_parentTag_reg ) ;*/
+                        console.log ( "pgp_placeHolderTokenMap:" , pgp_placeHolderTokenMap ) ;
+                        let str_all = str_this.fnStr_tokenToPlaceHolder 
+                        ( 
+                            pgp_placeHolderTokenMap 
+                        ) ;
+                        // console.log ( "str_all:" , str_all ) ;
+
+                        let ary_selectWrapCtt_str = null ;
+                        let ary_selectWrap = null ;
+                        let ary_selectCtt2 = null ;
+                        
+                        if ( pgp_parentTag_reg )
+                        {
+                            console.log ( "pgp_parentTag_reg :" , pgp_parentTag_reg ) ;
+                            ary_selectWrapCtt_str = str_all.match 
+                            ( 
+                                pgp_parentTag_reg.reg_wrapAndCtt  
+                            ) ;
+                            // console.log ( "ary_selectWrapCtt_str:" , ary_selectWrapCtt_str ) ;
+
+                            ary_selectWrap = ary_selectWrapCtt_str.fnPgp_hasNullPointer ().ary_content[ 0 ].match 
+                            ( pgp_parentTag_reg.reg_wrap ) ;
+                            console.log ( "ary_selectWrap:" ,  ary_selectWrap ) ;
+
+                            let str_selectCtt = ary_selectWrapCtt_str[ 0 ]
+                            .replace 
+                            (  
+                                pgp_parentTag_reg.reg_wrap   
+                                , 
+                                "" 
+                            ) 
+                            // .rSpace_aNl ( ) ;
+                            // console.log ( "str_selectCtt:" , str_selectCtt ) ;
+                            console.log ( "str_selectCtt:" , str_selectCtt ) ;
+                            // let selectWrapCttStr3 = str_selectCtt.split ( "\n" ) ; 
+                            let str_selectCtt2 = str_selectCtt.fnStr_placeHolderToToken 
+                            ( 
+                                pgp_placeHolderTokenMap 
+                            ) ;
+                            console.log ( "str_selectCtt2:" , str_selectCtt2 ) ;
+                            let ary_selectCtt = str_selectCtt2.split ( "\n" ) ; 
+                            ary_selectCtt2 = ary_selectCtt.fnPgp_hasNullPointer ().ary_content ;
+                            console.log ( "ary_selectCtt2:" , ary_selectCtt2 ) ;
+                        } ;
+                        
+                        return { 
+                            "ary_selectWrapCtt_str" : ary_selectWrapCtt_str ? ary_selectWrapCtt_str[ 0 ] : str_all ,
+                            "ary_selectCtt" : ary_selectCtt2 ,
+                            "ary_selectWrap" : ary_selectWrap
+                        } ;
+                    } 
+                } ,
+                
+                "fnStr_tokenToPlaceHolder" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( pgp_phTokenMap , str_fileExt )
+                    {
+                        console.log ( "str_fileExt:" , str_fileExt ) ;
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this ;
+                        str_fileExt = str_fileExt ? str_fileExt : Object.pgp_validDatas.pgp_fileState.str_ext ;
+                        pgp_phTokenMap = pgp_phTokenMap ? 
+                        pgp_phTokenMap : 
+                        Object.fnPgp_placeHolderTokenMap ()[ str_fileExt + "_pgp" ] ;
+                        console.log ( "pgp_phTokenMap:" , pgp_phTokenMap ) ;
+                        let str_resTkToPh = str_this ;
+                        for ( let ele in pgp_phTokenMap )
+                        {
+                            str_resTkToPh = str_resTkToPh.replace 
+                            ( 
+                                pgp_phTokenMap[ ele ][ 0 ] , 
+                                ele  
+                            ) ;
+                        } ;
+                                /*str_resTkToPh = str_resTkToPh.replace ( /(?:\n|\r)/ig , "$PH_r_n" )
+                                .replace ( /(?:\t\|\x09|\cI|\v)/ig , "$PH_t" ) 
+                                .replace ( /(?: )/ig , "$PH_space" ) */
+                                /*.match ( /[^\f\n\r\t\v]/ig )
+                                .join ( "" ) ; */
+                        // console.log ( "str_resTkToPh:" , str_resTkToPh ) ;
+                        return str_resTkToPh.match ( /[^\f\n\r\t\v]/ig ).join ( "" ) ;        
+                    }
+                } ,
+                "fnStr_placeHolderToToken" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( pgp_phTokenMap , str_fileExt )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this ;
+                        // console.log ( "this:" , this ) ;
+                        str_fileExt = str_fileExt ? str_fileExt : Object.pgp_validDatas.pgp_fileState.str_ext ;
+                        pgp_phTokenMap = pgp_phTokenMap ? 
+                        pgp_phTokenMap : Object.fnPgp_placeHolderTokenMap ()[ str_fileExt + "_pgp" ] ;
+                        let str_phRes = str_this ;
+                        console.log ( "pgp_phTokenMap:" , pgp_phTokenMap ) ;
+                        for ( let ele in pgp_phTokenMap )
+                        {
+                            str_phRes = str_phRes.replace 
+                            ( 
+                                new RegExp ( "(?:\\" + ele + ")" , "ig" ) , 
+                                pgp_phTokenMap[ ele ][ 1 ] 
+                            ) ;
+                        } ;
+                        // str_phRes = str_this.replace ( new RegExp ( "(?:\\$PH_r_n\\$){1,}"  ) , "\n" ) ;
+                        console.log ( "str_phRes:" , str_phRes ) ;
+                        return str_phRes ;
+                        
+                    }
+                }
+            }
+            
+        ) ;
+        Object.defineProperties
+        (
+            Array.prototype ,
+            {
+                "fnAry_rmEle" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( ary_idx )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let ary_this = this ;
+                        let ary_res = [] ;
+                        let inc = 0 ;
+                        ary_idx = ary_idx.constructor.name == "Array" ?
+                                ary_idx :
+                                ary_idx.constructor.name == "Number" ?
+                                [].push ( ary_idx ) :
+                                null ; 
+                        hfA01 : for ( let i = 0 ; i < ary_this.length ; i ++ )
+                        {
+                            for ( let a = 0 ; a < ary_idx.length ; a ++ )
+                            {
+                                if ( i == ary_idx [ a ] )
+                                {
+                                     continue hfA01 ; 
+                                } ;
+                            } ;
+                             
+                            ary_res [ inc ] = ary_this [ i ] ;
+                            inc ++ ;
+                        } ;
+                        return ary_res ;
+                    }
+                } ,
+                "fnBol_hasEle" : 
                 {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
                     value : function ( val )
                     {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let res = false ;
-                        /*for ( let ele in _this ) 
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let ary_this = this ;
+                        let bol_res = false ;
+                        for ( let i = 0 ; i < ary_this.length ; i ++ ) 
                         {
-                            if ( _this[ ele ] == val  ) 
+                            if ( ary_this[ i ] == val )
                             {
-                                res = true ;
-                                break ;
-                            } ;
-                        } ;*/
-                        for ( let i = 0 ; i < _this.length ; i++ ) 
-                        {
-                            if ( _this[ i ] == val  ) 
-                            {
-                                res = true ;
+                                bol_res = true ;
                                 break ;
                             } ;
                         } ;
-                        return res ;
+                        return bol_res ;
+                    }
+                } ,
+                "fnAry_getReadStream" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let ary_this = this ;
+                        let ary_readStream = [] ;
+                        for ( let i = 0 ; i < ary_this.length ; i++ ) 
+                        {
+                            ary_readStream[ i ] = pgp_fs.createReadStream ( ary_this[ i ] ) ; 
+                            ary_readStream[ i ].setEncoding ( "utf-8" ) ;
+                        } ;
+                        return ary_readStream ;
+                    }
+                } ,
+                "fnPgp_hasNullPointer" : 
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( val ) 
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let ary_this = this ;
+                        let ary = [] ;
+                        let inc = 0 ;
+                        let bol_flag = false ;
+                        hfA02 : for ( let i = 0 ; i < ary_this.length ; i++ )
+                        {
+                            if 
+                            (
+                                ary_this[ i ] == null || 
+                                ary_this[ i ] == undefined || 
+                                ary_this[ i ] == ""
+                            )
+                            {
+                                bol_flag = true ;
+                                continue hfA02 ;
+                            }
+                            else 
+                            {
+                                
+                                ary[ inc ] = ary_this[ i ] ;
+                                ++inc ;
+                            } ;
+                            
+                        } ;
+                        console.log ( "ary:" , ary ) ;
+                        return { 
+                            "bol_flag" : bol_flag ,
+                            ary_content : ary 
+                        } ;
+                    }
+                } ,
+                
+                "fnBol_hasSamePointerInAry" :
+                {
+                    enumerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : function ( val )
+                    {
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let ary_this = this ;
+                        let bol_res = false ;
+                        /*for ( let ele in ary_this ) 
+                        {
+                            if ( ary_this[ ele ] == val  ) 
+                            {
+                                bol_res = true ;
+                                break ;
+                            } ;
+                        } ;*/
+                        for ( let i = 0 ; i < ary_this.length ; i++ ) 
+                        {
+                            if ( ary_this[ i ] == val  ) 
+                            {
+                                bol_res = true ;
+                                break ;
+                            } ;
+                        } ;
+                        return bol_res ;
                     }
                 } ,
                 "excludeOverlap" : 
@@ -1015,34 +1039,34 @@ let node_common_lib =
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( bAry , aAry )
+                    value : function ( ary_b , ary_a )
                     {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = args[ 1 ] ? args[ 1 ] : this ;
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let ary_this = ary_args[ 1 ] ? ary_args[ 1 ] : this ;
                         let ary = [] ;
                         let inc = 0 ;
-                        hfA01 : for ( let be = 0 ; be < bAry.length ; be++ )
+                        hfA01 : for ( let be = 0 ; be < ary_b.length ; be++ )
                         {
-                            console.log ( "_this[ be ]:" , _this ) ;
-                            console.log ( "bAry [ be ]:" , bAry  ) ;
-                            for ( let ce = 0 ; ce < _this.length ; ce++ )
+                            console.log ( "ary_this[ be ]:" , ary_this ) ;
+                            console.log ( "ary_b [ be ]:" , ary_b  ) ;
+                            for ( let ce = 0 ; ce < ary_this.length ; ce++ )
                             {
 
                                 if 
                                 ( 
-                                    bAry[ be ].caseQuote () == _this[ ce ].caseQuote () 
+                                    ary_b[ be ].fn_caseQuote () == ary_this[ ce ].fn_caseQuote () 
                                 )
                                 { 
                                     continue hfA01 ; 
                                 }
                                 else if 
                                 ( 
-                                    ce == _this.length - 1 && 
-                                    !ary.hasSamePointerInAry ( bAry[ be ] ) 
+                                    ce == ary_this.length - 1 && 
+                                    !ary.fnBol_hasSamePointerInAry ( ary_b[ be ] ) 
                                 )
                                 { 
                                     
-                                    ary[ inc ] = bAry[ be ] ; 
+                                    ary[ inc ] = ary_b[ be ] ; 
                                     ++inc ;
                                 } ;
                             } ;
@@ -1051,18 +1075,18 @@ let node_common_lib =
                         return ary ;
                     }
                 } ,
-                "insertEle" : 
+                "fnAry_insertEle" : 
                 {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( index , val )
+                    value : function ( index , any_val )
                     {
                         let arts = Array.prototype.slice.call ( argumets ) ;
-                        let _this = this ;
-                        let ary1 = _this.slice ( 0 , index ) ;
-                        let ary2 = _this.slice ( index ) ;
-                        let ary3 = ary1.push ( val ) ; 
+                        let ary_this = this ;
+                        let ary1 = ary_this.slice ( 0 , index ) ;
+                        let ary2 = ary_this.slice ( index ) ;
+                        let ary3 = ary1.push ( any_val ) ; 
                         return ary3.concat ( ary2 ) ; 
                     } 
                 } ,
@@ -1074,128 +1098,132 @@ let node_common_lib =
         (
             String.prototype ,
             {
-                "formatToRegStr" : 
+                "fnAry_formatToRegStr" : 
                 {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
                     value : function ( a )
                     {
-                        var defCharAry = [ "/" , "\\" ] ; 
+                        var ary_defChar = [ "/" , "\\" ] ; 
                         // console.log ( "this:" , this ) ;
-                        var thisAry = this.split ( "" ) ;
-                        for ( var i = 0 ; i < thisAry.length ; i++ )
+                        var ary_this = this.split ( "" ) ;
+                        for ( var i = 0 ; i < ary_this.length ; i++ )
                         {
-                            thisAry[ i ] =  "\\" + thisAry[ i ] ;
+                            ary_this[ i ] =  "\\" + ary_this[ i ] ;
                         } ;
-                        // this = thisAry.join ( "" ) ;
-                        return thisAry.join ( "" ) ;
+                        // this = ary_this.join ( "" ) ;
+                        return ary_this.join ( "" ) ;
                         /*var reg = new RegExp 
                         ( 
-                            "[" + defCharAry.join( "" ) + "]" , 
+                            "[" + ary_defChar.join( "" ) + "]" , 
                             "ig" 
                         ) ;
                         var defCharStr = this ;
-                        for ( var i = 0 ; i < defCharAry.length ; i++ )
+                        for ( var i = 0 ; i < ary_defChar.length ; i++ )
                         {
                             defCharStr = defCharStr.replace 
                             ( 
-                                reg , "\\" + defCharAry[ i ] 
+                                reg , "\\" + ary_defChar[ i ] 
                             ) ;
                         } ;*/
                         
                     } 
                 } ,
-                "countOf" : 
+                "fnNum_countOf" : 
                 {
                     enumerable : false ,
                     configuratble : true ,
                     writable : true ,
-                    value : function ( token )
+                    value : function ( str_token )
                     {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let tokenCount = 0 ;
-                        for ( let i = 0 ; i < _this.length ; i ++ ) 
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this ;
+                        let num_tokenCount = 0 ;
+                        for ( let i = 0 ; i < str_this.length ; i ++ ) 
                         {
-                            if ( _this[ i ] === token )
+                            if ( str_this[ i ] === str_token )
                             {
-                                tokenCount ++ ;
+                                num_tokenCount ++ ;
                             } ;
                         } ;
                         
-                        return tokenCount ;
+                        return num_tokenCount ;
                     } 
                 } ,
-                "backNumIndexOf" : 
+                "fnNum_backNumIndexOf" : 
                 {
                     enumerable : false ,
                     configuratble : true ,
                     writable : true ,
-                    value : function ( token , num )
+                    value : function ( str_token , num )
                     {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let _thisAry = _this.split ( "" ) ;
-                        let indexCount = 0 ;
-                        let _thisStr1 = _this ;
-                        for ( let i = 0 ; i < _this.countOf ( "." ) ; i ++ ) 
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let str_this = this ;
+                        let ary_this = str_this.split ( "" ) ;
+                        let num_indexCount = 0 ;
+                        let ary_this1 = ary_this ;
+                        for ( let i = 0 ; i < ary_this.fnNum_countOf ( "." ) ; i ++ ) 
                         {
-                            ++ indexCount  ;
-                            if ( indexCount >= num ) break ;
-                            _thisStr1 = _thisStr1.slice ( 0 , _thisStr1.lastIndexOf ( "." ) ) ;
+                            ++ num_indexCount  ;
+                            if ( num_indexCount >= num ) break ;
+                            ary_this1 = ary_this1.slice ( 0 , ary_this1.lastIndexOf ( "." ) ) ;
                             
                         } ;
-                        let resIndex = _thisStr1.lastIndexOf ( token ) ;
-                        return resIndex ;
+                        let num_resIndex = ary_this1.lastIndexOf ( str_token ) ;
+                        return num_resIndex ;
                     } 
                 } ,
-                "getOutputUri" : 
+                "fnStr_getOutputUri" : 
                 {
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( outputDir )
+                    value : function ( str_outputDir )
                     {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        console.log ( "getOutputUri_this:" , this ) ;
-                        console.log ( "getOutputUri_outputDir:" , outputDir2 = outputDir ) 
-                        outputDir = outputDir ? outputDir : this.resolveUri ().dir ;
-                        console.log ( "outputDir:" , outputDir ) ;
-                        let outputUri = 
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let ary_this = this ;
+                        console.log ( "fnStr_getOutputUri_this:" , this ) ;
+                        console.log ( "fnStr_getOutputUri_outputDir:" , outputDir2 = str_outputDir ) 
+                        str_outputDir = str_outputDir ? str_outputDir : this.fnPgp_resolveUri ().str_dir ;
+                        console.log ( "str_outputDir:" , str_outputDir ) ;
+                        let str_outputUri = 
                         (
-                                outputDir
-                            + this.resolveUri ().file 
+                                str_outputDir
+                            + this.fnPgp_resolveUri ().str_file 
                             // + ".dev"
-                            + this.resolveUri ().ext
-                        ).rmSuffix ( "" )  ;
-                        console.log ( "outputUri：" , outputUri ) ;
-                        return outputUri ;
+                            + this.fnPgp_resolveUri ().str_ext
+                        ).fnStr_rmSuffix ( "" )  ;
+                        console.log ( "str_outputUri：" , str_outputUri ) ;
+                        return str_outputUri ;
                     }
                 } ,
-                "rmSuffix" : 
+                "fnStr_rmSuffix" : 
                 {
                     enumerable : false ,
                     configuratble : true ,
                     writable : true ,
                     value : function ( repStr )
                     {
-                        let args = Array.prototype.slice.call ( arguments ) ;
-                        let _this = this ;
-                        let str1 = _this.slice ( _this.lastIndexOf ( "." ) ) ;
-                        /*_this = str1 == ".html" ? 
-                                _this : 
-                                str1 == ".htm" ? 
-                                _this.replace ( new RegExp ( str1 + "$" ) , ".html" )
-                                : null ;*/
-                        let str2 = _this.slice ( _this.backNumIndexOf ( "." , 2 ) ) ;
-                        let resStr = _this.replace 
+                        let ary_args = Array.prototype.slice.call ( arguments ) ;
+                        let ary_this = this ;
+                       /* let str1 = ary_this.slice ( ary_this.lastIndexOf ( "." ) ) ;
+                        let str2 = ary_this.slice ( ary_this.fnNum_backNumIndexOf ( "." , 2 ) ) ;
+                        let str_res = ary_this.replace 
                         ( 
                             new RegExp ( str2 + "$" ) , 
                             str1 == ".htm" ? ".html" : str1
-                        ) ;
-                        return resStr ;
+                        ) ;*/
+
+                        let pgp_file = ary_this.fnPgp_resolveUri () ;
+                        let str_res = 
+                        pgp_file.str_dir + "\\" 
+                        + 
+                        pgp_file.str_fileBaseName 
+                        + 
+                        pgp_file.str_ext ;
+
+                        return str_res ;
                     } 
                 }
             }
@@ -1241,4 +1269,4 @@ let node_common_lib =
 } ;
 
 
-module.exports = node_common_lib ;
+module.exports = pgp_node_common_lib ;

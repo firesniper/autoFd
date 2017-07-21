@@ -1,123 +1,125 @@
-let fs = require ( "fs" ) ;
-let glob = require ( "glob" ) ;
-let nodeCommonLib = require ( "../node_common_lib/node_common_lib" ) ;
+let pgp_fs = require ( "fs" ) ;
+let fn_glob = require ( "glob" ) ;
+let pgp_nodeCommonLib = require ( "../node_common_lib/node_common_lib" ) ;
 
 console.log ( "begin" ) ;
 
-let getResLessSassStr = function ( srcDataStr , fileExt )
+let fnStr_getResLessSass = function ( str_srcData , str_fileExt )
 {
-    //console.log ( "srcDataStr:" ,  srcDataStr ) ;
-    let regPgp = srcDataStr.getRegPgpFromState (  ) ;
+    console.log ( "str_srcData:" ,  str_srcData ) ;
+    let pgp_reg = str_srcData.fnPgp_getRegPgpFromState (  ) ;
 
-    let lessSassStr = srcDataStr.getCttWrap 
+    let str_lessSass = str_srcData.fnPgp_getCttWrap 
     ( 
-        regPgp.placeHolderTokenMap  
-    ).selectWrapCttStr ;
-    //console.log ( "lessSassStr:" , lessSassStr ) ;
-    let lessSassStr2 = lessSassStr.placeHolderToToken ( regPgp.placeHolderTokenMap ) ;
-    //console.log ( "lessSassStr2:" , lessSassStr2 ) ;
+        pgp_reg.pgp_placeHolderTokenMap  
+    ).ary_selectWrapCtt_str ;
+    console.log ( "str_lessSass:" , str_lessSass ) ;
+    let str_lessSass2 = str_lessSass.fnStr_placeHolderToToken ( pgp_reg.pgp_placeHolderTokenMap ) ;
+    console.log ( "str_lessSass2:" , str_lessSass2 ) ;
 
+    return str_lessSass2 ;
+} ;
+
+let fnStr_getResNonMakeUp = function ( str_srcData , str_fileExt )
+{
+    // console.log ( "str_srcData:" ,  str_srcData ) ;
+    let pgp_reg = str_srcData.fnPgp_getRegPgpFromState (  ) ;
+
+    let ary_selectWrapCtt_str = str_srcData.fnPgp_getCttWrap 
+    ( 
+        pgp_reg.pgp_placeHolderTokenMap  
+    ).ary_selectWrapCtt_str ;
+    // console.log ( "ary_selectWrapCtt_str:" , ary_selectWrapCtt_str ) ;
+
+    let str_nmu = ary_selectWrapCtt_str.fnStr_placeHolderToToken ( pgp_reg.pgp_placeHolderTokenMap ) ;
+    // console.log ( "str_nmu:" , str_nmu ) ;
     
-
-    return lessSassStr2 ;
+    return str_nmu ;
 } ;
 
-let getResNonMakeUpStr = function ( srcDataStr , fileExt )
+let fnStr_getResJsStr2 = function ( str_srcData , str_fileExt )
 {
-    //console.log ( "srcDataStr:" ,  srcDataStr ) ;
-    let regPgp = srcDataStr.getRegPgpFromState (  ) ;
+    console.log ( "str_srcData :" , str_srcData ) ;
+    console.log ( "fileExt2:" , str_fileExt ) ;    
+    let pgp_reg = str_srcData.fnPgp_getRegPgpFromState ( pgp_reg.pgp_placeHolderTokenMap ) ;
 
-    let nmuStr = srcDataStr.getCttWrap 
+    let str_js = str_srcData.fnPgp_getCttWrap 
     ( 
-        regPgp.placeHolderTokenMap  
-    ).selectWrapCttStr ;
-    //console.log ( "nmuStr:" , nmuStr ) ;
-    let nmuStr2 = nmuStr.placeHolderToToken ( regPgp.placeHolderTokenMap ) ;
-    //console.log ( "nmuStr2:" , nmuStr2 ) ;
-    return nmuStr2 ;
-} ;
-
-let getResJsStr2 = function ( srcDataStr , fileExt )
-{
-    //console.log ( "srcDataStr :" , srcDataStr ) ;
-    //console.log ( "fileExt2:" , fileExt ) ;    
-    let regPgp = srcDataStr.getRegPgpFromState ( regPgp.placeHolderTokenMap ) ;
-
-    let jsStr = srcDataStr.getCttWrap 
-    ( 
-        regPgp.placeHolderTokenMap  
-    ).selectWrapCttStr ;
-    //console.log ( "jsStr:" , jsStr ) ;
-    let jsStr2 = jsStr.placeHolderToToken ( regPgp.placeHolderTokenMap ) ;
-    //console.log ( "jsStr2:" , jsStr2 ) ;
+        pgp_reg.pgp_placeHolderTokenMap  
+    ).ary_selectWrapCtt_str ;
+    console.log ( "str_js:" , str_js ) ;
+    let str_js2 = str_js.fnStr_placeHolderToToken ( pgp_reg.pgp_placeHolderTokenMap ) ;
+    console.log ( "str_js2:" , str_js2 ) ;
         
-    return jsStr2 ;
+    return str_js2 ;
 } ;                    
 
-let getResHTMLStr = function ( srcDataStr , injSrcStr , fileExt )
+let str_getResHTML = function ( str_srcData , str_injSrc , str_fileExt )
 {
-    //console.log ( "srcDataStr:" ,  srcDataStr ) ;
-    let regPgpHead = srcDataStr.getRegPgpFromState ( "head" ) ;
-    //console.log ( "regPgpHead:" , regPgpHead ) ;
-    let targetAryA1 = srcDataStr.getCttWrap 
+    console.log ( "str_srcData:" ,  str_srcData ) ;
+    let pgp_regHead = str_srcData.fnPgp_getRegPgpFromState ( "head" ) ;
+    console.log ( "pgp_regHead:" , pgp_regHead ) ;
+    let ary_targetA1 = str_srcData.fnPgp_getCttWrap 
     ( 
-        regPgpHead.placeHolderTokenMap ,
-        regPgpHead.parentTagRegStrPgp
-    ).selectCttAry ;
-    //console.log ( "targetAryA1:" , targetAryA1 ) ;
+        pgp_regHead.pgp_placeHolderTokenMap ,
+        pgp_regHead.pgp_parentTag_reg
+    ).ary_selectCtt ;
+    console.log ( "ary_targetA1:" , ary_targetA1 ) ;
     
-    let sourceDataPgp = injSrcStr.getCttWrap 
+    let pgp_sourceData = str_injSrc.fnPgp_getCttWrap 
     ( 
-        regPgpHead.placeHolderTokenMap ,
-        regPgpHead.parentTagRegStrPgp
+        pgp_regHead.pgp_placeHolderTokenMap ,
+        pgp_regHead.pgp_parentTag_reg
     ) ;
-    //console.log ( "sourceDataPgp.selectCttAry:" , sourceDataPgp.selectCttAry ) ;
+    console.log ( "pgp_sourceData.ary_selectCtt:" , pgp_sourceData.ary_selectCtt ) ;
 
-    let resDiffAry = targetAryA1.excludeOverlap ( sourceDataPgp.selectCttAry ) ;
-    //console.log ( " resDiffAry:" ,  resDiffAry ) ;
+    let ary_resDiff = ary_targetA1.excludeOverlap ( pgp_sourceData.ary_selectCtt ) ;
+    console.log ( "ary_resDiff:" ,  ary_resDiff ) ;
 
-    let resDiffAry2 = targetAryA1.concat ( resDiffAry ) ;
-    //console.log ( " resDiffAry2:" ,  resDiffAry2 ) ;
+    let ary_resDiff2 = ary_targetA1.concat ( ary_resDiff ) ;
+    console.log ( "ary_resDiff2:" ,  ary_resDiff2 ) ;
 
-    let selectWrapAry = sourceDataPgp.selectWrapAry ;
-    let headStr4 = ( selectWrapAry[ 0 ] + "\n" + resDiffAry2.join( "\n" ) + "\n" + selectWrapAry[ selectWrapAry.length - 1 ] ) ;
-    //console.log ( "headStr4:" , headStr4 ) ;
+    let ary_selectWrap = pgp_sourceData.ary_selectWrap ;
+    let str_head4 = ( ary_selectWrap[ 0 ] + "\n" + ary_resDiff2.join( "\n" ) + "\n" + ary_selectWrap[ ary_selectWrap.length - 1 ] ) ;
+    console.log ( "str_head4:" , str_head4 ) ;
     
-    let resData = srcDataStr.tokenToPlaceHolder ( null , "global" ) ;
-    //console.log ( "resData:" , resData ) ;
-    let resData2 = resData.replace ( /<head.*>.*<\/head>/ig , headStr4 ) ;
-    //console.log ( "resData2:" , resData2  ) ;
+    let str_resData = str_srcData.fnStr_tokenToPlaceHolder ( null , "global" ) ;
+    // console.log ( "str_resData:" , str_resData.constructor.name ) ;
+    // console.log ( "str_resData:" , str_resData ) ;
+
+    let str_resData2 = str_resData.replace ( /<head.*>.*<\/head>/ig , str_head4 ) ;
+    console.log ( "str_resData2:" , str_resData2  ) ;
     
     
-    /*if ( srcDataStr.indexOf ( "<body" ) > -1 )
+    /*if ( str_srcData.indexOf ( "<body" ) > -1 )
     {
-        let bodyStr = srcDataStr.tokenToPlaceHolder ().match ( /<body.*>.*<\/body>/ig ) ;
-        console.log ( "bodyStr:" , bodyStr ) ;
+        let str_body = str_srcData.fnStr_tokenToPlaceHolder ().match ( /<body.*>.*<\/body>/ig ) ;
+        console.log ( "str_body:" , str_body ) ;
 
-        // let bodyStr2 = bodyStr.tokenToPlaceHolder () ;
-        let bodyStr3 = bodyStr[ 0 ].placeHolderToToken () ;
+        // let str_body2 = str_body.fnStr_tokenToPlaceHolder () ;
+        let bodyStr3 = str_body[ 0 ].fnStr_placeHolderToToken () ;
         console.log ( "bodyStr3:" , bodyStr3 ) ;
     } ;*/
-    //console.log ( "srcDataStr2:" , srcDataStr ) 
-    let regPgpBody = srcDataStr.getRegPgpFromState ( "body" ) ;
-    //console.log ( "regPgpBody:" , regPgpBody ) ;
-    //console.log ( "regPgpBody.parentTagRegStrPgp:" , regPgpBody.parentTagRegStrPgp ) ;
-    let bodyStr = srcDataStr.getCttWrap 
+    //console.log ( "str_srcData2:" , str_srcData ) 
+    let pgp_regPgpBody = str_srcData.fnPgp_getRegPgpFromState ( "body" ) ;
+    console.log ( "pgp_regPgpBody:" , pgp_regPgpBody ) ;
+    console.log ( "pgp_regPgpBody.pgp_parentTag_reg:" , pgp_regPgpBody.pgp_parentTag_reg ) ;
+    let str_body = str_srcData.fnPgp_getCttWrap 
     ( 
-        regPgpBody.placeHolderTokenMap ,
-        regPgpBody.parentTagRegStrPgp
-    ).selectWrapCttStr ;
+        pgp_regPgpBody.pgp_placeHolderTokenMap ,
+        pgp_regPgpBody.pgp_parentTag_reg
+    ).ary_selectWrapCtt_str ;
 
-    //console.log ( "bodyStr:" , bodyStr ) ;
-    let bodyStr2 = bodyStr.placeHolderToToken ( regPgpBody.placeHolderTokenMap ) ;
-    //console.log ( "bodyStr2:" , bodyStr2 ) ;
-    let resData3 = resData2.replace ( /<body.*>.*<\/body>/ig , bodyStr2 ) ;
-    //console.log ( "resData3:" , resData3 ) ;
+    console.log ( "str_body:" , str_body ) ;
+    let str_body2 = str_body.fnStr_placeHolderToToken ( pgp_regPgpBody.pgp_placeHolderTokenMap ) ;
+    console.log ( "str_body2:" , str_body2 ) ;
+    let str_resData3 = str_resData2.replace ( /<body.*>.*<\/body>/ig , str_body2 ) ;
+    console.log ( "str_resData3:" , str_resData3 ) ;
 
-    let resData4 = resData3.placeHolderToToken ( null , "global" ) ;
-    //console.log ( "resData4:" , resData4  ) ;
+    let str_resData4 = str_resData3.fnStr_placeHolderToToken ( null , "global" ) ;
+    console.log ( "str_resData4:" , str_resData4  ) ;
 
-    return resData4 ;
+    return str_resData4 ;
     
 } ;
 
@@ -125,59 +127,59 @@ let getResHTMLStr = function ( srcDataStr , injSrcStr , fileExt )
 let compileFd = 
 {
     "watchLockA01" : false ,
-    "fileState" : {
+    "pgp_fileState" : {
         uri : "" ,
 
     } ,
-    init : function ( initParams ) 
+    fn_init : function ( pgp_params ) 
     {
-        let globPgp     = initParams.globPgp ;
-        let regPattAry  = 
-        initParams.globPgp.regPattAry ? 
+        let pgp_globParams     = pgp_params.pgp_globParams ;
+        let ary_regPatt  = 
+        pgp_params.pgp_globParams.ary_regPatt ? 
         function ( )
         {
-            initParams.globPgp.regPattAry.push ( "" ) ;
-            return initParams.globPgp.regPattAry ;
+            pgp_params.pgp_globParams.ary_regPatt.push ( "" ) ;
+            return pgp_params.pgp_globParams.ary_regPatt ;
         } () 
-        : initParams.globPgp.regPattAry ;
-        let cwd         = initParams.globPgp.cwd ? initParams.globPgp.cwd : "./" ;
-        let outputDir   = initParams.outputDir ;
-        let injSrcStr   = initParams.injSrcStr ;
-        let srcBaseUrl  = initParams.srcBaseUrl ;
-        console.log ( "srcBaseUrl:" , srcBaseUrl ) ;
+        : pgp_params.pgp_globParams.ary_regPatt ;
+        let str_cwd         = pgp_params.pgp_globParams.str_cwd ? pgp_params.pgp_globParams.str_cwd : "./" ;
+        let str_outputDir   = pgp_params.str_outputDir ;
+        let str_injSrc   = pgp_params.str_injSrc ;
+        let str_srcBaseUrl  = pgp_params.str_srcBaseUrl ;
+        console.log ( "str_srcBaseUrl:" , str_srcBaseUrl ) ;
 
-        let destBaseUrl = initParams.destBaseUrl ;
-        console.log ( "destBaseUrl:" , destBaseUrl ) ;
+        let str_destBaseUrl = pgp_params.str_destBaseUrl ;
+        console.log ( "str_destBaseUrl:" , str_destBaseUrl ) ;
  
-        let destVirPath = initParams.destVirPath ;
-        nodeCommonLib.init 
+        let str_destVirPath = pgp_params.str_destVirPath ;
+        pgp_nodeCommonLib.fn_init 
         ( 
             {
-                 "srcBaseUrl" : srcBaseUrl ,
-                 "destBaseUrl" : destBaseUrl , 
-                 "destVirPath" : destVirPath
+                 "str_srcBaseUrl" : str_srcBaseUrl ,
+                 "str_destBaseUrl" : str_destBaseUrl , 
+                 "str_destVirPath" : str_destVirPath
             } 
         ) ;
         let $this = this ;
         //console.log ( "$this:" , $this ) ;
-        // putPath.inputDir = putPath.inputUri.resolveUri ().dir ;
+        // putPath.inputDir = putPath.inputUri.fnPgp_resolveUri ().dir ;
         // let inputUri = putPath.inputUri ;
-        //console.log ( "nodeCommonLib:" , nodeCommonLib ) ;
+        //console.log ( "pgp_nodeCommonLib:" , pgp_nodeCommonLib ) ;
 
-        //console.log ( "initParams.outputDir:" , initParams.outputDir ) ;
+        //console.log ( "pgp_params.str_outputDir:" , pgp_params.str_outputDir ) ;
 
         let promiseA01 = Promise.resolve 
         (
-            glob 
+            fn_glob 
             ( 
                 '{' 
-                + regPattAry.join ( "," ) 
+                + ary_regPatt.join ( "," ) 
                 + '}' 
                 ,
  
                 { 
  
-                    "cwd" : cwd ? cwd : "./" , 
+                    "cwd" : str_cwd ? str_cwd : "./" , 
                     mark : true 
                 } , 
                 function ( err , fileList )
@@ -189,61 +191,60 @@ let compileFd =
                     } ;
                     //console.log ( "fileList1:" , fileList ) ;
 
-                    let readStreamAry = fileList.getReadStreamAry ( ) ;
+                    let ary_readStream = fileList.fnAry_getReadStream ( ) ;
                     
                     
 
-                    for ( let inc = 0 ; inc < readStreamAry.length ; inc++ )
+                    for ( let inc = 0 ; inc < ary_readStream.length ; inc++ )
                     {
-                        //console.log ( "readStreamAry[ inc ].path:" , readStreamAry[ inc ].path ) ;
-                        readStreamAry[ inc ].on
+                        //console.log ( "ary_readStream[ inc ].path:" , ary_readStream[ inc ].path ) ;
+                        ary_readStream[ inc ].on
                         (
                             "data" ,
-                            function ( srcDataStr )
+                            function ( str_srcData )
                             {
-                                let _this = this ;
-                                let _thisPath = this.path ;
+                                let str_this = this ;
+                                let str_thisPath = this.path ;
                                 //console.log ( "this.path:" , this.path ) ;
 
-                                Object.validDatas.fileState = _this.path.validFileGetState () ;
-                                //console.log ( "Object.validDatas.fileState:" , Object.validDatas.fileState ) ;
-                                /*outputDir = outputDir ? outputDir : _this.path.resolveUri ().dir ;
-                                console.log ( "191_outputDir:" , outputDir ) ;*/
-                                let outputUri =  _this.path.getOutputUri ( outputDir ) ;
-                                //console.log ( "outputUri：" , outputUri ) ;
+                                Object.pgp_validDatas.pgp_fileState = str_this.path.fnPgp_validFileGetState () ;
+                                //console.log ( "Object.pgp_validDatas.pgp_fileState:" , Object.pgp_validDatas.pgp_fileState ) ;
+                                /*str_outputDir = str_outputDir ? str_outputDir : str_this.path.fnPgp_resolveUri ().dir ;
+                                console.log ( "191_outputDir:" , str_outputDir ) ;*/
+                                let str_outputUri =  str_this.path.fnStr_getOutputUri ( str_outputDir ) ;
+                                console.log ( "str_outputUri：" , str_outputUri ) ;
 
-                                outputUri.validDesDirFileFromUri ( outputDir ) ;
-                                let fileExt = _this.path.resolveUri ().ext ;
-                                
-                                let resDataStr = 
-                                fileExt 
+                                str_outputUri.fn_validFdFromUri ( str_outputDir ) ;
+                                let str_fileExt = str_this.path.fnPgp_resolveUri ().str_ext ;
+                                console.log ( "Object.pgp_validDatas.pgp_fileState:" , Object.pgp_validDatas.pgp_fileState ) ;
+                                let str_resData = 
+                                str_fileExt 
                                 ? 
                                 ( 
-                                    Object.validDatas.fileState.isMarkUpExt
+                                    Object.pgp_validDatas.pgp_fileState.bol_isMarkUpExt
                                     ?
-                                    getResHTMLStr ( srcDataStr , injSrcStr , fileExt ) 
+                                    str_getResHTML ( str_srcData , str_injSrc , str_fileExt ) 
                                     :
-                                    getResNonMakeUpStr ( srcDataStr , fileExt ) 
+                                    fnStr_getResNonMakeUp ( str_srcData , str_fileExt ) 
                                     
                                 )
                                 : 
                                 null ;
-                                //console.log ( "resDataStr:" , resDataStr ) ;
+                                console.log ( "str_resData_f:" , str_resData ) ;
+                                // console.log ( "str_resData_f:" , str_resData.constructor.name ) ;
 
-                              
-
-                                let writerStream = fs.createWriteStream 
+                                let pgp_writerStm = pgp_fs.createWriteStream 
                                 ( 
-                                    outputUri
+                                    str_outputUri
                                 ) ;
-                                // console.log ( "writerStream:" , writerStream ) ;        
-                                writerStream.write 
+                                // console.log ( "pgp_writerStm:" , pgp_writerStm ) ;        
+                                pgp_writerStm.write 
                                 ( 
-                                    resDataStr , 
+                                    str_resData.toString () , 
                                     "utf-8" 
                                 ) ;
-                                writerStream.end () ;
-                                writerStream.on
+                                pgp_writerStm.end () ;
+                                pgp_writerStm.on
                                 (
                                     "finish" ,
                                     function ()
@@ -251,26 +252,26 @@ let compileFd =
                                         console.log ( "finish" ) ;
                                     }
                                 ) ;
-                                let watchLock = false ;
-                                let fsWatchHandle = 
+                                let bol_watchLock = false ;
+                                let fn_fsWatchHandle = 
                                 function ( a , b , c ) 
                                 {
                                     if ( $this.watchLockA01 ) return ;
                                     $this.watchLockA01 = true ;
 
-                                    //console.log ( "_this.path:" , _this.path ) ;
-                                    /*fs.unwatchFile
+                                    //console.log ( "str_this.path:" , str_this.path ) ;
+                                    /*pgp_fs.unwatchFile
                                     (
-                                        _this.path , 
-                                        fsWatchHandle
+                                        str_this.path , 
+                                        fn_fsWatchHandle
                                     ) ;*/
-                                    initParams.globPgp = {
+                                    pgp_params.fn_glob = {
                                         "cwd" : "./" ,
-                                        "regPattAry" : [ _this.path , "" ]
+                                        "ary_regPatt" : [ str_this.path , "" ]
                                     } ;
                                     
-                                    compileFd.init 
-                                    ( initParams )  ;
+                                    compileFd.fn_init 
+                                    ( pgp_params )  ;
                                     let st01 = setTimeout 
                                     (
                                         function ()
@@ -286,10 +287,10 @@ let compileFd =
                                 } ;
                                 let psWatchA01 = Promise.resolve
                                 (
-                                    fs.watch 
+                                    pgp_fs.watch 
                                     ( 
-                                        _this.path , 
-                                        fsWatchHandle
+                                        str_this.path , 
+                                        fn_fsWatchHandle
                                     ) 
                                 ) ;
                                 psWatchA01.then
@@ -300,15 +301,15 @@ let compileFd =
                                         (
                                             function ()
                                             {
-                                                watchLock = !watchLock ;
+                                                bol_watchLock = !bol_watchLock ;
                                             } ,
                                             3000
 
                                         ) ;
-                                        fs.unwatchFile
+                                        pgp_fs.unwatchFile
                                         (
-                                            _this.path , 
-                                            fsWatchHandle
+                                            str_this.path , 
+                                            fn_fsWatchHandle
                                         ) ;
                                     } ,
                                     function ( reject ) 
@@ -332,7 +333,7 @@ let compileFd =
         ) ;
         promiseA01.then
         (
-            function ( srcDataStr )
+            function ( str_srcData )
             {
                 // console.log ( "arg0:" , arg0 ) ;
                 // console.log ( "Function.prototype.fileList:", Function.prototype.fileList ) ;

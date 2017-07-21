@@ -97,15 +97,15 @@ var deleteFd = function ( src )
     // arguments.callee ( src ) ;
 } ;
 
-let dele = function ( params , cbParams , cbFn )
+let dele = function ( params , cbFn , cbParams )
 {
-    let rmRegAry    = params.rmRegAry ? 
+    let regPattAry    = params.regPattAry ? 
     function ()
     {
-        params.rmRegAry.push ( "" ) ;
-        return params.rmRegAry ;
+        params.regPattAry.push ( "" ) ;
+        return params.regPattAry ;
     } ()
-    : params.rmRegAry ;
+    : params.regPattAry ;
     let cwd         = params.cwd ? params.cwd : "./" ;
     cbParams    = cbParams ? cbParams : undefined ; 
     cbFn        = cbFn ? cbFn : new Function ;
@@ -114,7 +114,7 @@ let dele = function ( params , cbParams , cbFn )
     ( 
         
         '{' 
-        + rmRegAry.join ( "," ) 
+        + regPattAry.join ( "," ) 
         + '}' 
         ,
         { 

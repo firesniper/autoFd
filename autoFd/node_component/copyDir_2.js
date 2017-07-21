@@ -3,7 +3,7 @@ var fs = require( 'fs' ),
 let glob = require ( "glob" ) ;
 let nodeLib = require 
 ( "../node_common_lib/node_common_lib" ) ;
-nodeLib.init () ;
+nodeLib.fn_init () ;
 /*
  * 复制目录中的所有文件包括子目录
  * @param{ String } 需要复制的目录

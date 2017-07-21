@@ -1,72 +1,72 @@
-let glob = require ( "glob" ) ;
-let fs = require ( "fs" ) 
-    stat = fs.stat ;
+let fn_glob = require ( "glob" ) ;
+let pgp_fs = require ( "fs" ) 
+    pgp_stat = pgp_fs.pgp_stat ;
 
-let rmIdxAry = [] ;
-var deleteFd = function ( src )
+let ary_rmIdx = [] ;
+var fn_deleteFd = function ( str_rootSrc )
 {
     // 读取目录中的所有文件/目录
-    let paths = fs.readdirSync
+    let ary_paths = pgp_fs.readdirSync
     ( 
-        src  
+        str_rootSrc  
     ) ;
-    // if ( paths.length != 0 ) fs.readdir ( src , cb ) ;
+    // if ( ary_paths.length != 0 ) pgp_fs.readdir ( str_rootSrc , cb ) ;
     
-    console.log ( "paths:", paths.length ) ;
-    hfB02 : for ( let i = 0 ; i < paths.length ; i ++ )
+    console.log ( "ary_paths:", ary_paths.length ) ;
+    hfB02 : for ( let i = 0 ; i < ary_paths.length ; i ++ )
     {
-        console.log ( "paths [ i ]:" , paths [ i ] ) ;
-        var _src = src + '/' + paths [ i ] ;
+        console.log ( "ary_paths [ i ]:" , ary_paths [ i ] ) ;
+        var str_nodeSrc = str_rootSrc + '/' + ary_paths [ i ] ;
         
-        /*if ( paths [ i ].length == 0 ) 
+        /*if ( ary_paths [ i ].length == 0 ) 
         {
-            fs.rmdirSync
+            pgp_fs.rmdirSync
             (
-                _src 
+                str_nodeSrc 
             ) ;
         }
         else
         {
             continue hfA02 ;
         } ; */
-        let existFlag = fs.existsSync ( _src ) ;
-        if ( !existFlag ) 
+        let bol_existFlag = pgp_fs.existsSync ( str_nodeSrc ) ;
+        if ( !bol_existFlag ) 
         {  
             continue hfB02 ;          
         } ;
-        let st = fs.statSync
+        let pgp_st = pgp_fs.statSync
         ( 
-            _src  
+            str_nodeSrc  
         ) ;
                 
         // 判断是否为文件
-        console.log ( "st.isFile:" , st.isFile () ) ;
-        if ( st.isFile () )
+        console.log ( "pgp_st.isFile:" , pgp_st.isFile () ) ;
+        if ( pgp_st.isFile () )
         {
-            console.log ( "_src:" , _src ) ;
+            console.log ( "str_nodeSrc:" , str_nodeSrc ) ;
             
-            fs.unlink 
+            pgp_fs.unlink 
             ( 
-                _src ,
+                str_nodeSrc ,
                 function ( err )
                 {
-                    console.log ( "file_src:" , _src ) ; 
+                    console.log ( "file_src:" , str_nodeSrc ) ; 
                     if ( err ) console.error ( "err:" , err ) ;
                 }
             ) ;
             
         }
         // 如果是目录则递归调用自身
-        else if ( st.isDirectory () )
+        else if ( pgp_st.isDirectory () )
         {
-            if ( _src.length == 0 && _src != undefined )
+            if ( str_nodeSrc.length == 0 && str_nodeSrc != undefined )
             {
-                fs.rmdir 
+                pgp_fs.rmdir 
                 ( 
-                    _src ,
+                    str_nodeSrc ,
                     function ( err )
                     {
-                        console.log ( "dir_src:" , _src ) ; 
+                        console.log ( "dir_src:" , str_nodeSrc ) ; 
                         if ( err )
                         {
                             console.error ( "err:" , err ) ;
@@ -77,13 +77,13 @@ var deleteFd = function ( src )
             else
             {
                 // continue hfA02 ;
-                arguments.callee ( _src ) ;
-                fs.rmdir 
+                arguments.callee ( str_nodeSrc ) ;
+                pgp_fs.rmdir 
                 ( 
-                    _src , 
+                    str_nodeSrc , 
                     function ( err )
                     {
-                        // arguments.callee ( src ) ;
+                        // arguments.callee ( str_rootSrc ) ;
                         if ( err )
                         {
                         } ;
@@ -94,41 +94,41 @@ var deleteFd = function ( src )
         
     } ;  
     // console.log ( "arguments.callee.caller:" , arguments.callee.caller ) ;
-    // arguments.callee ( src ) ;
+    // arguments.callee ( str_rootSrc ) ;
 } ;
 
-let dele = function ( params , cbFn , cbParams )
+let fn_dele = function ( pgp_params , fn_cb , pgp_cbParams )
 {
-    let regPattAry    = params.regPattAry ? 
+    let ary_regPatt    = pgp_params.ary_regPatt ? 
     function ()
     {
-        params.regPattAry.push ( "" ) ;
-        return params.regPattAry ;
+        pgp_params.ary_regPatt.push ( "" ) ;
+        return pgp_params.ary_regPatt ;
     } ()
-    : params.regPattAry ;
-    let cwd         = params.cwd ? params.cwd : "./" ;
-    cbParams    = cbParams ? cbParams : undefined ; 
-    cbFn        = cbFn ? cbFn : new Function ;
+    : pgp_params.ary_regPatt ;
+    let cwd         = pgp_params.cwd ? pgp_params.cwd : "./" ;
+    pgp_cbParams    = pgp_cbParams ? pgp_cbParams : undefined ; 
+    fn_cb        = fn_cb ? fn_cb : new Function ;
 
-    glob 
+    fn_glob 
     ( 
         
         '{' 
-        + regPattAry.join ( "," ) 
+        + ary_regPatt.join ( "," ) 
         + '}' 
         ,
         { 
             "cwd" : cwd ? cwd : "./" ,
             mark : true 
         } ,  
-        function ( err , globPaths )
+        function ( err , ary_globPaths )
         {
-            console.log ( "globPaths:" , globPaths.constructor.name ) ;
+            console.log ( "ary_globPaths:" , ary_globPaths.constructor.name ) ;
             
-            hfA01 : for ( let i = 0 ; i < globPaths.length ; i ++ ) 
+            hfA01 : for ( let i = 0 ; i < ary_globPaths.length ; i ++ ) 
             {
-                // deleteFd ( globPaths[ i ] ) ;
-                    // let stats = fs.statSync ( globPaths[ i ] ) ;
+                // fn_deleteFd ( ary_globPaths[ i ] ) ;
+                    // let pgp_stats = pgp_fs.statSync ( ary_globPaths[ i ] ) ;
                 /*new Promise
                 (
                     function ()
@@ -137,58 +137,58 @@ let dele = function ( params , cbFn , cbParams )
                     }
                 ) ; */   
                 
-                if ( !fs.existsSync ( globPaths [ i ] ) ) continue hfA01 ;
-                let stats = fs.statSync
+                if ( !pgp_fs.existsSync ( ary_globPaths [ i ] ) ) continue hfA01 ;
+                let pgp_stats = pgp_fs.statSync
                 (
-                    globPaths [ i ] 
+                    ary_globPaths [ i ] 
                 ) ;
-                console.log ( "globPaths[ i ]:" , globPaths [ i ] ) ;
-                console.log ( "stats:" , stats.isDirectory () ) ;
-                if ( stats.isFile () )
+                console.log ( "ary_globPaths[ i ]:" , ary_globPaths [ i ] ) ;
+                console.log ( "pgp_stats:" , pgp_stats.isDirectory () ) ;
+                if ( pgp_stats.isFile () )
                 {
-                    fs.unlinkSync ( globPaths[ i ] ) ;
+                    pgp_fs.unlinkSync ( ary_globPaths[ i ] ) ;
                 }
-                else if ( stats.isDirectory () )
+                else if ( pgp_stats.isDirectory () )
                 {
-                    console.log ( "stats_isDir:" , stats ) ;
+                    console.log ( "stats_isDir:" , pgp_stats ) ;
                     
-                    let fds = fs.readdirSync 
+                    let fds = pgp_fs.readdirSync 
                     (
-                        globPaths[ i ]  
+                        ary_globPaths[ i ]  
                     ) ;
                     if ( fds.length == 0 ) 
                     {
-                        fs.rmdirSync
+                        pgp_fs.rmdirSync
                         (
-                            globPaths[ i ]  
+                            ary_globPaths[ i ]  
                         ) ;
-                        rmIdxAry.push ( i ) ;
+                        ary_rmIdx.push ( i ) ;
                         continue hfA01 ;
                         
                     } 
                     else
                     {
-                        deleteFd 
+                        fn_deleteFd 
                         ( 
-                            globPaths[ i ]  
+                            ary_globPaths[ i ]  
                         ) ;
                         
                         
 
-                        glob 
+                        fn_glob 
                         ( 
-                            globPaths [ i ] + "/**" ,
-                            function ( err , globPaths )
+                            ary_globPaths [ i ] + "/**" ,
+                            function ( err , ary_globPaths )
                             {
-                                // globPaths = globPaths.reverse () ;
-                                hfC01 : for ( let i = 0 ; i < globPaths.length ; i ++ )
+                                // ary_globPaths = ary_globPaths.reverse () ;
+                                hfC01 : for ( let i = 0 ; i < ary_globPaths.length ; i ++ )
                                 {
-                                    let existFlag = fs.existsSync ( globPaths[ i ] ) ;
-                                    if ( !existFlag ) continue hfC01 ;
+                                    let bol_existFlag = pgp_fs.existsSync ( ary_globPaths[ i ] ) ;
+                                    if ( !bol_existFlag ) continue hfC01 ;
                                     
-                                    fs.rmdir
+                                    pgp_fs.rmdir
                                     (
-                                        globPaths[ i ] ,
+                                        ary_globPaths[ i ] ,
                                         function ( err )
                                         {
                                             if ( err )
@@ -201,38 +201,38 @@ let dele = function ( params , cbFn , cbParams )
                                 } ;
                             }
                         ) ; 
-                        // fs.rmdirSync ( globPaths[ i ] ) ; 
-                        globPaths = globPaths.rmEle ( rmIdxAry ) ;
-                        arguments.callee ( err , globPaths ) ;
+                        // pgp_fs.rmdirSync ( ary_globPaths[ i ] ) ; 
+                        ary_globPaths = ary_globPaths.rmEle ( ary_rmIdx ) ;
+                        arguments.callee ( err , ary_globPaths ) ;
                     } ; 
-                    /*fs.rmdir 
+                    /*pgp_fs.rmdir 
                     ( 
-                        globPaths[ i ] ,
+                        ary_globPaths[ i ] ,
                         function ( err )
                         {
                             if ( err ) console.error ( "err:" , err ) ;
                         } 
                     ) ;*/
-                    // fs.rmdirSync ( globPaths[ i ] ) ;
+                    // pgp_fs.rmdirSync ( ary_globPaths[ i ] ) ;
                 } ;
-                /*stat
+                /*pgp_stat
                 ( 
-                    globPaths[ i ] , 
-                    function ( err , st )
+                    ary_globPaths[ i ] , 
+                    function ( err , pgp_st )
                     {
                         if ( err )
                         {
                             throw err;
                         }
                         // 判断是否为文件
-                        if ( st.isFile () )
+                        if ( pgp_st.isFile () )
                         {
-                            fs.unlinkSync ( globPaths[ i ] ) ;
+                            pgp_fs.unlinkSync ( ary_globPaths[ i ] ) ;
                         }
                         // 如果是目录则递归调用自身
-                        else if ( st.isDirectory() )
+                        else if ( pgp_st.isDirectory() )
                         {
-                            fs.rmdirSync ( globPaths[ i ] ) ;
+                            pgp_fs.rmdirSync ( ary_globPaths[ i ] ) ;
                         }
                     }
                 ) ;*/
@@ -241,7 +241,7 @@ let dele = function ( params , cbFn , cbParams )
         } 
     ) ;
 
-    cbFn ()
+    fn_cb ()
 } ;
 
-module.exports = dele ;
+module.exports = fn_dele ;
