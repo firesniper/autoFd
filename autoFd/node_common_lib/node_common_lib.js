@@ -13,11 +13,16 @@ let pgp_node_common_lib =
             str_destVirPath : 0 
         } ;
         let $this = this ;
+
         let str_srcBaseUrl  = pgp_params.str_srcBaseUrl ;
+        console.log ( "str_srcBaseUrl2:" , str_srcBaseUrl ) ;
+
         let str_destBaseUrl = pgp_params.str_destBaseUrl ;
         console.log ( "str_destBaseUrl2:" , str_destBaseUrl ) ;
+
         let str_destVirPath = pgp_params.str_destVirPath ;
-        // let destBaseUrlRegStr = 
+        // console.log ( "str_destVirPath:" , str_destVirPath ) ;
+
         Object.defineProperties
         (
             Object ,
@@ -112,8 +117,8 @@ let pgp_node_common_lib =
                         {
                             "$PH_baseUri" :
                             [
-                                /(?:baseUri[^\:]*:[^\r\n;]*(?:\r\n|\r|\n;))/ig , 
-                                "baseUri:'" + str_srcBaseUrl + "';" 
+                                /(?:baseUri[^:]*:[^'"`]*(?:'|"|`)[^\r\n;]*(?:\'|\"|\`|;|\r\n|\r|\n))/gi , 
+                                `baseUri:'` + str_srcBaseUrl + `';` 
                             ]
                         } ,
                         ".sass_pgp" :

@@ -1,0 +1,25 @@
+{
+  "name": "dir_append_mls",
+  "version": "1.0.0",
+  "description": "123",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "123"
+  ],
+  "author": "123",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "express": "^4.15.3",
+    "gulp-clean": "^0.3.2",
+    "gulp-file-include": "^1.1.0",
+    "gulp-include-file": "^0.1.1",
+    "gulp-rev": "^7.1.2",
+    "gulp-rev-collector": "^1.2.2",
+    "gulp-scss": "^1.4.0",
+    "gulp-sourcemaps": "^2.6.0"
+  }
+}

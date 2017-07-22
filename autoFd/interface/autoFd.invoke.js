@@ -21,13 +21,13 @@ pgp_compileFd.fn_init
     {
         pgp_globParams : 
         {
-            // "str_cwd" : "./" ,
+            "str_cwd" : "./" ,
             "ary_regPatt" : 
             [ 
-                str_laboRat + 'htmloutput.dev.htm' , 
+                // str_laboRat + '**/*.dev.htm' , 
                 // str_autoFd_ol + '**/*.dev.js' , 
                 // str_laboRat + '*.dev.js' , 
-                // str_laboRat + '*.dev.less' ,        
+                str_laboRat + '*.dev.less' ,        
                 // str_laboRat + '*.dev.scss' 
             ]
         } ,
@@ -37,16 +37,16 @@ pgp_compileFd.fn_init
         str_outputDir : null ,
         str_injSrc :
         `
-        <head>
-            <meta charset='utf-8' />
-            <meta  content='no-cache' http-equiv='cache-control'   />
-            <meta  content='width=device-width,name='viewport    ' height=device-height, user-scalable=no, initial-scale=1.0 ,maximum-scale=1.0, minimum-scale=1.0' />
-            <meta 11/>
-            <meta bbbccc/>
-            <meta a/>
-            <script src= "./append_mls.js" ></script>
-            <script src= "./appmls.invoke.js" ></script>
-        </head>
+<head>
+<meta charset='utf-8' />
+<meta  content='no-cache' http-equiv='cache-control'   />
+<meta  content='width=device-width,name='viewport    ' height=device-height, user-scalable=no, initial-scale=1.0 ,maximum-scale=1.0, minimum-scale=1.0' />
+<meta 11/>
+<meta bbbccc/>
+<meta a/>
+<script src= "./append_mls.js" ></script>
+<script src= "./appmls.invoke.js" ></script>
+</head>
         `  
 
     }

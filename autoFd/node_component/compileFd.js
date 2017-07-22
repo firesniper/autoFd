@@ -22,24 +22,24 @@ let fnStr_getResLessSass = function ( str_srcData , str_fileExt )
 
 let fnStr_getResNonMakeUp = function ( str_srcData , str_fileExt )
 {
-    // console.log ( "str_srcData:" ,  str_srcData ) ;
-    let pgp_reg = str_srcData.fnPgp_getRegPgpFromState (  ) ;
-
+    console.log ( "NonMakeUp str_srcData:" ,  str_srcData ) ;
+    let pgp_reg = str_srcData.fnPgp_getRegPgpFromState ( ) ;
+    console.log ( "pgp_reg:" , pgp_reg ) ;
     let ary_selectWrapCtt_str = str_srcData.fnPgp_getCttWrap 
     ( 
         pgp_reg.pgp_placeHolderTokenMap  
     ).ary_selectWrapCtt_str ;
-    // console.log ( "ary_selectWrapCtt_str:" , ary_selectWrapCtt_str ) ;
+    console.log ( "ary_selectWrapCtt_str:" , ary_selectWrapCtt_str ) ;
 
     let str_nmu = ary_selectWrapCtt_str.fnStr_placeHolderToToken ( pgp_reg.pgp_placeHolderTokenMap ) ;
-    // console.log ( "str_nmu:" , str_nmu ) ;
+    console.log ( "str_nmu:" , str_nmu ) ;
     
     return str_nmu ;
 } ;
 
 let fnStr_getResJsStr2 = function ( str_srcData , str_fileExt )
 {
-    console.log ( "str_srcData :" , str_srcData ) ;
+    console.log ( "js str_srcData :" , str_srcData ) ;
     console.log ( "fileExt2:" , str_fileExt ) ;    
     let pgp_reg = str_srcData.fnPgp_getRegPgpFromState ( pgp_reg.pgp_placeHolderTokenMap ) ;
 
@@ -145,6 +145,7 @@ let compileFd =
         let str_cwd         = pgp_params.pgp_globParams.str_cwd ? pgp_params.pgp_globParams.str_cwd : "./" ;
         let str_outputDir   = pgp_params.str_outputDir ;
         let str_injSrc   = pgp_params.str_injSrc ;
+        
         let str_srcBaseUrl  = pgp_params.str_srcBaseUrl ;
         console.log ( "str_srcBaseUrl:" , str_srcBaseUrl ) ;
 
