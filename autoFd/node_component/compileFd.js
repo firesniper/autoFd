@@ -236,7 +236,7 @@ let compileFd =
 
                                 let pgp_writerStm = pgp_fs.createWriteStream 
                                 ( 
-                                    str_outputUri
+                                    str_outputUri.toString ()
                                 ) ;
                                 // console.log ( "pgp_writerStm:" , pgp_writerStm ) ;        
                                 pgp_writerStm.write 

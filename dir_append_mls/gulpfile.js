@@ -7,9 +7,10 @@ let pgp_indeEnv = {
 let pgp_depeEnv = {
     str_node_js         : pgp_indeEnv.str_cwr + "/node_js/" ,
     str_laboRat         : pgp_indeEnv.str_cwr + "/node_js/laboRat/" ,
-    str_autoFdDir       : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/autoFd/" ,
+    str_repo_autoFd     : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/" ,
+    str_dir_autoFd      : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/autoFd/" ,
     str_dist1           : pgp_indeEnv.str_desktop + "/dist1/" ,
-    str_dir_append_mls  : pgp_indeEnv.str_cwr + "/dir_append_mls/" ,
+    str_dir_append_mls  : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/dir_append_mls" ,
     str_node_common_lib : pgp_indeEnv.str_node_me + "/autoFd/node_common_lib/" 
 } ;
 
@@ -50,14 +51,15 @@ let str_compileFd = pgp_gulpLib.fnStr_compileFd
         {
             pgp_globParams : 
             {
-                // "str_cwd" :  pgp_libIndeEnv.str_cwr + "/dir_append_mls" ,
+                // "str_cwd" :  pgp_depeEnv.str_dir_append_mls ,
                 "str_cwd" :   "./" ,
                 "ary_regPatt" : 
                 [ 
                     // str_laboRat + '**/*.dev.htm' , 
                     // str_autoFd_ol + '**/*.dev.js' , 
                     // str_laboRat + '*.dev.js' , 
-                    "./append_mls/*.combo.html" ,  
+                    // pgp_depeEnv.str_dir_append_mls + "/append_mls/*.combo.html" , 
+                    "./append_mls/*.combo.html" ,
                     "./append_mls/css/*.dev.less" ,  
 
                     // pgp_libIndeEnv.str_laboRat + '**/*.dev.htm'
@@ -219,7 +221,12 @@ pgp_gulp.task
                 str_sass2Css 
             ] 
         ) ;
-        // pgp_gulp.watch ( pgp_libDepeEnv.str_laboRat + "/inputJs.dev.js" , ary_defTask ) ;
+        pgp_gulp.watch 
+        ( 
+            // pgp_libDepeEnv.str_laboRat + "/inputJs.dev.js" , 
+            "./**/*.html" ,
+            ary_defTask 
+        ) ;
     }
 ) ;
 

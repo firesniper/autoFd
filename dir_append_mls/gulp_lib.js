@@ -8,9 +8,9 @@ let pgp_depeEnv = {
     str_autoFdRoot      : pgp_indeEnv.str_node_me + "/autoFd/" ,
     str_node_js         : pgp_indeEnv.str_cwr + "/node_js/" ,
     str_laboRat         : pgp_indeEnv.str_cwr + "/node_js/laboRat/" ,
-    str_autoFdDir       : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/autoFd/" ,
+    str_dir_autoFd      : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/autoFd/" ,
     str_dist1           : pgp_indeEnv.str_desktop + "/dist1/" ,
-    str_dir_append_mls  : pgp_indeEnv.str_cwr + "/dir_append_mls/" ,
+    str_dir_append_mls  : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/dir_append_mls" ,
     str_node_common_lib : pgp_indeEnv.str_node_me + "/autoFd/node_common_lib/" 
 } ;
 // console.log ( "depeEnv:" , depeEnv ) ;
