@@ -51,13 +51,13 @@ let str_compileFd_html = pgp_gulpLib.fnStr_compileFd
         {
             pgp_globParams : 
             {
-                "str_cwd" :  pgp_depeEnv.str_cwr ,
-                // "str_cwd" :   "./" ,
+                // "str_cwd" :  pgp_depeEnv.str_dir_append_mls ,
+                "str_cwd" :   "./" ,
                 "ary_regPatt" : 
                 [ 
                      
-                    pgp_depeEnv.str_dir_append_mls + "/append_mls/*.combo.html" ,
-                    // pgp_depeEnv.str_dir_append_mls + "/append_mls/css/*.dev.less"   
+                     "./append_mls/*.combo.html" ,
+                     "./append_mls/css/*.dev.less"   
  
                 ]
             } ,
@@ -78,7 +78,7 @@ let str_compileFd_less = pgp_gulpLib.fnStr_compileFd
         {
             pgp_globParams : 
             {
-                "str_cwd" :  pgp_depeEnv.str_dir_append_mls ,
+                // "str_cwd" :  pgp_depeEnv.str_dir_append_mls ,
                 // "str_cwd" :   "./" ,
                 "ary_regPatt" : 
                 [ 
@@ -110,7 +110,11 @@ let str_fileInclude = pgp_gulpLib.fnStr_fileInclude
 ( 
     { 
         str_name : "" , 
-        ary_src : [ "./append_mls/*.dev.html" ] 
+        ary_src : 
+        [
+            //  pgp_depeEnv.str_dir_append_mls + 
+             "./append_mls/*.dev.html"
+        ] 
     } 
 ) ;
 

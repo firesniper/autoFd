@@ -3,12 +3,11 @@ require.config
     {
         paths : {
             "jquery" : [
-                "/code_common/common_js/jquery-1.9.0.custom" 
-                , 
-                "js/jquery"
+                document.baseURI + "/js/jquery-2.1.4" 
+                
             ] 
             ,
-            "a" : "js/a"   
+            "a" : [ document.baseURI + "/js/a" ]  
         }
     }
 ) ;
