@@ -23,13 +23,17 @@ let fnStr_getResLessSass = function ( str_srcData , str_fileExt )
 let fnStr_getResNonMakeUp = function ( str_srcData , str_fileExt )
 {
     console.log ( "NonMakeUp str_srcData:" ,  str_srcData ) ;
-    let pgp_reg = str_srcData.fnPgp_getRegPgpFromState ( ) ;
+    let pgp_reg = str_srcData.fnPgp_getRegPgpFromState ( "global" ) ;
     console.log ( "pgp_reg:" , pgp_reg ) ;
     let ary_selectWrapCtt_str = str_srcData.fnPgp_getCttWrap 
     ( 
-        pgp_reg.pgp_placeHolderTokenMap  
+        pgp_reg.pgp_placeHolderTokenMap ,
+        pgp_reg.pgp_parentTag_reg 
     ).ary_selectWrapCtt_str ;
-    console.log ( "ary_selectWrapCtt_str:" , ary_selectWrapCtt_str ) ;
+    console.log ( "ary_selectWrapCtt_str:" , str_srcData.fnPgp_getCttWrap 
+    ( 
+        pgp_reg.pgp_placeHolderTokenMap  
+    ) ) ;
 
     let str_nmu = ary_selectWrapCtt_str.fnStr_placeHolderToToken ( pgp_reg.pgp_placeHolderTokenMap ) ;
     console.log ( "str_nmu:" , str_nmu ) ;
@@ -66,29 +70,43 @@ let str_getResHTML = function ( str_srcData , str_injSrc , str_fileExt )
     ).ary_selectCtt ;
     console.log ( "ary_targetA1:" , ary_targetA1 ) ;
     
-    let pgp_sourceData = str_injSrc.fnPgp_getCttWrap 
-    ( 
-        pgp_regHead.pgp_placeHolderTokenMap ,
-        pgp_regHead.pgp_parentTag_reg
-    ) ;
-    console.log ( "pgp_sourceData.ary_selectCtt:" , pgp_sourceData.ary_selectCtt ) ;
-
-    let ary_resDiff = ary_targetA1.excludeOverlap ( pgp_sourceData.ary_selectCtt ) ;
-    console.log ( "ary_resDiff:" ,  ary_resDiff ) ;
-
-    let ary_resDiff2 = ary_targetA1.concat ( ary_resDiff ) ;
-    console.log ( "ary_resDiff2:" ,  ary_resDiff2 ) ;
-
-    let ary_selectWrap = pgp_sourceData.ary_selectWrap ;
-    let str_head4 = ( ary_selectWrap[ 0 ] + "\n" + ary_resDiff2.join( "\n" ) + "\n" + ary_selectWrap[ ary_selectWrap.length - 1 ] ) ;
-    console.log ( "str_head4:" , str_head4 ) ;
-    
     let str_resData = str_srcData.fnStr_tokenToPlaceHolder ( null , "global" ) ;
     // console.log ( "str_resData:" , str_resData.constructor.name ) ;
-    // console.log ( "str_resData:" , str_resData ) ;
+    console.log ( "str_resData:" , str_resData ) ;
+    let str_resData2 = str_resData ;
+    console.log ( "str_injSrc:" ,  ( str_injSrc != null) ) ;
 
-    let str_resData2 = str_resData.replace ( /<head.*>.*<\/head>/ig , str_head4 ) ;
-    console.log ( "str_resData2:" , str_resData2  ) ;
+    if (
+         str_injSrc && str_injSrc != "" 
+        //  false
+        )
+    {
+        let pgp_sourceData = str_injSrc.fnPgp_getCttWrap 
+        ( 
+            pgp_regHead.pgp_placeHolderTokenMap ,
+            pgp_regHead.pgp_parentTag_reg
+        ) ;
+        console.log ( "pgp_sourceData.ary_selectCtt:" , pgp_sourceData.ary_selectCtt ) ;
+
+        let ary_resDiff = ary_targetA1.excludeOverlap ( pgp_sourceData.ary_selectCtt ) ;
+        console.log ( "ary_resDiff:" ,  ary_resDiff ) ;
+
+        let ary_resDiff2 = ary_targetA1.concat ( ary_resDiff ) ;
+        console.log ( "ary_resDiff2:" ,  ary_resDiff2 ) ;
+
+        
+        
+        if ( pgp_sourceData.ary_selectWrap != [] )
+        {
+            let ary_selectWrap = pgp_sourceData.ary_selectWrap ;
+            let str_head4 = ( ary_selectWrap[ 0 ] + "\n" + ary_resDiff2.join( "\n" ) + "\n" + ary_selectWrap[ ary_selectWrap.length - 1 ] ) ;
+            console.log ( "str_head4:" , str_head4 ) ;
+            str_resData2 = str_resData.replace ( /<head.*>.*<\/head>/ig , str_head4 ) ;
+            console.log ( "str_resData2:" , str_resData2  ) ;
+
+        } ;
+
+    } ;
     
     
     /*if ( str_srcData.indexOf ( "<body" ) > -1 )
@@ -290,7 +308,8 @@ let compileFd =
                                 (
                                     pgp_fs.watch 
                                     ( 
-                                        str_this.path , 
+                                        str_this.path 
+                                        , 
                                         fn_fsWatchHandle
                                     ) 
                                 ) ;

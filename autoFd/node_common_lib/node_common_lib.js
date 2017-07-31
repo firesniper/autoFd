@@ -775,27 +775,36 @@ let pgp_node_common_lib =
                         } ;
                         
                        /* let pgp_placeHolderTokenMap = Object.fnPgp_placeHolderTokenMap ()[ str_selectNode + "Reg" ] ;
-                        let pgp_parentTag_reg = str_selectNode.fnPgp_toTagReg () ;
-                        console.log ( "pgp_parentTag_reg:" , pgp_parentTag_reg ) ;*/
+                        let pgp_parentTag_reg = str_selectNode.fnPgp_toTagReg () ;*/
+                        console.log ( "pgp_parentTag_reg:" , pgp_parentTag_reg ) ;
                         console.log ( "pgp_placeHolderTokenMap:" , pgp_placeHolderTokenMap ) ;
                         let str_all = str_this.fnStr_tokenToPlaceHolder 
                         ( 
                             pgp_placeHolderTokenMap 
                         ) ;
-                        // console.log ( "str_all:" , str_all ) ;
+                        console.log ( "str_all:" , str_all ) ;
 
-                        let ary_selectWrapCtt_str = null ;
-                        let ary_selectWrap = null ;
-                        let ary_selectCtt2 = null ;
+                        let ary_selectWrapCtt_str = [] ;
+                        let ary_selectWrap = [] ;
+                        let ary_selectCtt2 = [] ;
                         
-                        if ( pgp_parentTag_reg )
+                        if 
+                        (
+                             pgp_parentTag_reg 
+                             && 
+                             str_this
+                             &&
+                             str_this != ""
+                             &&
+                             pgp_parentTag_reg.reg_wrapAndCtt.test ( str_all )
+                        )
                         {
                             console.log ( "pgp_parentTag_reg :" , pgp_parentTag_reg ) ;
                             ary_selectWrapCtt_str = str_all.match 
                             ( 
                                 pgp_parentTag_reg.reg_wrapAndCtt  
                             ) ;
-                            // console.log ( "ary_selectWrapCtt_str:" , ary_selectWrapCtt_str ) ;
+                            console.log ( "ary_selectWrapCtt_str:" , ary_selectWrapCtt_str ) ;
 
                             ary_selectWrap = ary_selectWrapCtt_str.fnPgp_hasNullPointer ().ary_content[ 0 ].match 
                             ( pgp_parentTag_reg.reg_wrap ) ;

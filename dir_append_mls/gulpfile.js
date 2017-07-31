@@ -1,16 +1,16 @@
 let pgp_indeEnv = {
     str_desktop         : "C:/Users/Administrator/Desktop/" ,
-    str_cwr             : "E:/SERVER_CODES/DIVI_WORKING/TEST/cs_trade_a03_g_02/" ,
+    str_cwr             : "E:/Repos_git/repo_autoFd/" ,
     str_node_me         : "D:/ProgramFiles/node_me/" 
 } ;
 
 let pgp_depeEnv = {
-    str_node_js         : pgp_indeEnv.str_cwr + "/node_js/" ,
-    str_laboRat         : pgp_indeEnv.str_cwr + "/node_js/laboRat/" ,
-    str_repo_autoFd     : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/" ,
-    str_dir_autoFd      : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/autoFd/" ,
+    str_node_js         : pgp_indeEnv.str_cwr + "/" ,
+    str_laboRat         : pgp_indeEnv.str_cwr + "/laboRat/" ,
+    str_repo_autoFd     : pgp_indeEnv.str_cwr + "/" ,
+    str_dir_autoFd      : pgp_indeEnv.str_cwr + "/autoFd/" ,
     str_dist1           : pgp_indeEnv.str_desktop + "/dist1/" ,
-    str_dir_append_mls  : pgp_indeEnv.str_cwr + "/node_js/repo_autoFd/dir_append_mls" ,
+    str_dir_append_mls  : pgp_indeEnv.str_cwr + "/dir_append_mls/" ,
     str_node_common_lib : pgp_indeEnv.str_node_me + "/autoFd/node_common_lib/" 
 } ;
 
@@ -43,52 +43,60 @@ let str_rev_r = pgp_gulpLib.fnStr_rev
         str_maniDest : "./manifest/" 
     } 
 ) ;
-let str_compileFd = pgp_gulpLib.fnStr_compileFd 
+let str_compileFd_html = pgp_gulpLib.fnStr_compileFd 
 (
     {
-        str_name : "" ,
+        str_name : "html" ,
         compileFdParams : 
         {
             pgp_globParams : 
             {
-                // "str_cwd" :  pgp_depeEnv.str_dir_append_mls ,
-                "str_cwd" :   "./" ,
+                "str_cwd" :  pgp_depeEnv.str_cwr ,
+                // "str_cwd" :   "./" ,
                 "ary_regPatt" : 
                 [ 
-                    // str_laboRat + '**/*.dev.htm' , 
-                    // str_autoFd_ol + '**/*.dev.js' , 
-                    // str_laboRat + '*.dev.js' , 
-                    // pgp_depeEnv.str_dir_append_mls + "/append_mls/*.combo.html" , 
-                    "./append_mls/*.combo.html" ,
-                    "./append_mls/css/*.dev.less" ,  
+                     
+                    pgp_depeEnv.str_dir_append_mls + "/append_mls/*.combo.html" ,
+                    // pgp_depeEnv.str_dir_append_mls + "/append_mls/css/*.dev.less"   
+ 
+                ]
+            } ,
+            str_srcBaseUrl : "http://localhost:3000/public/" ,
+            str_destBaseUrl : "http://sdaf:8080/abc/" ,
+            str_destVirPath : 2 ,
+            str_outputDir : null ,
+            str_injSrc : null
 
-                    // pgp_libIndeEnv.str_laboRat + '**/*.dev.htm'
-                    // "./append_mls/css/*.less"         
-                    // str_laboRat + '*.dev.scss' 
+        }
+    }
+) ;
+let str_compileFd_less = pgp_gulpLib.fnStr_compileFd 
+(
+    {
+        str_name : "less" ,
+        compileFdParams : 
+        {
+            pgp_globParams : 
+            {
+                "str_cwd" :  pgp_depeEnv.str_dir_append_mls ,
+                // "str_cwd" :   "./" ,
+                "ary_regPatt" : 
+                [ 
+                     
+                    "./append_mls/*.combo.html" ,
+                    // "./append_mls/css/*.dev.less"   
+ 
                 ]
             } ,
             str_srcBaseUrl : "http://localhost:211" ,
             str_destBaseUrl : "http://sdaf:8080/abc/" ,
             str_destVirPath : 2 ,
             str_outputDir : null ,
-            str_injSrc :
-            `
-<head>
-<meta charset='utf-8' />
-<meta  content='no-cache' http-equiv='cache-control'   />
-<meta  content='width=device-width,name='viewport    ' height=device-height, user-scalable=no, initial-scale=1.0 ,maximum-scale=1.0, minimum-scale=1.0' />
-<meta 11/>
-<meta bbbccc/>
-<meta a/>
-<script src= "./append_mls.js" ></script>
-<script src= "./appmls.invoke.js" ></script>
-</head>
-            `  
+            str_injSrc : null 
 
         }
     }
 ) ;
-
 let str_rmConsole = pgp_gulpLib.fnStr_rmConsole 
 (
     {
@@ -198,7 +206,9 @@ let ary_defTask =
     
     str_fileInclude
     ,
-    str_compileFd
+    str_compileFd_html 
+    /*,
+    str_compileFd_less*/
     /*,
     str_rev_r*/
     /*,
@@ -225,7 +235,7 @@ pgp_gulp.task
         ( 
             // pgp_libDepeEnv.str_laboRat + "/inputJs.dev.js" , 
             "./**/*.html" ,
-            ary_defTask 
+            [ str_fileInclude ] 
         ) ;
     }
 ) ;
