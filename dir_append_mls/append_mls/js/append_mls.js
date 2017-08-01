@@ -214,7 +214,7 @@ Object.defineProperties
 				return type ;
 			} ,
 		} ,
-		thisIdx : 
+		"thisIdx" : 
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -692,7 +692,7 @@ Object.defineProperties
 				return ele ;
 			} 
 		} ,
-		getSchema :
+		"getSchema" :
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -747,7 +747,7 @@ Object.defineProperties
 				return regResStr ;
 			} 
 		} ,
-		suffix : 
+		"suffix" : 
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -765,7 +765,7 @@ Object.defineProperties
 
 			}
 		} ,
-		prefix : 
+		"prefix" : 
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -829,7 +829,7 @@ Object.defineProperties
 (
 	Function.prototype ,
 	{
-		callerArgs : 
+		"callerArgs" : 
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -880,7 +880,7 @@ Object.defineProperties
 (
 	Boolean.prototype ,
 	{
-		isAsynLoadFn :
+		"isAsynLoadFn" :
 		{
 			eumerable : false ,
 			configurable : true ,
@@ -933,14 +933,14 @@ if ( "baseURI" in document == false )
 
 }() ;
 
-function envAdware ()
+function envAware ()
 {
 
 	var envScmAry = String.prototype.getSchema ( null , 3 ) ;
 	console.log ( "envScmAry:" , envScmAry ) ;
-	envScmAry[ 0 ] + evmScmAry[ 1 ] ;
+	envScmAry[ 0 ] + envScmAry[ 1 ] ;
 
-} envAdware () ;
+} envAware () ;
 
 
 ;( function ( $html , $head , $body , getDefUrlPgp ) 
@@ -1404,7 +1404,7 @@ var append_mls =
 						+ parseInt ( Math.random( 9 ) * 10 ) ;
 
 		var defJsonpCbKey = "callback" , defJsonpCbVal = "jsonp" ;
-		var defJsonpCbPg = { defJsonpCbKey : defJsonpCbVal } ;
+		var defJsonpCbPg = { "callback" : defJsonpCbVal } ;
 		var jsonpCbPg = jsonpCbPg ? jsonpCbPg : defJsonpCbPg ;
 		var optJsonpCbKey = 
 			(

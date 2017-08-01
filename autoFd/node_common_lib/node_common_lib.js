@@ -76,7 +76,7 @@ let pgp_node_common_lib =
                                  ( 
                                      str_destBaseUrl ?
                                      str_destBaseUrl :
-                                     `(?:(?:http|https)?:\\/\\/[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){` + 0 + `,` + str_destVirPath + `})` 
+                                     `(?:http|https)?:?\\/\\/[^:]+:?\\d*(?:\\\\|\\/)?([\\w-]+(?:\\/|\\\\)?){` + 0 + `,` + str_destVirPath + `}` 
                                      , 
                                      `ig` 
                                  ) 
@@ -311,34 +311,36 @@ let pgp_node_common_lib =
                         let str_all = str_this ;
                         // let str_all = "<img src = 'http://www.abc.com/firesniper/adb/def/ghi/jkm/aaa.html' />" ;
                         let str_schemaReg = `((?:http|https):)?\\/\\/(?:localhost|127.0.0.1|[\\w\\.-]+):?\\d*(?:\\\\|\\/)?` ;
-                        let str_virRegPatt = `([\\w\\.-]+(?:\\\\|\\/)?)` ;
+                        let reg_schemaReg = new RegExp ( str_schemaReg , `ig` ) ;
+                        let str_virRegPatt = `([\\w-]+(?:\\\\|\\/))` ;
                         let str_virReg = str_virRegPatt + `{` + 0 + `,` + num + `}` ;
                         console.log ( "str_virReg:" , str_virReg ) ;
+                        let str_fileNameReg = `([\\w\\.-]+(?:\\\\|\\/)?)?` ;
                         let reg_virReg = new RegExp ( str_virReg , `ig` ) ;
                         console.log ( "str_all.match ( reg_virReg ):" , str_all.match ( reg_virReg ) ) ;
-                        let str_urlReg = `(?:'|")?` + str_schemaReg + str_virRegPatt + "*" + `(?:'|")?` ;
+                        let str_urlReg = `(?:'|")?` + str_schemaReg + str_virRegPatt + "*" + str_fileNameReg + `(?:'|")?` ;
                         // let ary_url_str = str_all.match ( /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.-]+):?\d*(?:\\|\/)?([\w\.-]+(?:\\|\/)?)*(?:'|")?/ig ) ;
                         let ary_url_str = str_all.match ( new RegExp ( str_urlReg , `ig` ) ) ;
                         console.log ( "ary_url_str:" , ary_url_str ) ;
-                        let ary_schema_str = ary_url_str[ 0 ].match ( new RegExp ( str_schemaReg , `ig` ) ) ;
+                        let ary_schema_str = ary_url_str[ 0 ].match ( reg_schemaReg ) ;
                         console.log ( "ary_schema_str:" , ary_schema_str ) ;
                         let str_start = ary_url_str[ 0 ].indexOf ( ary_schema_str [ 0 ] ) + ary_schema_str [ 0 ].length ;
                         console.log ( "str_start:" ,  str_start ) ;
                         let str_fd = ary_url_str[ 0 ].slice ( str_start ) ;
                         console.log ( "str_fd:" , str_fd ) ;
-                        let virPath_str = str_fd.match ( reg_virReg ) ;
-                        console.log ( "virPath_str:" , virPath_str ) ;
-                        let scmVir_str = str_all.match 
+                        let ary_virPath_str = str_fd.match ( reg_virReg ) ;
+                        console.log ( "ary_virPath_str:" , ary_virPath_str ) ;
+                        let ary_scmVir_str = str_all.match 
                         (
                             // /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.]+)((?:\\|\/)\w+){0,4}(?:'|")?/ig 
                             new RegExp ( str_schemaReg + str_virReg ) 
                         ) ;
-                        console.log ( "scmVir_str:" , scmVir_str ) ;
+                        console.log ( "ary_scmVir_str:" , ary_scmVir_str ) ;
                         return {
                             "ary_url_str" : ary_url_str ,
                             "ary_schema_str" : ary_schema_str ,
-                            "virPath_str" : virPath_str ,
-                            "str_baseUrl" : scmVir_str
+                            "ary_virPath_str" : ary_virPath_str ,
+                            "ary_baseUrl_str" : ary_scmVir_str
                         } ;
                     } 
                 } ,

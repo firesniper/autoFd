@@ -118,7 +118,7 @@ let str_getResHTML = function ( str_srcData , str_injSrc , str_fileExt )
         let bodyStr3 = str_body[ 0 ].fnStr_placeHolderToToken () ;
         console.log ( "bodyStr3:" , bodyStr3 ) ;
     } ;*/
-    //console.log ( "str_srcData2:" , str_srcData ) 
+    console.log ( "str_srcData2:" , str_srcData ) 
     let pgp_regPgpBody = str_srcData.fnPgp_getRegPgpFromState ( "body" ) ;
     console.log ( "pgp_regPgpBody:" , pgp_regPgpBody ) ;
     console.log ( "pgp_regPgpBody.pgp_parentTag_reg:" , pgp_regPgpBody.pgp_parentTag_reg ) ;
