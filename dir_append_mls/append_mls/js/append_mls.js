@@ -747,6 +747,52 @@ Object.defineProperties
 				return regResStr ;
 			} 
 		} ,
+		"fnPgp_getUrl" :
+		{
+			enumerable : false ,
+			configurable : true ,
+			writable : true ,
+			value : function ( num )
+			{
+				var args = Array.prototype.slice.call ( arguments ) ;
+				let str_this = this ;
+				var str_all = location.href ? location.href : document.URL ? document.URL : urlStr ? urlStr : str_this ;
+				
+				// let str_all = "<img src = 'http://www.abc.com/firesniper/adb/def/ghi/jkm/aaa.html' />" ;
+				let str_schemaReg = `((?:http|https):)?\\/\\/(?:localhost|127.0.0.1|[\\w\\.-]+):?\\d*(?:\\\\|\\/)?` ;
+				let reg_schemaReg = new RegExp ( str_schemaReg , `ig` ) ;
+				let str_virRegPatt = `([\\w-]+(?:\\\\|\\/))` ;
+				let str_virReg = str_virRegPatt + `{` + 0 + `,` + num + `}` ;
+				console.log ( "str_virReg:" , str_virReg ) ;
+				let str_fileNameReg = `([\\w\\.-]+(?:\\\\|\\/)?)?` ;
+				let reg_virReg = new RegExp ( str_virReg , `ig` ) ;
+				console.log ( "str_all.match ( reg_virReg ):" , str_all.match ( reg_virReg ) ) ;
+				let str_urlReg = `(?:'|")?` + str_schemaReg + str_virRegPatt + "*" + str_fileNameReg + `(?:'|")?` ;
+				// let ary_url_str = str_all.match ( /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.-]+):?\d*(?:\\|\/)?([\w\.-]+(?:\\|\/)?)*(?:'|")?/ig ) ;
+				let ary_url_str = str_all.match ( new RegExp ( str_urlReg , `ig` ) ) ;
+				console.log ( "ary_url_str:" , ary_url_str ) ;
+				let ary_schema_str = ary_url_str[ 0 ].match ( reg_schemaReg ) ;
+				console.log ( "ary_schema_str:" , ary_schema_str ) ;
+				let str_start = ary_url_str[ 0 ].indexOf ( ary_schema_str [ 0 ] ) + ary_schema_str [ 0 ].length ;
+				console.log ( "str_start:" ,  str_start ) ;
+				let str_fd = ary_url_str[ 0 ].slice ( str_start ) ;
+				console.log ( "str_fd:" , str_fd ) ;
+				let ary_virPath_str = str_fd.match ( reg_virReg ) ;
+				console.log ( "ary_virPath_str:" , ary_virPath_str ) ;
+				let ary_scmVir_str = str_all.match 
+				(
+					// /(?:'|")?((?:http|https):)?\/\/(?:localhost|127.0.0.1|[\w\.]+)((?:\\|\/)\w+){0,4}(?:'|")?/ig 
+					new RegExp ( str_schemaReg + str_virReg ) 
+				) ;
+				console.log ( "ary_scmVir_str:" , ary_scmVir_str ) ;
+				return {
+					"ary_url_str" : ary_url_str ,
+					"ary_schema_str" : ary_schema_str ,
+					"ary_virPath_str" : ary_virPath_str ,
+					"ary_baseUrl_str" : ary_scmVir_str
+				} ;
+			} 
+		} ,
 		"suffix" : 
 		{
 			enumerable : false ,
@@ -781,6 +827,8 @@ Object.defineProperties
 				return prefix ;
 			}
 		} ,
+		
+		
 
 	}
 ) ;
@@ -929,18 +977,138 @@ if ( "baseURI" in document == false )
 		} 
 	) ;
 } ;
+String.envOpt = {} ;
+Object.defineProperties
+(
+	String.envOpt ,
+	{
+		"str_internalWeb" :
+		{
+			enumerable : true ,
+			configurable : true ,
+			writable : true ,
+			value : 
+			{
+				ary_indicate : [ "localhost" , "127.0.0" ] ,
+				pgp_servBaseUrl : "http://localhost:8080/mall_a01/" ,
+				pgp_browBaseUrl : "http://localhost:3000/public/light7-mall_d01_codes_inw/"
+			}
+		} ,
+		"str_externalWeb" :
+		{
+			enumerable : true ,
+			configurable : true ,
+			writable : true ,
+			value : 
+			{
+				ary_indicate : [ "www.firesnip.com" , "github" ] ,
+				pgp_servBaseUrl : "http://www.spitc-cn.com/mall_a01_ol/" ,
+				pgp_browBaseUrl : "http://www.firesnip.com/light7-mall_c01_ol/"
+			}
+		} 
+	}
+) ;
+Object.defineProperties
+(
+	String ,
+	{
+		"optionfn" :
+		{
+			enumerable : false ,
+			configurable : true ,
+			writable : true ,
+			value : function ()
+			{
+				var option = String.envOpt ;
+				var res = { mem : null , length : 0 } ;
+				for ( var a in option )
+				{
+					var length = Object.keys ( option [ a ] ).length ;
+					if ( length >= res.length )
+					{
+						res.length = length ;
+						res.mem = a ;
+					} ;
+				} ;
+				console.log ( "res:" , res ) ;
+				String.envParams = {} ;
+				var pgp = {} ;
+				for ( var column in option [ res.mem ] )
+				{
+					pgp [ column ] = {} ;
+					for ( var l in option )
+					{
+						pgp [ column ] [ l ] = option [ l ] [ column ] ;
+					} ;
+				}
+				String.envParams = pgp ;
+				console.log ( "String.envParams:" , String.envParams ) ;
+				 
+			} ()
+		} 
+	}
 
+) ;
+Object.defineProperties
+(
+	String ,
+	{
+		
+		"fnPgp_getEnvState" :
+		{
+			enumerable : false ,
+			configurable : true ,
+			writable : true ,
+			value : function ()
+			{
+
+				/*var envScmAry = String.prototype.getSchema ( null , 3 ) ;
+				console.log ( "envScmAry:" , envScmAry ) ;
+				envScmAry[ 0 ] + envScmAry[ 1 ] ;*/
+				var pgp_env = String.prototype.fnPgp_getUrl ( 2 ) ;
+				console.log ( "pgp_env:" , pgp_env ) ;
+				var str_schema		= pgp_env.ary_schema_str [ 0 ] ;
+
+				var str_optionIndicate = "" ;
+				var pgp_envOpt = {} ;
+				for ( var a in String.envOpt )
+				{
+					bol_optionIndicate =  
+					( 
+						new RegExp 
+						( 
+							"(?:" 
+							+ String.envOpt [ a ] [ "ary_indicate" ] .join ( "|" ) 
+							+ ")" 
+							, 
+							"ig" 
+						) 
+					).test ( str_schema ) ;
+					if ( bol_optionIndicate )
+					{
+						str_optionIndicate = a ;
+						pgp_envOpt = String.envOpt [ a ] ;
+					} ;
+				} ;
+				window.pgp_envState = 
+				{
+					"str_baseUrl" 			: pgp_env.ary_baseUrl_str [ 0 ] ,
+					"str_schema"			: str_schema , 
+					"str_url" 				: pgp_env.ary_url_str [ 0 ] ,
+					"str_virPath" 			: pgp_env.ary_virPath_str [ 0 ] ,
+					"str_optionIndicate"	: str_optionIndicate ,
+					"pgp_envOpt" 			: pgp_envOpt
+				} ; 	
+				console.log ( "window.pgp_envState:" , window.pgp_envState ) ;
+				
+			} () 
+		}
+	}
+) ;
 
 }() ;
 
-function envAware ()
-{
 
-	var envScmAry = String.prototype.getSchema ( null , 3 ) ;
-	console.log ( "envScmAry:" , envScmAry ) ;
-	envScmAry[ 0 ] + envScmAry[ 1 ] ;
-
-} envAware () ;
 
 
 ;( function ( $html , $head , $body , getDefUrlPgp ) 
