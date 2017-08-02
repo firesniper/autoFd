@@ -10,7 +10,7 @@ let pgp_node_common_lib =
         {
             str_srcBaseUrl : "" ,
             str_destBaseUrl : "" ,
-            str_destVirPath : 0 
+            str_srcVirPath : 0 
         } ;
         let $this = this ;
 
@@ -20,9 +20,11 @@ let pgp_node_common_lib =
         let str_destBaseUrl = pgp_params.str_destBaseUrl ;
         console.log ( "str_destBaseUrl2:" , str_destBaseUrl ) ;
 
-        let str_destVirPath = pgp_params.str_destVirPath ;
-        // console.log ( "str_destVirPath:" , str_destVirPath ) ;
+        let str_srcVirPath = pgp_params.str_srcVirPath ? pgp_params.str_srcVirPath : 0 ;
+        // console.log ( "str_srcVirPath:" , str_srcVirPath ) ;
 
+        let pgp_baseUrl_ary = pgp_params.pgp_baseUrl_ary ;
+        console.log ( "pgp_baseUrl_ary:" , pgp_baseUrl_ary ) ;
         Object.defineProperties
         (
             Object ,
@@ -59,9 +61,9 @@ let pgp_node_common_lib =
                         "all_pgp" : {} ,
                         "global_pgp" :
                         {
-                            "$PH_r_n"  :   [ /(?:\r\n|\r|\n)/ig , "\n" ] ,
-                            "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
-                            "$PH_space":   [ /(?: )/ig , " " ] 
+                            "^PH_r_n"  :   [ /(?:\r\n|\r|\n)/ig , "\n" ] ,
+                            "^PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
+                            "^PH_space":   [ /(?: )/ig , " " ] 
                         }
                         ,
                         "head_pgp" : 
@@ -70,40 +72,42 @@ let pgp_node_common_lib =
                         } ,
                         "body_pgp" : 
                         {
-                            "$PH_baseUrl"  :   
+                            /*"^PH_baseUrl" :   
                             [ 
                                  new RegExp 
                                  ( 
-                                     str_destBaseUrl ?
-                                     str_destBaseUrl :
-                                     `(?:http|https)?:?\\/\\/[^:]+:?\\d*(?:\\\\|\\/)?([\\w-]+(?:\\/|\\\\)?){` + 0 + `,` + str_destVirPath + `}` 
+                                     str_srcBaseUrl == undefined ?
+                                     `(?:http|https)?:?\\/\\/[^:]+:?\\d*(?:\\\\|\\/)?([\\w-]+(?:\\/|\\\\)?){` + 0 + `,` + str_srcVirPath + `}` 
+                                     :
+                                     str_srcBaseUrl 
                                      , 
                                      `ig` 
                                  ) 
                                  , 
-                                 str_srcBaseUrl + "\/" 
-                            ] ,
-                            /*"$PH_url"  :   
+                                 str_destBaseUrl  
+                            ] 
+                            ,*/
+                            /*"^PH_url"  :   
                             [ 
                                 new RegExp 
                                 ( 
                                     str_destBaseUrl ?
                                     str_destBaseUrl :
                                     `(?:url\\([^:]+:[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){`
-                                        + 0 + `,` + str_destVirPath + `})` 
+                                        + 0 + `,` + str_srcVirPath + `})` 
                                     ,
                                     `ig`
                                 ) , 
                                 "url(" + str_srcBaseUrl + "\/" 
                             ] 
                             ,
-                            "$PH_src"  :   
+                            "^PH_src"  :   
                             [ 
                                  new RegExp 
                                  ( 
                                      str_destBaseUrl ?
                                      str_destBaseUrl :
-                                     `(?:src[^=]=[^'"]*(?:'|")?[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){` + 0 + `,` + str_destVirPath + `})` 
+                                     `(?:src[^=]=[^'"]*(?:'|")?[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){` + 0 + `,` + str_srcVirPath + `})` 
                                      , 
                                      `ig` 
                                  ) 
@@ -115,7 +119,7 @@ let pgp_node_common_lib =
                         ".htm_pgp" : { } ,
                         ".less_pgp" :
                         {
-                            "$PH_baseUri" :
+                            "^PH_baseUri" :
                             [
                                 /(?:baseUri[^:]*:[^'"`]*(?:'|"|`)[^\r\n;]*(?:\'|\"|\`|;|\r\n|\r|\n))/gi , 
                                 `baseUri:'` + str_srcBaseUrl + `';` 
@@ -127,51 +131,51 @@ let pgp_node_common_lib =
                         {  } ,
                         ".js_pgp" :
                         {
-                            // "$PH_r_n"  :  [ /(?:\r\n|\r|\n)/ig , "\n" ] , 
-                            // "$PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
-                            // "$PH_space":   [ /(?: )/ig , " " ] ,
-                            // "$PH_leftBlock" : 
+                            // "^PH_r_n"  :  [ /(?:\r\n|\r|\n)/ig , "\n" ] , 
+                            // "^PH_t"    :   [ /(?:\t|\x09|\cI|\v)/ig , "\t" ] ,
+                            // "^PH_space":   [ /(?: )/ig , " " ] ,
+                            // "^PH_leftBlock" : 
                             // [
                             //     /\/\*/ig ,
                             //     "/*"
                             // ] ,
-                            // "$PH_rightBlock" : 
+                            // "^PH_rightBlock" : 
                             // [
                             //     /\*\//ig ,
                             //     "*/"
                             // ] ,
                             
-                            "$PH_reglationA1" :
+                            "^PH_reglationA1" :
                             [
                                 /\\\/\//ig  , 
                                 "\\//" 
                             ] 
                             ,
-                            "$PH_fileProtocal" :
+                            "^PH_fileProtocal" :
                             [
                                 /file:\/\/\//ig  , 
                                 "file:///" 
                             ] 
                             ,
-                            "$PH_httpProtocal" :
+                            "^PH_httpProtocal" :
                             [
                                 /http:\/\//ig  , 
                                 "http://" 
                             ] 
                             ,
-                            "$PH_block" :
+                            "^PH_block" :
                             [
                                 /\/\*[^\*\/]*\*\//ig , 
                                 "" 
                             ] 
                             ,
-                            "$PH_line" :
+                            "^PH_line" :
                             [
                                 /\/\/[^\r\n\t]*(?:\r\n|\r|\n|\t)/ig ,
                                 "" 
                             ] 
                             ,
-                            "$PH_console" :
+                            "^PH_console" :
                             [
                                 /console.log[^;\r\n\t]*(?:(?:; *)|(?:\r\n|\r|\n|\t))/ig  , 
                                 "" 
@@ -181,6 +185,13 @@ let pgp_node_common_lib =
                         
                     } 
                 } ,
+                
+            }
+        ) ;
+        Object.defineProperties
+        (
+            Object ,
+            {
                 "fnPgp_placeHolderTokenMap" : 
                 {
                     enumerable : false ,
@@ -188,9 +199,40 @@ let pgp_node_common_lib =
                     writable : true ,
                     value : function ( pgp_PHTMap )
                     {
+                        newPgp =
+                        {
+                            "^PH_baseUrl%" :   
+                            [ 
+                                    new RegExp 
+                                    ( 
+                                        str_srcBaseUrl == undefined ?
+                                        `(?:http|https)?:?\\/\\/[^:]+:?\\d*(?:\\\\|\\/)?([\\w-]+(?:\\/|\\\\)?){` + 0 + `,` + str_srcVirPath + `}` 
+                                        :
+                                        str_srcBaseUrl 
+                                        , 
+                                        `ig` 
+                                    ) 
+                                    , 
+                                    str_destBaseUrl  
+                            ] 
+
+                        } ;
+                         
+                        Object.pgp_placeHolderTokenMap.body_pgp = 
+                        str_destBaseUrl ? 
+                        Object.assign 
+                        ( 
+                            Object.pgp_placeHolderTokenMap.body_pgp ,
+                            newPgp
+                        ) : Object.pgp_placeHolderTokenMap.body_pgp ;
+
+                        Object.pgp_placeHolderTokenMap.body_pgp = Object.assign 
+                        ( 
+                            Object.pgp_placeHolderTokenMap.body_pgp , 
+                            pgp_baseUrl_ary
+                        ) ;
                         pgp_PHTMap = pgp_PHTMap ? pgp_PHTMap : Object.pgp_placeHolderTokenMap ;
-                        
-                        // console.log ( "pgp_PHTMap:" , pgp_PHTMap ) ;
+                        console.log ( "pgp_PHTMap:" , pgp_PHTMap ) ;
                         // phtm.all = {} ;
                         /*for ( let ele in phtm ) 
                         {
@@ -199,6 +241,35 @@ let pgp_node_common_lib =
                         // pgp_PHTMap.pgp_bodyReg = Object.assign ( pgp_PHTMap.pgp_bodyReg , pgp_PHTMap.pgp_headReg ) ;
                         // let newPgp = {} ;
                         // pgp_PHTMap[ "pgp.jsReg" ] = Object.assign ( pgp_PHTMap[ "pgp_globalReg" ] , pgp_PHTMap[ "pgp.jsReg" ] ) ;
+
+                        hfA01 : for ( let ele in pgp_PHTMap )
+                        {
+                            if ( !pgp_PHTMap [ ele ] )
+                            {
+                                continue hfA01 ;
+                            } ;
+                            console.log ( "pgp_PHTMap [ ele ]:" ,  pgp_PHTMap [ ele ] ) ;
+                            hfA02 : for ( let key in pgp_PHTMap [ ele ] )
+                            {
+                                if 
+                                ( 
+                                    !pgp_PHTMap [ ele ] [ key ] 
+                                    || 
+                                    !pgp_PHTMap [ ele ] [ key ] [ 0 ]
+                                )
+                                {
+                                    continue hfA02 ;
+                                } ;
+                                // console.log ( "pgp_PHTMap [ ele ] [ key ] [ 0 ]:" , pgp_PHTMap [ ele ] [ key ] [ 0 ] ) ;
+                                 pgp_PHTMap [ ele ] [ key ] [ 0 ] = 
+                                 pgp_PHTMap [ ele ] [ key ] [ 0 ].constructor.name == "RegExp" ? 
+                                 pgp_PHTMap [ ele ] [ key ] [ 0 ]
+                                 :
+                                 new RegExp ( pgp_PHTMap [ ele ] [ key ] [ 0 ] , "ig" ) ;
+                            } ;
+                             
+                        } ;
+                        console.log ( "pgp_PHTMap2:" ,  pgp_PHTMap ) ;
                         pgp_PHTMap[ ".htm_pgp" ] = pgp_PHTMap[ ".html_pgp" ] = Object.assign 
                         ( 
                             pgp_PHTMap[ "head_pgp" ] , 
@@ -230,11 +301,30 @@ let pgp_node_common_lib =
                         // console.log ( "pgp_PHTMap.pgp_allReg:" , pgp_PHTMap.pgp_allReg ) ;
                         // pgp_PHTMap.pgp_allReg = newPgp ;
                         // console.log ( "pgp_PHTMap:" , pgp_PHTMap ) ;
+                        Object.pgp_placeHolderTokenMap2 = pgp_PHTMap ;
                         return pgp_PHTMap ;
                     }  
-                }  ,
+                } 
             }
-        ) ,
+        ) ;
+        Object.defineProperties
+        (
+            Object.pgp_placeHolderTokenMap ,
+            {
+                fnPgp_placeHolderTokenMap :
+                {
+                    enuemerable : false ,
+                    configurable : true ,
+                    writable : true ,
+                    value : 
+                    function ( pgp )
+                    {
+                        pgp = pgp ? pgp : this ;
+                        return Object.fnPgp_placeHolderTokenMap ( this ) ;
+                    } 
+                }
+            }
+        ) ;
         Object.defineProperties
         (
             Object.prototype ,
@@ -278,24 +368,7 @@ let pgp_node_common_lib =
                 } 
             } 
         ) ;
-        Object.defineProperties
-        (
-            Object.pgp_placeHolderTokenMap ,
-            {
-                fnPgp_placeHolderTokenMap :
-                {
-                    enuemerable : false ,
-                    configurable : true ,
-                    writable : true ,
-                    value : 
-                    function ( pgp )
-                    {
-                        pgp = pgp ? pgp : this ;
-                        return Object.fnPgp_placeHolderTokenMap ( this ) ;
-                    } 
-                }
-            }
-        ) ;
+        
         Object.defineProperties
         (
             String.prototype ,
@@ -854,7 +927,7 @@ let pgp_node_common_lib =
                         str_fileExt = str_fileExt ? str_fileExt : Object.pgp_validDatas.pgp_fileState.str_ext ;
                         pgp_phTokenMap = pgp_phTokenMap ? 
                         pgp_phTokenMap : 
-                        Object.fnPgp_placeHolderTokenMap ()[ str_fileExt + "_pgp" ] ;
+                        Object.fnPgp_placeHolderTokenMap () [ str_fileExt + "_pgp" ] ;
                         console.log ( "pgp_phTokenMap:" , pgp_phTokenMap ) ;
                         let str_resTkToPh = str_this ;
                         for ( let ele in pgp_phTokenMap )
@@ -865,9 +938,9 @@ let pgp_node_common_lib =
                                 ele  
                             ) ;
                         } ;
-                                /*str_resTkToPh = str_resTkToPh.replace ( /(?:\n|\r)/ig , "$PH_r_n" )
-                                .replace ( /(?:\t\|\x09|\cI|\v)/ig , "$PH_t" ) 
-                                .replace ( /(?: )/ig , "$PH_space" ) */
+                                /*str_resTkToPh = str_resTkToPh.replace ( /(?:\n|\r)/ig , "^PH_r_n" )
+                                .replace ( /(?:\t\|\x09|\cI|\v)/ig , "^PH_t" ) 
+                                .replace ( /(?: )/ig , "^PH_space" ) */
                                 /*.match ( /[^\f\n\r\t\v]/ig )
                                 .join ( "" ) ; */
                         // console.log ( "str_resTkToPh:" , str_resTkToPh ) ;
@@ -897,7 +970,7 @@ let pgp_node_common_lib =
                                 pgp_phTokenMap[ ele ][ 1 ] 
                             ) ;
                         } ;
-                        // str_phRes = str_this.replace ( new RegExp ( "(?:\\$PH_r_n\\$){1,}"  ) , "\n" ) ;
+                        // str_phRes = str_this.replace ( new RegExp ( "(?:\\^PH_r_n\\$){1,}"  ) , "\n" ) ;
                         console.log ( "str_phRes:" , str_phRes ) ;
                         return str_phRes ;
                         

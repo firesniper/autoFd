@@ -61,9 +61,22 @@ let str_compileFd_html = pgp_gulpLib.fnStr_compileFd
  
                 ]
             } ,
-            str_srcBaseUrl : "http://localhost:3000/public/" ,
-            str_destBaseUrl : "http://sdaf:8080/abc/" ,
-            str_destVirPath : 2 ,
+            str_srcBaseUrl : "http://sdaf:8080/abc/" ,
+            str_destBaseUrl : "http://localhost:3000/public/" ,
+            str_srcVirPath : 2 ,
+            "pgp_baseUrl_ary" : 
+            {
+                "^PH_baseUrl%" : 
+                [
+                    "http://localhost-a:3000/1/" ,
+                    "http://remote-a:1111/public/1/"
+                ] ,
+                "^PH_baseUrl2%" : 
+                [
+                    "http://127.0.0.1-b:8080/2/" ,
+                    "http://remote-b:2222/public/2/"
+                ] ,
+            } ,
             str_outputDir : null ,
             str_injSrc : null
 
@@ -88,9 +101,9 @@ let str_compileFd_less = pgp_gulpLib.fnStr_compileFd
  
                 ]
             } ,
-            str_srcBaseUrl : "http://localhost:211" ,
-            str_destBaseUrl : "http://sdaf:8080/abc/" ,
-            str_destVirPath : 2 ,
+            str_srcBaseUrl : "http://sdaf:8080/abc/" ,
+            str_destBaseUrl : "http://localhost:211" ,
+            str_srcVirPath : 2 ,
             str_outputDir : null ,
             str_injSrc : null 
 

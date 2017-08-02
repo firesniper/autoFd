@@ -170,13 +170,17 @@ let compileFd =
         let str_destBaseUrl = pgp_params.str_destBaseUrl ;
         console.log ( "str_destBaseUrl:" , str_destBaseUrl ) ;
  
-        let str_destVirPath = pgp_params.str_destVirPath ;
+        let pgp_baseUrl_ary = pgp_params.pgp_baseUrl_ary ;
+        console.log ( "pgp_baseUrl_ary1:" , pgp_baseUrl_ary ) ;
+
+        let str_srcVirPath = pgp_params.str_srcVirPath ;
         pgp_nodeCommonLib.fn_init 
         ( 
             {
-                 "str_srcBaseUrl" : str_srcBaseUrl ,
-                 "str_destBaseUrl" : str_destBaseUrl , 
-                 "str_destVirPath" : str_destVirPath
+                 "str_srcBaseUrl"   : str_srcBaseUrl ,
+                 "str_destBaseUrl"  : str_destBaseUrl , 
+                 "str_srcVirPath"   : str_srcVirPath ,
+                 "pgp_baseUrl_ary"  : pgp_baseUrl_ary 
             } 
         ) ;
         let $this = this ;

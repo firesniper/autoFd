@@ -12,7 +12,7 @@ let str_autoFd_ol = str_repo_autoFd + "/autoFd_ol/" ;
 let dir_append_mls = str_cwr + "/dir_append_mls/" ;
 
 let pgp_compileFd = require ( str_autoFdRoot + "/node_component/compileFd" ) ;
-let pgp_copyDir = require ( str_autoFdRoot + "/node_component/copyDir_2" ) ;
+// let pgp_copyDir = require ( str_autoFdRoot + "/node_component/copyDir_2" ) ;
 let fn_dele = require ( str_autoFdRoot + "/node_component/dele" ) ;
 
  
@@ -32,9 +32,22 @@ pgp_compileFd.fn_init
                 // dir_append_mls + '*.dev.scss' 
             ]
         } ,
-        str_srcBaseUrl : "http://localhost:3000/public/" ,
-        str_destBaseUrl : "http://sdaf:8080/abc/" ,
-        str_destVirPath : 2 ,
+        /*str_srcBaseUrl : "http://sdaf:8080/abc/" ,
+        str_destBaseUrl : "http://localhost:3000/public/" ,
+        str_srcVirPath : 2 ,*/
+        "pgp_baseUrl_ary" : 
+        {
+            "^PH_baseUrl1%" : 
+            [
+                "http://localhost-a:3000/1/" ,
+                "http://remote-a:1111/public/1/"
+            ] ,
+            "^PH_baseUrl2%" : 
+            [
+                "http://127.0.0.1-b:8080/2/" ,
+                "http://remote-b:2222/public/2/"
+            ] ,
+        } ,
         str_outputDir : null ,
         str_injSrc : null
 
