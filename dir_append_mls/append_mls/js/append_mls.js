@@ -4,7 +4,7 @@ var getDefUrlPgp = function (  )
 	var defUrlPgp = 
 	{
 		meta : 
-		[
+		[/*
 			{
 				"viewport" : 
 				{
@@ -56,10 +56,10 @@ var getDefUrlPgp = function (  )
 				} ,
 
 
-			} ,
+			} ,*/
 		] ,
 		link : 
-		[
+		[/*
 			{
 
 				"shortcut" : 
@@ -79,7 +79,7 @@ var getDefUrlPgp = function (  )
 			// } ,
 			// {
 			// 	fakeloader : baseURI + "jiaoben_loading_3025/css/fakeloader.css" ,
-			// } ,
+			// } ,*/
 		] ,
 		script : 
 		[
@@ -639,6 +639,41 @@ Object.defineProperties
 (
 	String.prototype ,
 	{
+		"getSearch" : 
+		{
+			enumerable : false ,
+			configurable : true ,
+			writable : true ,
+			value : function ( urlStrOpt )
+			{
+				var args = Array.prototype.slice.call( arguments ) ;
+				urlStrOpt = ( args.length == 1 && urlStrOpt ) ? 
+						 urlStrOpt = args[ args.length - 1 ] : 
+						 typeof this === 'string' ?
+						 this :
+						 null ;
+				var urlStrDef = location.href ? location.href : document.URL ? document.URL : urlStrOpt ? urlStrOpt : this ;
+				
+				if ( typeof urlStrDef != "string" ) throw new TypeError( "urlStrDef must string " ) ;
+				var searchStr = window.location ? location.search : urlStrDef.match( /\?+.*$/ig )[ 0 ] ;
+				if( searchStr.indexOf( "?" ) == 0 ) 
+				{
+					var sliceRes = searchStr.slice(1) ; 
+					var etyAry = sliceRes.split( "&" ) ;
+					var obj = {} ;
+					for ( var i = 0 ; i < etyAry.length ; i++ )
+					{
+						var pgAry = etyAry[ i ].split( "=" ) ;
+						obj[ pgAry[ 0 ] ] = pgAry[ 1 ] ;
+					} ;
+				}
+				else
+				{
+					throw new RangeError( "none search" ) ;
+				} ;
+				return obj ;
+			} ,
+		} ,
 		"getUrlFileName" : 
 		{
 			enumerable : false ,
@@ -1162,7 +1197,7 @@ var classPgp =
 					) ;
 				break ;
 			}
-		};
+		} ;
 
 		classPgp.scIns.prototype.crtEleObj = function ( urlPgp , tagName )
 		{
@@ -1170,7 +1205,7 @@ var classPgp =
 			if ( !urlPgp || urlPgp == undefined || urlPgp == null ) 
 			{
 				throw new TypeError( "null point error" ) ;
-				return false ;
+				// return false ;
 			} ;
 // 			urlPgp = urlPgp.objConvertAry() ;
 			var cssEleObj = {} ;
@@ -1191,7 +1226,7 @@ var classPgp =
 					var paireUnit = urlPgp[ o ][ i ] ;
 					switch ( paireUnit.verifyType(  ) ) 
 					{
-						case "string" :
+						case "String" :
 							// console.log( "suffix:" , paireUnit.suffix(  ) );
 							suffix = paireUnit.suffix(  ) ;
 							ele = classPgp.scIns.prototype.insObj.generateEle( paireUnit , suffix ) ;
@@ -1454,20 +1489,22 @@ var append_mls =
 		var scIns_InsObj = scInsSinIns ;
 		// console.log("scIns_InsObj:",scIns_InsObj);
 		
-		var resUrlObj = urlPgp != null && urlPgp != defUrlPgp && urlPgp.meta ? 
-			( 
-				function () 
-				{
-					if 
-					( !defUrlPgp.script || defUrlPgp.meta.getLength() == 0 ) 
-					return urlPgp.meta ;
-					resUrlObj = defUrlPgp.meta.combineUgNestUg ( urlPgp.meta ) ;
-					// resUrlObj = defUrlPgp.meta.concat( urlPgp.meta ) ;
-					var nonp = resUrlObj.hasNullPointer () ;
-					return nonp.unit ;
-				}
-			)() : 
-			defUrlPgp.meta ; 
+		var resUrlObj = 
+		urlPgp != null && urlPgp != defUrlPgp && urlPgp.meta 
+		&& defUrlPgp.meta
+		? 
+		function () 
+		{
+			if 
+			( !defUrlPgp.script || defUrlPgp.meta.getLength() == 0 ) 
+			return urlPgp.meta ;
+			resUrlObj = defUrlPgp.meta.combineUgNestUg ( urlPgp.meta ) ;
+			// resUrlObj = defUrlPgp.meta.concat( urlPgp.meta ) ;
+			var nonp = resUrlObj.hasNullPointer () ;
+			return nonp.unit ;
+		} () 
+		: 
+		defUrlPgp.meta ; 
 		
 		var metaEleObj = scIns_InsObj.crtEleObj ( resUrlObj ) ;
 		scIns_InsObj.appendSc ( metaEleObj , 0 , isAsyn ) ;
@@ -1541,7 +1578,7 @@ var append_mls =
 		// console.log( "urlPgp:" , urlPgp ) ;
 		isAsyn = isAsyn ? isAsyn : false ;
 		$append_mls.appendMeta ( urlPgp , true ) ;
-		$append_mls.appendLink ( urlPgp , false ) ;
+		$append_mls.appendLink ( urlPgp , true ) ;
 
 		document.onreadystatechange = 
 		function ()
@@ -1554,7 +1591,7 @@ var append_mls =
 				{
 					window.$body = "0" in $body && $body[ 0 ] ? $body[ 0 ] : $body ;
 					// console.log( "$body: " , $body ) ;
-					$append_mls.appendScript ( urlPgp , false ) ;
+					$append_mls.appendScript ( urlPgp , true ) ;
 				} ;
 			} ;
 		} ;
