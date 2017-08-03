@@ -1,12 +1,13 @@
 @padding: 3226px;
-@baseUri: "http://sdaf:8080/abc/";
+@ssurl: url("http://sdaf:8080/abc/def/123.png") ;
 body{
   background : purple ;
+  background-image : @ssurl ;
 }
 nav {
   ul {
     margin: 0;
-    padding: @padding;
+    padding: @padding + @padding;
     list-style: none;
   }
 

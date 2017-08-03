@@ -8,33 +8,33 @@ let pgp_node_common_lib =
     {
         pgp_params = pgp_params ? pgp_params :
         {
-            str_srcBaseUrl : "" ,
-            str_destBaseUrl : "" ,
+            str_srcBaseUri : "" ,
+            str_destBaseUri : "" ,
             str_srcVirPath : 0 
         } ;
         let $this = this ;
 
-        let str_srcBaseUrl  = pgp_params.str_srcBaseUrl ;
-        console.log ( "str_srcBaseUrl2:" , str_srcBaseUrl ) ;
+        let str_srcBaseUri  = pgp_params.str_srcBaseUri ;
+        console.log ( "str_srcBaseUri2:" , str_srcBaseUri ) ;
 
-        let str_destBaseUrl = pgp_params.str_destBaseUrl ;
-        console.log ( "str_destBaseUrl2:" , str_destBaseUrl ) ;
+        let str_destBaseUri = pgp_params.str_destBaseUri ;
+        console.log ( "str_destBaseUri2:" , str_destBaseUri ) ;
 
         let str_srcVirPath = pgp_params.str_srcVirPath ? pgp_params.str_srcVirPath : 0 ;
         // console.log ( "str_srcVirPath:" , str_srcVirPath ) ;
 
-        let pgp_baseUrl_ary = pgp_params.pgp_baseUrl_ary ;
-        console.log ( "pgp_baseUrl_ary:" , pgp_baseUrl_ary ) ;
+        let pgp_baseUri_ary = pgp_params.pgp_baseUri_ary ;
+        console.log ( "pgp_baseUri_ary:" , pgp_baseUri_ary ) ;
         Object.defineProperties
         (
             Object ,
             {
-                "str_baseUrl" :
+                "str_baseUri" :
                 {
                     enumerable : true ,
                     configurable : false ,
                     writable : true ,
-                    value : str_srcBaseUrl 
+                    value : str_srcBaseUri 
                 } ,
                 "pgp_validDatas" :
                 {
@@ -72,57 +72,57 @@ let pgp_node_common_lib =
                         } ,
                         "body_pgp" : 
                         {
-                            /*"^PH_baseUrl" :   
+                            /*"^PH_baseUri%" :   
                             [ 
                                  new RegExp 
                                  ( 
-                                     str_srcBaseUrl == undefined ?
+                                     str_srcBaseUri == undefined ?
                                      `(?:http|https)?:?\\/\\/[^:]+:?\\d*(?:\\\\|\\/)?([\\w-]+(?:\\/|\\\\)?){` + 0 + `,` + str_srcVirPath + `}` 
                                      :
-                                     str_srcBaseUrl 
+                                     str_srcBaseUri 
                                      , 
                                      `ig` 
                                  ) 
                                  , 
-                                 str_destBaseUrl  
+                                 str_destBaseUri  
                             ] 
                             ,*/
-                            /*"^PH_url"  :   
+                            /*"^PH_url%"  :   
                             [ 
                                 new RegExp 
                                 ( 
-                                    str_destBaseUrl ?
-                                    str_destBaseUrl :
+                                    str_destBaseUri ?
+                                    str_destBaseUri :
                                     `(?:url\\([^:]+:[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){`
                                         + 0 + `,` + str_srcVirPath + `})` 
                                     ,
                                     `ig`
                                 ) , 
-                                "url(" + str_srcBaseUrl + "\/" 
+                                "url(" + str_srcBaseUri + "\/" 
                             ] 
                             ,
-                            "^PH_src"  :   
+                            "^PH_src%"  :   
                             [ 
                                  new RegExp 
                                  ( 
-                                     str_destBaseUrl ?
-                                     str_destBaseUrl :
+                                     str_destBaseUri ?
+                                     str_destBaseUri :
                                      `(?:src[^=]=[^'"]*(?:'|")?[^:]+:\\d+\\/([\\w-]+(?:\\/|\\\\)){` + 0 + `,` + str_srcVirPath + `})` 
                                      , 
                                      `ig` 
                                  ) 
                                  , 
-                                'src = "' + str_srcBaseUrl + "\/" 
+                                'src = "' + str_srcBaseUri + "\/" 
                             ]*/
                         } ,
                         ".html_pgp" :  { } ,
                         ".htm_pgp" : { } ,
                         ".less_pgp" :
                         {
-                            "^PH_baseUri" :
+                            "^PH_ssUrl%" :
                             [
-                                /(?:baseUri[^:]*:[^'"`]*(?:'|"|`)[^\r\n;]*(?:\'|\"|\`|;|\r\n|\r|\n))/gi , 
-                                `baseUri:'` + str_srcBaseUrl + `';` 
+                                /(?:ssurl[^:]*:[^u]*url[^'"`]*(?:'|"|`)[^\r\n;]*(?:\'|\"|\`|;|\r\n|\r|\n))/gi , 
+                                `ssurl:url('` + str_destBaseUri + `');` 
                             ]
                         } ,
                         ".sass_pgp" :
@@ -201,25 +201,25 @@ let pgp_node_common_lib =
                     {
                         newPgp =
                         {
-                            "^PH_baseUrl%" :   
+                            "^PH_baseUri%" :   
                             [ 
-                                    new RegExp 
-                                    ( 
-                                        str_srcBaseUrl == undefined ?
-                                        `(?:http|https)?:?\\/\\/[^:]+:?\\d*(?:\\\\|\\/)?([\\w-]+(?:\\/|\\\\)?){` + 0 + `,` + str_srcVirPath + `}` 
-                                        :
-                                        str_srcBaseUrl 
-                                        , 
-                                        `ig` 
-                                    ) 
+                                new RegExp 
+                                ( 
+                                    str_srcBaseUri == undefined ?
+                                    `(?:http|https)?:?\\/\\/[^:]+:?\\d*(?:\\\\|\\/)?([\\w-]+(?:\\/|\\\\)?){` + 0 + `,` + str_srcVirPath + `}` 
+                                    :
+                                    str_srcBaseUri 
                                     , 
-                                    str_destBaseUrl  
+                                    `ig` 
+                                ) 
+                                , 
+                                str_destBaseUri  
                             ] 
 
                         } ;
                          
                         Object.pgp_placeHolderTokenMap.body_pgp = 
-                        str_destBaseUrl ? 
+                        str_destBaseUri ? 
                         Object.assign 
                         ( 
                             Object.pgp_placeHolderTokenMap.body_pgp ,
@@ -229,7 +229,7 @@ let pgp_node_common_lib =
                         Object.pgp_placeHolderTokenMap.body_pgp = Object.assign 
                         ( 
                             Object.pgp_placeHolderTokenMap.body_pgp , 
-                            pgp_baseUrl_ary
+                            pgp_baseUri_ary
                         ) ;
                         pgp_PHTMap = pgp_PHTMap ? pgp_PHTMap : Object.pgp_placeHolderTokenMap ;
                         console.log ( "pgp_PHTMap:" , pgp_PHTMap ) ;

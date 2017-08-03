@@ -10,7 +10,7 @@ let str_repo_autoFd = str_cwr + "/" ;
 let str_autoFdDir = str_repo_autoFd + "/autoFd/" ;
 let str_autoFd_ol = str_repo_autoFd + "/autoFd_ol/" ;
 let dir_append_mls = str_cwr + "/dir_append_mls/" ;
-
+let dir_tMall = "E:/Repos_git/repo_tMall_d01_codes/tMall_brow_l7_d01_codes_dev/" ;
 let pgp_compileFd = require ( str_autoFdRoot + "/node_component/compileFd" ) ;
 // let pgp_copyDir = require ( str_autoFdRoot + "/node_component/copyDir_2" ) ;
 let fn_dele = require ( str_autoFdRoot + "/node_component/dele" ) ;
@@ -21,28 +21,28 @@ pgp_compileFd.fn_init
     {
         pgp_globParams : 
         {
-            // "str_cwd" : "./" ,
-            "str_cwd" : str_cwr ,
+            "str_cwd" : "./" ,
+            // "str_cwd" : "E:/Repos_git/repo_tMall_d01_codes/tMall_brow_l7_d01_codes_dev/" ,
             "ary_regPatt" : 
             [ 
-                dir_append_mls + '/**/*.combo.html' , 
-                // str_autoFd_ol + '**/*.dev.js' , 
+                // './**/append_mls/*.combo.html' , 
+                './**/append_mls/css/*.dev.less' ,        
                 // dir_append_mls + '*.dev.js' , 
-                dir_append_mls + '/*.dev.less' ,        
-                // dir_append_mls + '*.dev.scss' 
+                // dir_tMall + '/**/*.combo.html' ,
+                // dir_tMall + '/**/css/*.dev.less' 
             ]
         } ,
-        /*str_srcBaseUrl : "http://sdaf:8080/abc/" ,
-        str_destBaseUrl : "http://localhost:3000/public/" ,
-        str_srcVirPath : 2 ,*/
-        "pgp_baseUrl_ary" : 
+        str_srcBaseUri : "http://sdaf:8080/abc/" ,
+        str_destBaseUri : "http://localhost:3000/public/" ,
+        str_srcVirPath : 2 ,
+        "pgp_baseUri_ary" : 
         {
-            "^PH_baseUrl1%" : 
+            "^PH_baseUri1%" : 
             [
                 "http://localhost-a:3000/1/" ,
                 "http://remote-a:1111/public/1/"
             ] ,
-            "^PH_baseUrl2%" : 
+            "^PH_baseUri2%" : 
             [
                 "http://127.0.0.1-b:8080/2/" ,
                 "http://remote-b:2222/public/2/"

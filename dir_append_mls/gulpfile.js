@@ -1,7 +1,9 @@
 let pgp_indeEnv = {
     str_desktop         : "C:/Users/Administrator/Desktop/" ,
     str_cwr             : "E:/Repos_git/repo_autoFd/" ,
-    str_node_me         : "D:/ProgramFiles/node_me/" 
+    str_node_me         : "D:/ProgramFiles/node_me/" ,
+    dir_tMall           : "E:/Repos_git/repo_tMall_d01_codes/tMall_brow_l7_d01_codes_dev/" 
+
 } ;
 
 let pgp_depeEnv = {
@@ -56,22 +58,24 @@ let str_compileFd_html = pgp_gulpLib.fnStr_compileFd
                 "ary_regPatt" : 
                 [ 
                      
-                     "./append_mls/*.combo.html" ,
-                     "./append_mls/css/*.dev.less"   
+                    //  pgp_indeEnv.dir_tMall + "/**/*.combo.html" ,
+                    //  pgp_indeEnv.dir_tMall + "/**/css/*.dev.less" ,  
+                     "./**/*.combo.html" ,
+                     "./**/css/*.dev.less"   
  
                 ]
             } ,
-            str_srcBaseUrl : "http://sdaf:8080/abc/" ,
-            str_destBaseUrl : "http://localhost:3000/public/" ,
+            str_srcBaseUri : "http://sdaf:8080/abc/" ,
+            str_destBaseUri : "http://localhost:3000/public/" ,
             str_srcVirPath : 2 ,
-            "pgp_baseUrl_ary" : 
+            "pgp_baseUri_ary" : 
             {
-                "^PH_baseUrl%" : 
+                "^PH_baseUri%" : 
                 [
                     "http://localhost-a:3000/1/" ,
                     "http://remote-a:1111/public/1/"
                 ] ,
-                "^PH_baseUrl2%" : 
+                "^PH_baseUri2%" : 
                 [
                     "http://127.0.0.1-b:8080/2/" ,
                     "http://remote-b:2222/public/2/"
@@ -92,17 +96,15 @@ let str_compileFd_less = pgp_gulpLib.fnStr_compileFd
             pgp_globParams : 
             {
                 // "str_cwd" :  pgp_depeEnv.str_dir_append_mls ,
-                // "str_cwd" :   "./" ,
+                "str_cwd" :   "./" ,
                 "ary_regPatt" : 
                 [ 
-                     
-                    "./append_mls/*.combo.html" ,
-                    // "./append_mls/css/*.dev.less"   
- 
+                    pgp_indeEnv.dir_tMall + "/**/*.combo.html" ,
+                    pgp_indeEnv.dir_tMall + "/**/css/*.dev.less"   
                 ]
             } ,
-            str_srcBaseUrl : "http://sdaf:8080/abc/" ,
-            str_destBaseUrl : "http://localhost:211" ,
+            str_srcBaseUri : "http://sdaf:8080/abc/" ,
+            str_destBaseUri : "http://localhost:211" ,
             str_srcVirPath : 2 ,
             str_outputDir : null ,
             str_injSrc : null 
@@ -191,7 +193,11 @@ let str_less2Css = pgp_gulpLib.fnStr_cvt2Css
 ( 
     { 
         str_name : "fn_less" , 
-        ary_src : [ "./append_mls/css/*.less" ] 
+        ary_src : 
+        [ 
+            // pgp_indeEnv.dir_tMall + "/**/css/*.less" 
+            "./**/append_mls/css/styles.less"
+        ] 
     } 
 ) ;
 
@@ -199,7 +205,7 @@ let str_sass2Css = pgp_gulpLib.fnStr_cvt2Css
 ( 
     { 
         str_name : "fn_sass" , 
-        ary_src : [ "./append_mls/css/*.scss" ] 
+        ary_src : [ "./**/append_mls/css/*.scss" ] 
     } 
 ) ;
 // let scss2Css = cvt2Css ( { fn : "scss" , ary_src : [ "./append_mls/css/*.scss" ] , loadMaps : true } ) ;

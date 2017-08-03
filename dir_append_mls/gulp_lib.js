@@ -1,6 +1,6 @@
 let pgp_indeEnv = {
     str_desktop         : "C:/Users/Administrator/Desktop/" ,
-    str_cwr             : "E:/SERVER_CODES/DIVI_WORKING/TEST/cs_trade_a03_g_02/" ,
+    str_cwr             : "E:/Repos_git/repo_autoFd/" ,
     str_node_me         : "D:/ProgramFiles/node_me/" ,
 } ;
 

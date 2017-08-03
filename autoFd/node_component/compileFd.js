@@ -164,23 +164,23 @@ let compileFd =
         let str_outputDir   = pgp_params.str_outputDir ;
         let str_injSrc   = pgp_params.str_injSrc ;
         
-        let str_srcBaseUrl  = pgp_params.str_srcBaseUrl ;
-        console.log ( "str_srcBaseUrl:" , str_srcBaseUrl ) ;
+        let str_srcBaseUri  = pgp_params.str_srcBaseUri ;
+        console.log ( "str_srcBaseUri:" , str_srcBaseUri ) ;
 
-        let str_destBaseUrl = pgp_params.str_destBaseUrl ;
-        console.log ( "str_destBaseUrl:" , str_destBaseUrl ) ;
+        let str_destBaseUri = pgp_params.str_destBaseUri ;
+        console.log ( "str_destBaseUri:" , str_destBaseUri ) ;
  
-        let pgp_baseUrl_ary = pgp_params.pgp_baseUrl_ary ;
-        console.log ( "pgp_baseUrl_ary1:" , pgp_baseUrl_ary ) ;
+        let pgp_baseUri_ary = pgp_params.pgp_baseUri_ary ;
+        console.log ( "pgp_baseUri_ary1:" , pgp_baseUri_ary ) ;
 
         let str_srcVirPath = pgp_params.str_srcVirPath ;
         pgp_nodeCommonLib.fn_init 
         ( 
             {
-                 "str_srcBaseUrl"   : str_srcBaseUrl ,
-                 "str_destBaseUrl"  : str_destBaseUrl , 
+                 "str_srcBaseUri"   : str_srcBaseUri ,
+                 "str_destBaseUri"  : str_destBaseUri , 
                  "str_srcVirPath"   : str_srcVirPath ,
-                 "pgp_baseUrl_ary"  : pgp_baseUrl_ary 
+                 "pgp_baseUri_ary"  : pgp_baseUri_ary 
             } 
         ) ;
         let $this = this ;
