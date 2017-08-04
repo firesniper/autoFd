@@ -32,7 +32,7 @@ pgp_compileFd.fn_init
                 // dir_tMall + '/**/css/*.dev.less' 
             ]
         } ,
-        str_srcBaseUri : "http://sdaf:8080/abc/" ,
+        str_srcBaseUri : "http://PH_host:8080/abc/" ,
         str_destBaseUri : "http://localhost:3000/public/" ,
         str_srcVirPath : 2 ,
         "pgp_baseUri_ary" : 

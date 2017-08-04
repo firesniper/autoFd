@@ -34,7 +34,7 @@ compileFd.init
             ]
         } ,
         srcBaseUrl : "http://localhost:211" ,
-        destBaseUrl : "http://sdaf:8080/abc/" ,
+        destBaseUrl : "http://PH_host:8080/abc/" ,
         destVirPath : 2 ,
         outputDir : null ,
         injSrcStr :

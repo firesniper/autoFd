@@ -65,7 +65,7 @@ let str_compileFd_html = pgp_gulpLib.fnStr_compileFd
  
                 ]
             } ,
-            str_srcBaseUri : "http://sdaf:8080/abc/" ,
+            str_srcBaseUri : "http://PH_host:8080/abc/" ,
             str_destBaseUri : "http://localhost:3000/public/" ,
             str_srcVirPath : 2 ,
             "pgp_baseUri_ary" : 
@@ -99,15 +99,32 @@ let str_compileFd_less = pgp_gulpLib.fnStr_compileFd
                 "str_cwd" :   "./" ,
                 "ary_regPatt" : 
                 [ 
-                    pgp_indeEnv.dir_tMall + "/**/*.combo.html" ,
-                    pgp_indeEnv.dir_tMall + "/**/css/*.dev.less"   
+                     
+                    //  pgp_indeEnv.dir_tMall + "/**/*.combo.html" ,
+                    //  pgp_indeEnv.dir_tMall + "/**/css/*.dev.less" ,  
+                    //  "./**/*.combo.html" ,
+                     "./**/css/*.dev.less"   
+ 
                 ]
             } ,
-            str_srcBaseUri : "http://sdaf:8080/abc/" ,
-            str_destBaseUri : "http://localhost:211" ,
+            str_srcBaseUri : "http://PH_host:8080/abc/" ,
+            str_destBaseUri : "http://localhost:3000/public/" ,
             str_srcVirPath : 2 ,
+            "pgp_baseUri_ary" : 
+            {
+                "^PH_baseUri%" : 
+                [
+                    "http://localhost-a:3000/1/" ,
+                    "http://remote-a:1111/public/1/"
+                ] ,
+                "^PH_baseUri2%" : 
+                [
+                    "http://127.0.0.1-b:8080/2/" ,
+                    "http://remote-b:2222/public/2/"
+                ] ,
+            } ,
             str_outputDir : null ,
-            str_injSrc : null 
+            str_injSrc : null
 
         }
     }
@@ -196,8 +213,9 @@ let str_less2Css = pgp_gulpLib.fnStr_cvt2Css
         ary_src : 
         [ 
             // pgp_indeEnv.dir_tMall + "/**/css/*.less" 
-            "./**/append_mls/css/styles.less"
-        ] 
+            "./**/append_mls/css/*.res.less"
+        ] ,
+        ary_depeFn : [ str_compileFd_less ]
     } 
 ) ;
 
@@ -239,20 +257,46 @@ let ary_defTask =
     ,*/
     /*"bwsReload" */
 ] ;
-
 pgp_gulp.task
+(
+    "less2Css" ,
+    [] ,
+    function ()
+    {
+        pgp_gulp.start ( [ str_less2Css ] ) ;
+    } 
+) ;
+
+pgp_gulp
+.task
 (
     "default" ,
     ary_defTask ,
     function ( )
     {
-        pgp_gulp.start 
-        ( 
-            [ 
-                str_less2Css
-                ,
-                str_sass2Css 
-            ] 
+        new Promise 
+        (
+            function ( resolved , rejected )
+            {
+                setTimeout 
+                (
+                    function ()
+                    {
+                        pgp_gulp.start 
+                        ( 
+                            [ 
+                                str_less2Css
+                                /*,
+                                str_sass2Css */
+                            ] 
+                        ) 
+
+                    } ,
+                    3000
+                ) ;
+
+            }
+
         ) ;
         pgp_gulp.watch 
         ( 

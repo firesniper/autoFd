@@ -45,6 +45,7 @@ let pgp_node_common_lib =
                     {
                         ary_nonMarkUpExt : [ ".js" , ".css" , ".less" , ".sass" , ".scss" , ".txt" ] ,
                         ary_markUpExt : [ ".html" , ".htm" , ".xhtml" , ".xml" ] ,
+                        ary_ssExt : [ ".css" , ".less" , ".sass" , ".scss" ] ,
                         ary_extLabel : [ "all" , "global" ] ,
                         ary_commonLabel : [] ,
                         ary_combineLabel : [ "lessSassScss" ] ,
@@ -119,10 +120,19 @@ let pgp_node_common_lib =
                         ".htm_pgp" : { } ,
                         ".less_pgp" :
                         {
-                            "^PH_ssUrl%" :
+                            /*"^PH_ssUrl%" :
                             [
                                 /(?:ssurl[^:]*:[^u]*url[^'"`]*(?:'|"|`)[^\r\n;]*(?:\'|\"|\`|;|\r\n|\r|\n))/gi , 
                                 `ssurl:url('` + str_destBaseUri + `');` 
+                            ] ,*/
+                             "^PH_ssUrl2%" :
+                            [
+                                /(?:(?:@|\$)ssurl\^)/gi , 
+                                /*`ssurl:` 
+                                + */
+                                str_destBaseUri 
+                                /*+ 
+                                `;` */
                             ]
                         } ,
                         ".sass_pgp" :
@@ -607,11 +617,8 @@ let pgp_node_common_lib =
                             ( 
                                 `(?:` + Object.pgp_validDatas.ary_markUpExt.join ( `|` ) + `)` , `ig` 
                             ) 
-                        ).test ( str_fileExt ) 
-                        ? 
-                        true 
-                        : 
-                        false ;
+                        ).test ( str_fileExt ) ;
+                        
                         let bol_htmlFlag = str_data.indexOf ( "<html" ) > -1 ;
                         let bol_headFlag = str_data.indexOf ( "<head" ) > -1 ;
                         let bol_bodyFlag = str_data.indexOf ( "<body" ) > -1 ;
@@ -1276,13 +1283,26 @@ let pgp_node_common_lib =
                         console.log ( "fnStr_getOutputUri_outputDir:" , outputDir2 = str_outputDir ) 
                         str_outputDir = str_outputDir ? str_outputDir : this.fnPgp_resolveUri ().str_dir ;
                         console.log ( "str_outputDir:" , str_outputDir ) ;
+                        let str_fileExt = this.fnPgp_resolveUri ().str_ext ;
+                        let str_suffix = this.fnPgp_resolveUri ().str_suffix ;
+                        let bol_isSsExt = 
+                        ( 
+                            new RegExp 
+                            ( 
+                                `(?:` + Object.pgp_validDatas.ary_ssExt.join ( `|` ) + `)` , `ig` 
+                            ) 
+                        ).test ( str_fileExt ) ;
                         let str_outputUri = 
                         (
                                 str_outputDir
                             + this.fnPgp_resolveUri ().str_file 
                             // + ".dev"
-                            + this.fnPgp_resolveUri ().str_ext
-                        ).fnStr_rmSuffix ( "" )  ;
+                            + str_fileExt
+                        )
+                        .fnStr_rmSuffix 
+                        ( 
+                            bol_isSsExt && str_suffix == ".dev" ? ".res" : "" 
+                        )  ;
                         console.log ( "str_outputUri：" , str_outputUri ) ;
                         return str_outputUri ;
                     }
@@ -1292,10 +1312,11 @@ let pgp_node_common_lib =
                     enumerable : false ,
                     configuratble : true ,
                     writable : true ,
-                    value : function ( repStr )
+                    value : function ( str_suffix )
                     {
                         let ary_args = Array.prototype.slice.call ( arguments ) ;
                         let ary_this = this ;
+                        str_suffix = str_suffix ? str_suffix : "" ;
                        /* let str1 = ary_this.slice ( ary_this.lastIndexOf ( "." ) ) ;
                         let str2 = ary_this.slice ( ary_this.fnNum_backNumIndexOf ( "." , 2 ) ) ;
                         let str_res = ary_this.replace 
@@ -1309,12 +1330,14 @@ let pgp_node_common_lib =
                         pgp_file.str_dir + "\\" 
                         + 
                         pgp_file.str_fileBaseName 
+                        +
+                        str_suffix
                         + 
                         pgp_file.str_ext ;
 
                         return str_res ;
                     } 
-                }
+                }  
             }
         ) ; 
         Object.defineProperties

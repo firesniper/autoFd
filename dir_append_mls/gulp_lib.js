@@ -128,6 +128,7 @@ let fnStr_cvt2Css = function ( pgp_params )
     pgp_gulp.task 
     ( 
         str_taskName , 
+        pgp_params.ary_depeFn ,
         function () 
         {
             pgp_gulp
@@ -197,14 +198,15 @@ let fnStr_revCollector = function ( pgp_params )
                 (
                     function ( pgp_file , enc , cb )
                     {
-                        let pgp_uri = pgp_file.path.fnPgp_resolveUri () ;
+                        /*let pgp_uri = pgp_file.path.fnPgp_resolveUri () ;
                         console.log ( "pgp_uri:" , pgp_uri ) ;
                         pgp_file.path = 
                        pgp_uri.str_dir + "\\" 
                         + 
                        pgp_uri.str_fileBaseName 
                         + 
-                       pgp_uri.str_ext ;
+                       pgp_uri.str_ext ;*/
+                       pgp_file.path = pgp_file.path.fnStr_rmSuffix () ;
                         console.log ( "pgp_file.path:" , pgp_file.path ) ;
 
                         this.push ( pgp_file ) ;
