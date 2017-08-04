@@ -245,12 +245,15 @@ let ary_defTask =
     
     
     
-    str_fileInclude
+    /*str_fileInclude
     ,
-    str_compileFd_html 
+    str_compileFd_html
+    , */
+    str_compileFd_less
     /*,
-    str_compileFd_less*/
-    /*,
+    str_less2Css*/
+    /*
+    ,
     str_rev_r*/
     /*,
     "revCollector"
@@ -263,7 +266,7 @@ pgp_gulp.task
     [] ,
     function ()
     {
-        pgp_gulp.start ( [ str_less2Css ] ) ;
+        pgp_gulpsync.start ( [ str_less2Css ] ) ;
     } 
 ) ;
 
@@ -274,30 +277,25 @@ pgp_gulp
     ary_defTask ,
     function ( )
     {
-        new Promise 
+         
+        setTimeout 
         (
-            function ( resolved , rejected )
+            function ()
             {
-                setTimeout 
-                (
-                    function ()
-                    {
-                        pgp_gulp.start 
-                        ( 
-                            [ 
-                                str_less2Css
-                                /*,
-                                str_sass2Css */
-                            ] 
-                        ) 
+                pgp_gulp.start 
+                ( 
+                    [ 
+                        str_less2Css
+                        /*,
+                        str_sass2Css */
+                    ] 
+                ) 
 
-                    } ,
-                    3000
-                ) ;
-
-            }
-
+            } ,
+            6000
         ) ;
+
+           
         pgp_gulp.watch 
         ( 
             // pgp_libDepeEnv.str_laboRat + "/inputJs.dev.js" , 

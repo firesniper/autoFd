@@ -131,32 +131,61 @@ let fnStr_cvt2Css = function ( pgp_params )
         pgp_params.ary_depeFn ,
         function () 
         {
-            pgp_gulp
-            .src ( pgp_params.ary_src )
-            .pipe ( pgp_gMod.fn_sourceMaps.init ( pgp_loadMaps ) ) 
-            .pipe ( pgp_gMod [ pgp_params.str_name ] ( { outputStyle : "compressed" } ) )
-            .pipe ( pgp_gMod.fn_miniCss () ) 
-            .pipe  
-            ( 
-                pgp_gulp.dest 
-                ( 
-                    function ( pgp_f ) 
-                    {
-                        return pgp_f.base ;
-                    }
-                )
-            )
-            .pipe ( pgp_gMod.fn_sourceMaps.write ( "./" ) )
-            .pipe   
-            ( 
-                pgp_gulp.dest 
-                ( 
-                    function ( pgp_f ) 
-                    {
-                        return pgp_f.base ;
-                    }
-                )
-            )
+            return new Promise
+            (
+                function ( resolved , rejected )
+                {
+                    setTimeout 
+                    (
+                        function ()
+                        {
+                            pgp_gulp
+                            .src ( pgp_params.ary_src )
+                            .pipe ( pgp_gMod.fn_sourceMaps.init ( pgp_loadMaps ) ) 
+                            .pipe ( pgp_gMod [ pgp_params.str_name ] ( { outputStyle : "compressed" } ) )
+                            .pipe ( pgp_gMod.fn_miniCss () ) 
+                            .pipe
+                            (
+                                pgp_gMod.pgp_through2.obj
+                                (
+                                    function ( pgp_file , enc , cb )
+                                    {
+                                    pgp_file.path = pgp_file.path.fnStr_rmSuffix () ;
+                                        console.log ( "pgp_file.path:" , pgp_file.path ) ;
+
+                                        this.push ( pgp_file ) ;
+                                        cb () ;
+                                    }
+                                )
+                            )
+                            .pipe  
+                            ( 
+                                pgp_gulp.dest 
+                                ( 
+                                    function ( pgp_f ) 
+                                    {
+                                        return pgp_f.base ;
+                                    }
+                                )
+                            )
+                            .pipe ( pgp_gMod.fn_sourceMaps.write ( "./" ) )
+                            .pipe   
+                            ( 
+                                pgp_gulp.dest 
+                                ( 
+                                    function ( pgp_f ) 
+                                    {
+                                        return pgp_f.base ;
+                                    }
+                                )
+                            ) ;
+
+                        } ,
+                        3000
+                    ) ;
+
+                }
+            ) ;
         }
     ) ;
     return str_taskName ;
