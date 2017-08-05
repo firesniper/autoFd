@@ -206,7 +206,7 @@ let str_delRevDest = pgp_gulpLib.fnStr_delDir ( { str_name : "revDest" , ary_src
 
 
 
-let str_less2Css = pgp_gulpLib.fnStr_cvt2Css 
+let pgp_less2Css = pgp_gulpLib.fnStr_cvt2Css 
 ( 
     { 
         str_name : "fn_less" , 
@@ -219,7 +219,7 @@ let str_less2Css = pgp_gulpLib.fnStr_cvt2Css
     } 
 ) ;
 
-let str_sass2Css = pgp_gulpLib.fnStr_cvt2Css 
+let pgp_sass2Css = pgp_gulpLib.fnStr_cvt2Css 
 ( 
     { 
         str_name : "fn_sass" , 
@@ -245,13 +245,13 @@ let ary_defTask =
     
     
     
-    /*str_fileInclude
+    str_fileInclude
     ,
     str_compileFd_html
-    , */
+    , 
     str_compileFd_less
     /*,
-    str_less2Css*/
+    pgp_less2Css*/
     /*
     ,
     str_rev_r*/
@@ -266,7 +266,7 @@ pgp_gulp.task
     [] ,
     function ()
     {
-        pgp_gulpsync.start ( [ str_less2Css ] ) ;
+        pgp_gulpsync.start ( [ pgp_less2Css ] ) ;
     } 
 ) ;
 
@@ -278,23 +278,36 @@ pgp_gulp
     function ( )
     {
          
-        setTimeout 
+        /*setTimeout 
         (
             function ()
             {
                 pgp_gulp.start 
                 ( 
                     [ 
-                        str_less2Css
-                        /*,
-                        str_sass2Css */
+                        pgp_less2Css.str_sync
+                        , pgp_sass2Css 
+                    ] 
+                ) 
+            } ,
+            6000
+        ) ;*/
+        pgp_less2Css.pm_async.then
+        (
+            function ( resolved ) 
+            {
+                pgp_gulp.start 
+                ( 
+                    [ 
+                        resolved
+                        // , pgp_sass2Css 
                     ] 
                 ) 
 
             } ,
-            6000
+            function ( rejected )
+            {}
         ) ;
-
            
         pgp_gulp.watch 
         ( 

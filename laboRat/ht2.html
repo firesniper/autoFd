@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf-8' />
+<meta http-equiv='cache-control' content='no-cache' />
+<meta name='viewport' content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0 ,minimum-scale=1.0,maximum-scale=1.0' />
+<link href= "./css/clf.css" type= "text/css" rel= "stylesheet" />
+</head>
+<body>
+    <div class= "dvA" >
+        <div class= "dvB" ></div>
+        <div class= "dvB" ></div>
+    </div>
+    <div class= "dvA" >
+        <div class= "dvB" ></div>
+        <div class= "dvB" ></div>
+    </div>
+
+
+    <style type="text/css"> 
+.div1{background:#000080;border:1px solid red;} 
+.div2{background:#800080;border:1px solid red;height:100px;margin-top:10px} 
+.left{float:left;width:20%;height:200px;background:#DDD} 
+.right{float:right;width:30%;height:80px;background:#DDD} 
+/*清除浮动代码*/ 
+.clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0} 
+.clearfloat{zoom:1} 
+</style> 
+<div class="div1 clearfloat"> 
+<div class="left">Left</div> 
+<div class="right">Right</div> 
+</div> 
+<div class="div2"> 
+div2 
+</div> 
+</body>
+<script type='text/javascript'>
+(
+    function ( window )
+    {
+        function fn ( str )
+        {
+            this.str = str ;
+        } ;
+        fn.prototype.format = function (  )
+        {
+            
+            var arg = Array.prototype.slice.call ( arguments ) ;
+            return  this.str.replace 
+                    ( 
+                        /\d/ig ,
+                        function ( b )     
+                        {
+                            return arg[ b ] || '' ;
+                        }
+                    )
+        } ;
+        window.fn = fn ;
+    } 
+)( window );
+//use
+var t = new fn ( '[1][2]' ) ;
+console.log
+(
+    t.format
+    ( 
+        'http://Alibaba.com' ,
+        'alibaba' ,
+        'welcome'
+    ) 
+) ;
+</script>
+</html>
+

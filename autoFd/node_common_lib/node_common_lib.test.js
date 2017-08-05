@@ -11,16 +11,35 @@ let pgp_Url = str2.fnPgp_getUrl ( 3 ) ;
 console.log ( "pgp_Url:" , pgp_Url ) ;
 let fnA01 = function () 
 {
-    console.log ( "fnA01" ) ;
+    setTimeout
+    (
+        function ()
+        {
+            console.log ( "fnA01" ) ;
+        } ,
+        3000
+    ) ;
 } ;
-
+let fnA02 = function () 
+{
+    console.log ( "fnA02" ) ;
+} ;
 let PmA01 = new Promise 
 ( 
     function ( resovled , rejected ) 
     {
-        console.log ( "PmA01" ) ;
-        console.log ( "PmA01 resovled:" , resovled ) ;
-        resovled () ;
+        // console.log ( "PmA01" ) ;
+        // console.log ( "PmA01 resovled fn:" , resovled ) ;
+        // fnA01 () ;
+        setTimeout 
+        (
+            function ()
+            {
+                resovled ( fnA02 ) ;
+            } ,
+            3000
+        ) ;
+        fnA01 () ;
     } 
 ) ;
 console.log ( "PmA01:" , PmA01 ) ;
@@ -28,7 +47,9 @@ PmA01.then
 (
     function ( resolved )
     {
-        console.log ( "PmA01 resolved:" , resolved ) ;
+        // console.log ( "PmA01 then resolved:" , resolved ) ;
+        resolved () ;
+        // fnA01 () ;
     } ,
     function ( rejected )
     {
@@ -36,16 +57,16 @@ PmA01.then
     }
 )
 
-let PmA02 = Promise.resolve ( fnA01 () ) ;
+/*let PmA02 = Promise.resolve ( fnA01 ) ;
 console.log ( "PmA02:" , PmA02 ) ;
 PmA02.then 
 (
     function ( resolved )
     {
-        console.log ( "PmA02 resolved:" , resolved ) ;
+        console.log ( "PmA02 then resolved:" , resolved ) ;
     } ,
     function ( rejected )
     {
         console.log ( "PmA02 rejected:" , rejected ) ;
     }
-)
+) ;*/

@@ -1,23 +1,110 @@
-var fnPgp_getDefUrl = function ( pgp_params )
+var getDefUrlPgp = function (  )
 {
 	var baseURI = baseURI ? baseURI : window.baseURI ? window.baseURI : document.querySelector( "base" ) ? document.baseURI : "" ;
-	var pgp_defUrl = pgp_params.pgp_defUrl || 
+	var defUrlPgp = 
 	{
-		meta : [ ] ,
-		link : [ ] ,
-		script : [
-			{ } 
+		meta : 
+		[/*
+			{
+				"viewport" : 
+				{
+					"name" : "viewport" ,
+					"content" : "width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" ,
+
+				} ,
+				"meta01" : 
+				{
+					"name" : "renderer" ,
+					"content" : "webkit" ,
+				} ,
+				"meta02" : 
+				{
+					"http-equiv" : "X-UA-Compatible" ,
+					"content" : "IE=edge, chrome=1" ,
+				} ,
+				"pragma" : 
+				{
+					"http-equiv" : "pragma" ,
+					"content" : "no-cach" ,
+				} ,
+				// "meta04" : {
+				// 	"http-equiv" : "Content-Type" ,
+				// 	"content" : "text/html,charset=utf-8" ,
+				// } ,
+				"utf-8" : 
+				{
+					"charset" : "utf-8" ,
+				} ,
+				// "description" : {
+				// 	"name" : "description" ,
+				// 	"content" : ""
+				// } ,
+				"keywords" : 
+				{
+					"name" : "keywords" ,
+					"content" : "" ,
+				} ,
+				"apple-mobile-capable" : 
+				{
+					"name" : "apple-mobile-web-app-capable" ,
+					"content" : "yes" ,
+				} ,
+				"bar-style" : 
+				{
+					"name" : "apple-mobile-web-app-status-bar-style" ,
+					"content" : "black" ,
+				} ,
+
+
+			} ,*/
+		] ,
+		link : 
+		[/*
+			{
+
+				"shortcut" : 
+				{
+					"rel" : "shortcut icon" ,
+					"href" : "favicon.ico" ,
+				} ,
+				"apple-touch" : 
+				{
+					"rel" : "apple-touch-icon-precomposed" ,
+					"href" : "assets/img/apple-touch-icon-114x114.png" ,
+				} ,
+			} ,
+			// {
+			// 	common_cs_trad : baseURI + "cs_trade/css/common_cs_trad.css" ,
+			// 	demo : baseURI + "jiaoben_loading_3025/css/demo.css" ,
+			// } ,
+			// {
+			// 	fakeloader : baseURI + "jiaoben_loading_3025/css/fakeloader.css" ,
+			// } ,*/
+		] ,
+		script : 
+		[
+			{
+				// angular :  "http://code.angularjs.org/angular-1.0.1.min.js" ,
+				// jquery : baseURI + "code_common/common_js/jquery-1.9.0.custom.js" ,
+				// flexible : baseURI + "code_common/lib-flexible-master/src/flexible.js" ,
+			} ,
+// 						{
+// 							common_foundation : baseURI + "code_common/common_js/common_foundation.js" ,
+// 						} ,
+// 						{
+// 							cs_load_common_html : baseURI + "cs_trade/js/cs_load_common_html.js" ,
+// 						} ,
 		] ,
 	} ;
-	for ( var i in pgp_defUrl ) 
+	for ( var i in defUrlPgp ) 
 	{
-		if ( pgp_defUrl.hasOwnProperty( i ) )
+		if ( defUrlPgp.hasOwnProperty( i ) )
 		{
-			pgp_defUrl[ i ].__proto__.defFlag = true  ;
+			defUrlPgp[ i ].__proto__.defFlag = true  ;
 		} ;
 	} ;
 	
-	return pgp_defUrl ;
+	return defUrlPgp ;
 } ;
 void function () 
 {
@@ -925,12 +1012,12 @@ if ( "baseURI" in document == false )
 		} 
 	) ;
 } ;
-String.pgp_envOpt = {} ;
+String.envOpt = {} ;
 Object.defineProperties
 (
-	String.pgp_envOpt ,
+	String.envOpt ,
 	{
-		/*"dev" :
+		"str_internalWeb" :
 		{
 			enumerable : true ,
 			configurable : true ,
@@ -939,10 +1026,10 @@ Object.defineProperties
 			{
 				ary_indicate : [ "localhost" , "127.0.0" ] ,
 				pgp_servBaseUrl : "http://localhost:8080/mall_a01/" ,
-				pgp_browBaseUrl : "http://localhost:3000/"
+				pgp_browBaseUrl : "http://localhost:3000/public//"
 			}
 		} ,
-		"pro" :
+		"str_externalWeb" :
 		{
 			enumerable : true ,
 			configurable : true ,
@@ -953,26 +1040,25 @@ Object.defineProperties
 				pgp_servBaseUrl : "http://www.spitc-cn.com/mall_a01_ol/" ,
 				pgp_browBaseUrl : "http://www.firesnip.com/light7-mall_c01_ol/"
 			}
-		} */
+		} 
 	}
 ) ;
 Object.defineProperties
 (
 	String ,
 	{
-		"fn_envOpt" :
+		"optionfn" :
 		{
 			enumerable : false ,
 			configurable : true ,
 			writable : true ,
-			value : function ( pgp_params )
+			value : function ()
 			{
-				var pgp_option = pgp_params.pgp_envOpt ;
-				// String.pgp_envOpt = pgp_option ;
+				var option = String.envOpt ;
 				var res = { mem : null , length : 0 } ;
-				for ( var a in pgp_option )
+				for ( var a in option )
 				{
-					var length = Object.keys ( pgp_option [ a ] ).length ;
+					var length = Object.keys ( option [ a ] ).length ;
 					if ( length >= res.length )
 					{
 						res.length = length ;
@@ -982,18 +1068,18 @@ Object.defineProperties
 				console.log ( "res:" , res ) ;
 				String.envParams = {} ;
 				var pgp = {} ;
-				for ( var column in pgp_option [ res.mem ] )
+				for ( var column in option [ res.mem ] )
 				{
 					pgp [ column ] = {} ;
-					for ( var l in pgp_option )
+					for ( var l in option )
 					{
-						pgp [ column ] [ l ] = pgp_option [ l ] [ column ] ;
+						pgp [ column ] [ l ] = option [ l ] [ column ] ;
 					} ;
 				}
 				String.envParams = pgp ;
 				console.log ( "String.envParams:" , String.envParams ) ;
 				 
-			} 
+			} ()
 		} 
 	}
 
@@ -1008,38 +1094,35 @@ Object.defineProperties
 			enumerable : false ,
 			configurable : true ,
 			writable : true ,
-			value : function ( pgp_params )
+			value : function ()
 			{
 
 				/*var envScmAry = String.prototype.getSchema ( null , 3 ) ;
 				console.log ( "envScmAry:" , envScmAry ) ;
 				envScmAry[ 0 ] + envScmAry[ 1 ] ;*/
-				var num_virPath = pgp_params.num_virPath || 2 ;
-				var pgp_envOpt	= pgp_params.pgp_envOpt || String.pgp_envOpt ;
-
-				var pgp_env = String.prototype.fnPgp_getUrl ( num_virPath ) ;
+				var pgp_env = String.prototype.fnPgp_getUrl ( 2 ) ;
 				console.log ( "pgp_env:" , pgp_env ) ;
 				var str_schema		= pgp_env.ary_schema_str [ 0 ] ;
 
-				var str_envOptIndi = "" ;
-				var pgp_newNull_envOpt = {} ;
-				for ( var a in pgp_envOpt )
+				var str_optionIndicate = "" ;
+				var pgp_envOpt = {} ;
+				for ( var a in String.envOpt )
 				{
-					bol_envOptIndi =  
+					bol_optionIndicate =  
 					( 
 						new RegExp 
 						( 
 							"(?:" 
-							+ pgp_envOpt [ a ] [ "ary_indicate" ] .join ( "|" ) 
+							+ String.envOpt [ a ] [ "ary_indicate" ] .join ( "|" ) 
 							+ ")" 
 							, 
 							"ig" 
 						) 
 					).test ( str_schema ) ;
-					if ( bol_envOptIndi )
+					if ( bol_optionIndicate )
 					{
-						str_envOptIndi = a ;
-						pgp_newNull_envOpt = pgp_envOpt [ a ] ;
+						str_optionIndicate = a ;
+						pgp_envOpt = String.envOpt [ a ] ;
 					} ;
 				} ;
 				window.pgp_envState = 
@@ -1048,12 +1131,12 @@ Object.defineProperties
 					"str_schema"			: str_schema , 
 					"str_url" 				: pgp_env.ary_url_str [ 0 ] ,
 					"str_virPath" 			: pgp_env.ary_virPath_str [ 0 ] ,
-					"str_envOptIndi"		: str_envOptIndi ,
-					"pgp_envOpt" 			: pgp_newNull_envOpt
+					"str_optionIndicate"	: str_optionIndicate ,
+					"pgp_envOpt" 			: pgp_envOpt
 				} ; 	
 				console.log ( "window.pgp_envState:" , window.pgp_envState ) ;
 				
-			}  
+			} () 
 		}
 	}
 ) ;
@@ -1063,7 +1146,7 @@ Object.defineProperties
 
 
 
-;( function ( $html , $head , $body , fnPgp_getDefUrl ) 
+;( function ( $html , $head , $body , getDefUrlPgp ) 
 {
 "use strict" ;
 
@@ -1397,47 +1480,31 @@ var classPgp =
 	
 
 } ;
-window.pgp_defUrl = {} ;
+
 var append_mls = 
 {
-	 
-	config : function ( pgp_params )
-	{
-		var pgp_defUrl	= pgp_params.pgp_defUrl ;
-		var num_virPath	= pgp_params.num_virPath ;
-		var pgp_envOpt	= pgp_params.pgp_envOpt ;
-		String.fn_envOpt ( { "pgp_envOpt" : pgp_envOpt } ) ;
-		String.fnPgp_getEnvState 
-		( 
-			{ 
-				"num_virPath" : num_virPath ,
-				"pgp_envOpt" : pgp_envOpt
-			} 
-		) ;
-		window.pgp_defUrl = fnPgp_getDefUrl ( { "pgp_defUrl" : pgp_defUrl } ) ;
-		
-	} ,
+	
 	appendMeta : function ( urlPgp , isAsyn )
 	{
 		var scIns_InsObj = scInsSinIns ;
 		// console.log("scIns_InsObj:",scIns_InsObj);
 		
 		var resUrlObj = 
-		urlPgp != null && urlPgp != window.pgp_defUrl && urlPgp.meta 
-		&& window.pgp_defUrl.meta
+		urlPgp != null && urlPgp != defUrlPgp && urlPgp.meta 
+		&& defUrlPgp.meta
 		? 
 		function () 
 		{
 			if 
-			( !window.pgp_defUrl.script || window.pgp_defUrl.meta.getLength() == 0 ) 
+			( !defUrlPgp.script || defUrlPgp.meta.getLength() == 0 ) 
 			return urlPgp.meta ;
-			resUrlObj = window.pgp_defUrl.meta.combineUgNestUg ( urlPgp.meta ) ;
-			// resUrlObj = window.pgp_defUrl.meta.concat( urlPgp.meta ) ;
+			resUrlObj = defUrlPgp.meta.combineUgNestUg ( urlPgp.meta ) ;
+			// resUrlObj = defUrlPgp.meta.concat( urlPgp.meta ) ;
 			var nonp = resUrlObj.hasNullPointer () ;
 			return nonp.unit ;
 		} () 
 		: 
-		window.pgp_defUrl.meta ; 
+		defUrlPgp.meta ; 
 		
 		var metaEleObj = scIns_InsObj.crtEleObj ( resUrlObj ) ;
 		scIns_InsObj.appendSc ( metaEleObj , 0 , isAsyn ) ;
@@ -1447,21 +1514,21 @@ var append_mls =
 		var scIns_InsObj = new classPgp.scIns () ;
 // 		console.log("scIns_InsObj:",scIns_InsObj) ;
 		
-		var resUrlObj = urlPgp != null && urlPgp != window.pgp_defUrl && urlPgp.link ? 
+		var resUrlObj = urlPgp != null && urlPgp != defUrlPgp && urlPgp.link ? 
 			( 
 				function () 
 				{
 					if 
-					( !window.pgp_defUrl.script || window.pgp_defUrl.link.getLength () == 0 ) 
+					( !defUrlPgp.script || defUrlPgp.link.getLength () == 0 ) 
 					return urlPgp.link ;
 
-					var resUrlObj2 = window.pgp_defUrl.link.concat ( urlPgp.link ) ;
+					var resUrlObj2 = defUrlPgp.link.concat ( urlPgp.link ) ;
 					// console.log( "resUrlObj2:" , resUrlObj2 ) ;
 					var nonp = resUrlObj2.hasNullPointer () ;
 					return nonp.unit ;
 				}
 			)() : 
-			window.pgp_defUrl.link ; 
+			defUrlPgp.link ; 
 		// console.log( "resUrlObj : " , resUrlObj ) ;
 		scIns_InsObj.distribute ( resUrlObj , isAsyn ) ;
 	} ,
@@ -1473,22 +1540,22 @@ var append_mls =
 		var scIns_InsObj = new classPgp.scIns () ;
 		// console.log("scIns_InsObj:",scIns_InsObj);
 		
-		var resUrlObj = urlPgp != null && urlPgp != window.pgp_defUrl && urlPgp.script ? 
+		var resUrlObj = urlPgp != null && urlPgp != defUrlPgp && urlPgp.script ? 
 			( 
 				function () 
 				{
 					if 
-					( !window.pgp_defUrl.script || window.pgp_defUrl.script.getLength == 0 ) 
+					( !defUrlPgp.script || defUrlPgp.script.getLength == 0 ) 
 					return urlPgp.script ;
-					if ( "length" in window.pgp_defUrl.script || window.pgp_defUrl.script.constructor.name == "Array" )
+					if ( "length" in defUrlPgp.script || defUrlPgp.script.constructor.name == "Array" )
 					{
-						resUrlObj = window.pgp_defUrl.script.concat ( urlPgp.script ) ;
+						resUrlObj = defUrlPgp.script.concat ( urlPgp.script ) ;
 						var nonp = resUrlObj.hasNullPointer () ;
 					} ;
 					return nonp.unit ;
 				}
 			)() : 
-			window.pgp_defUrl.script ; 
+			defUrlPgp.script ; 
 		// console.log( "resUrlObj:" ,resUrlObj ) ;
 		scIns_InsObj.distribute ( resUrlObj , isAsyn ) ;
 	} ,
@@ -1661,7 +1728,7 @@ window.$append_mls = append_mls ;
 const scInsSinIns = new classPgp.scIns () ;
 window.$scInsSinIns = scInsSinIns ;
 // $append_mls.appendBase() ;
-// var window.pgp_defUrl = fnPgp_getDefUrl (  ) ;
+var defUrlPgp = getDefUrlPgp (  ) ;
 
 }
 )
@@ -1669,5 +1736,5 @@ window.$scInsSinIns = scInsSinIns ;
 	document.getElementsByTagName( "html" ) ,
 	document.getElementsByTagName( "head" ) ,
 	document.getElementsByTagName( "body" ) ,
-	fnPgp_getDefUrl 
+	getDefUrlPgp 
 ) ;

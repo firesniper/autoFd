@@ -122,73 +122,97 @@ let fnStr_rmConsole = function ( pgp_params )
 
 let fnStr_cvt2Css = function ( pgp_params ) 
 {
+
     console.log ( "pgp_params:" , pgp_params.str_name ) ;
     let pgp_loadMaps = pgp_params.str_name == "sass" ? { loadMaps : true } : undefined ;
     let str_taskName = "cvt2Css:" + pgp_params.str_name ;
+    let fnA01 = function ()
+    {
+        setTimeout 
+        (
+            function ()
+            {
+                pgp_gulp
+                .src ( pgp_params.ary_src )
+                .pipe ( pgp_gMod.fn_sourceMaps.init ( pgp_loadMaps ) ) 
+                .pipe ( pgp_gMod [ pgp_params.str_name ] ( { outputStyle : "compressed" } ) )
+                .pipe ( pgp_gMod.fn_miniCss () ) 
+                .pipe
+                (
+                    pgp_gMod.pgp_through2.obj
+                    (
+                        function ( pgp_file , enc , cb )
+                        {
+                        pgp_file.path = pgp_file.path.fnStr_rmSuffix () ;
+                            console.log ( "pgp_file.path:" , pgp_file.path ) ;
+
+                            this.push ( pgp_file ) ;
+                            cb () ;
+                        }
+                    )
+                )
+                .pipe  
+                ( 
+                    pgp_gulp.dest 
+                    ( 
+                        function ( pgp_f ) 
+                        {
+                            return pgp_f.base ;
+                        }
+                    )
+                )
+                .pipe ( pgp_gMod.fn_sourceMaps.write ( "./" ) )
+                .pipe   
+                ( 
+                    pgp_gulp.dest 
+                    ( 
+                        function ( pgp_f ) 
+                        {
+                            return pgp_f.base ;
+                        }
+                    )
+                ) ;
+
+            } ,
+            3000
+        ) ;
+    } ;
     pgp_gulp.task 
     ( 
         str_taskName , 
         pgp_params.ary_depeFn ,
         function () 
         {
-            return new Promise
+            /*return new Promise
             (
                 function ( resolved , rejected )
                 {
-                    setTimeout 
-                    (
-                        function ()
-                        {
-                            pgp_gulp
-                            .src ( pgp_params.ary_src )
-                            .pipe ( pgp_gMod.fn_sourceMaps.init ( pgp_loadMaps ) ) 
-                            .pipe ( pgp_gMod [ pgp_params.str_name ] ( { outputStyle : "compressed" } ) )
-                            .pipe ( pgp_gMod.fn_miniCss () ) 
-                            .pipe
-                            (
-                                pgp_gMod.pgp_through2.obj
-                                (
-                                    function ( pgp_file , enc , cb )
-                                    {
-                                    pgp_file.path = pgp_file.path.fnStr_rmSuffix () ;
-                                        console.log ( "pgp_file.path:" , pgp_file.path ) ;
-
-                                        this.push ( pgp_file ) ;
-                                        cb () ;
-                                    }
-                                )
-                            )
-                            .pipe  
-                            ( 
-                                pgp_gulp.dest 
-                                ( 
-                                    function ( pgp_f ) 
-                                    {
-                                        return pgp_f.base ;
-                                    }
-                                )
-                            )
-                            .pipe ( pgp_gMod.fn_sourceMaps.write ( "./" ) )
-                            .pipe   
-                            ( 
-                                pgp_gulp.dest 
-                                ( 
-                                    function ( pgp_f ) 
-                                    {
-                                        return pgp_f.base ;
-                                    }
-                                )
-                            ) ;
-
-                        } ,
-                        3000
-                    ) ;
+                    resolved (  ) ;
 
                 }
-            ) ;
+            ) ;*/
+            fnA01 () ;
         }
     ) ;
-    return str_taskName ;
+    let pm_a01 = new Promise 
+    (
+        function ( resolved , rejected )
+        {
+            setTimeout 
+            (
+                function ()
+                {
+                     resolved ( str_taskName ) ;
+
+                } ,
+                3000
+            ) ;
+        } 
+    ) ;
+    return {
+        str_sync    : str_taskName ,
+        pm_async    : pm_a01
+    }  ;
 } ;
 console.log ( "fn:" , pgp_gMod.fn_sourceMaps ) ;
 

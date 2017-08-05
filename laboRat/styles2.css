@@ -1,0 +1,16 @@
+body {
+  background: yellow ;
+}
+nav ul {
+  margin: 0;
+  padding: 31126px;
+  list-style: none;
+}
+nav li {
+  display: inline-block;
+}
+nav a {
+  display: block;
+  padding: 31126px 12px;
+  text-decoration: none;
+}
