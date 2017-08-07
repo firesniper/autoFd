@@ -44,6 +44,221 @@ pgp_gMod.fn_less            = require ( "gulp-less" ) ;
 pgp_gMod.fn_miniCss         = require ( "gulp-minify-css" ) ;
 pgp_gMod.fn_sourceMaps      = require ( "gulp-sourcemaps" ) ;
 
+
+let fnPgp_fileInclude = function ( pgp_params ) 
+{
+    let str_taskName = "fileInclude:" + pgp_params.str_name ;
+    let ary_ms = [ 0 , 0 ]
+    pgp_gulp.task
+    (
+        str_taskName ,
+        pgp_params.ary_depeFn ,
+        function ()
+        {
+            setTimeout 
+            (
+                function ()
+                {
+                    pgp_gulp.src ( pgp_params.ary_src )
+                    .pipe 
+                    ( 
+                        pgp_gMod.fn_fileInclude
+                        (
+                            {
+                                prefix : "@@" ,
+                                basepath : "@file"
+                            }
+                        )
+                    )  
+                    .pipe 
+                    (
+                        pgp_gMod.fn_rename ( { suffix : ".combo" } )
+                    )
+                    .pipe
+                    (
+                        pgp_gulp.dest
+                        (
+                            function ( pgp_f )
+                            {
+                                return pgp_f.base ;
+                            }  
+                        )
+                    ) ;
+
+                } ,
+                ary_ms [ 0 ]
+            ) ;
+        }
+    ) ;
+    let pm_a01 = new Promise
+    (
+        function ( resolved , rejected )
+        {
+            setTimeout
+            (
+                function ()
+                {
+                    resolved ( str_taskName )
+                } ,
+                ary_ms [ 1 ]
+            ) ;
+        }
+    ) ;
+    return {
+        "str_sync"  : str_taskName ,
+        "pm_asynd"  : pm_a01 ,
+        "ary_ms"    : ary_ms
+    } ;
+} ;
+
+let fnPgp_compileFd = function ( pgp_params ) 
+{
+    let str_taskName = "conmpileFd：" + pgp_params.str_name ;
+    let ary_ms = [ 3000 , 3000 ] ;
+    pgp_gulp.task
+    (
+        str_taskName ,
+        pgp_params.ary_depeFn ,
+        function ()
+        {
+            setTimeout
+            (
+                function ()
+                {
+                    pgp_compileFd.fn_init 
+                    ( 
+                        pgp_params.compileFdParams 
+                        
+
+                    ) ;
+
+                } ,
+                ary_ms [ 0 ]
+            ) ;
+        }
+    ) ;
+    
+    let pm_a01 = new Promise 
+    (
+        function ( resolved , rejected )
+        {
+            setTimeout
+            (
+                function ()
+                {
+                    resolved ( str_taskName ) ;
+                } ,
+                ary_ms [ 1 ]
+            ) ;
+        }
+    ) ;
+    return {
+        "str_sync" : str_taskName ,
+        "pm_async" : pm_a01 ,
+        "ary_ms" : ary_ms ,
+    } ;
+} ;
+
+
+
+
+let fnStr_cvt2Css = function ( pgp_params ) 
+{
+
+    console.log ( "pgp_params:" , pgp_params.str_name ) ;
+    let pgp_loadMaps = pgp_params.str_name == "sass" ? { loadMaps : true } : undefined ;
+    let str_taskName = "cvt2Css:" + pgp_params.str_name ;
+    let ary_ms = [ 3000 , 3000 ] ;
+    let fnA01 = function ()
+    {
+        setTimeout 
+        (
+            function ()
+            {
+                pgp_gulp
+                .src ( pgp_params.ary_src )
+                .pipe ( pgp_gMod.fn_sourceMaps.init ( pgp_loadMaps ) ) 
+                .pipe ( pgp_gMod [ pgp_params.str_name ] ( { outputStyle : "compressed" } ) )
+                .pipe ( pgp_gMod.fn_miniCss () ) 
+                .pipe
+                (
+                    pgp_gMod.pgp_through2.obj
+                    (
+                        function ( pgp_file , enc , cb )
+                        {
+                        pgp_file.path = pgp_file.path.fnStr_rmSuffix () ;
+                            console.log ( "pgp_file.path:" , pgp_file.path ) ;
+
+                            this.push ( pgp_file ) ;
+                            cb () ;
+                        }
+                    )
+                )
+                .pipe  
+                ( 
+                    pgp_gulp.dest 
+                    ( 
+                        function ( pgp_f ) 
+                        {
+                            return pgp_f.base ;
+                        }
+                    )
+                )
+                .pipe ( pgp_gMod.fn_sourceMaps.write ( "./" ) )
+                .pipe   
+                ( 
+                    pgp_gulp.dest 
+                    ( 
+                        function ( pgp_f ) 
+                        {
+                            return pgp_f.base ;
+                        }
+                    )
+                ) ;
+
+            } ,
+            ary_ms [ 0 ]
+        ) ;
+    } ;
+    pgp_gulp.task 
+    ( 
+        str_taskName , 
+        pgp_params.ary_depeFn ,
+        function () 
+        {
+            /*return new Promise
+            (
+                function ( resolved , rejected )
+                {
+                    resolved (  ) ;
+
+                }
+            ) ;*/
+            fnA01 () ;
+        }
+    ) ;
+    let pm_a01 = new Promise 
+    (
+        function ( resolved , rejected )
+        {
+            setTimeout 
+            (
+                function ()
+                {
+                     resolved ( str_taskName ) ;
+
+                } ,
+                ary_ms [ 1 ]
+            ) ;
+        } 
+    ) ;
+    return {
+        str_sync    : str_taskName ,
+        pm_async    : pm_a01 ,
+        ary_ms      : ary_ms
+    }  ;
+} ;
+console.log ( "fn:" , pgp_gMod.fn_sourceMaps ) ;
 let fnStr_rev = function ( pgp_params )
 {
     let str_taskName = "rev:" + pgp_params.str_name ;
@@ -64,6 +279,8 @@ let fnStr_rev = function ( pgp_params )
     ) ;
     return str_taskName ;
 } ;
+
+
 
 let fnStr_rmConsole = function ( pgp_params )
 {
@@ -120,101 +337,40 @@ let fnStr_rmConsole = function ( pgp_params )
 } ;
 
 
-let fnStr_cvt2Css = function ( pgp_params ) 
+
+let fnStr_cleanDir = function ( pgp_params )
 {
-
-    console.log ( "pgp_params:" , pgp_params.str_name ) ;
-    let pgp_loadMaps = pgp_params.str_name == "sass" ? { loadMaps : true } : undefined ;
-    let str_taskName = "cvt2Css:" + pgp_params.str_name ;
-    let fnA01 = function ()
+    let str_taskName = "clean:" + pgp_params.str_name ;
+    str_taskName ,
+    function ( )
     {
-        setTimeout 
-        (
-            function ()
-            {
-                pgp_gulp
-                .src ( pgp_params.ary_src )
-                .pipe ( pgp_gMod.fn_sourceMaps.init ( pgp_loadMaps ) ) 
-                .pipe ( pgp_gMod [ pgp_params.str_name ] ( { outputStyle : "compressed" } ) )
-                .pipe ( pgp_gMod.fn_miniCss () ) 
-                .pipe
-                (
-                    pgp_gMod.pgp_through2.obj
-                    (
-                        function ( pgp_file , enc , cb )
-                        {
-                        pgp_file.path = pgp_file.path.fnStr_rmSuffix () ;
-                            console.log ( "pgp_file.path:" , pgp_file.path ) ;
-
-                            this.push ( pgp_file ) ;
-                            cb () ;
-                        }
-                    )
-                )
-                .pipe  
-                ( 
-                    pgp_gulp.dest 
-                    ( 
-                        function ( pgp_f ) 
-                        {
-                            return pgp_f.base ;
-                        }
-                    )
-                )
-                .pipe ( pgp_gMod.fn_sourceMaps.write ( "./" ) )
-                .pipe   
-                ( 
-                    pgp_gulp.dest 
-                    ( 
-                        function ( pgp_f ) 
-                        {
-                            return pgp_f.base ;
-                        }
-                    )
-                ) ;
-
-            } ,
-            3000
-        ) ;
-    } ;
-    pgp_gulp.task 
-    ( 
-        str_taskName , 
-        pgp_params.ary_depeFn ,
-        function () 
-        {
-            /*return new Promise
+        pgp_gulp.src ( pgp_params.ary_src )
+            .pipe 
             (
-                function ( resolved , rejected )
-                {
-                    resolved (  ) ;
+                pgp_gMod.clean ( )
+            )
+    }
+    return str_taskName ;
+} ;
 
-                }
-            ) ;*/
-            fnA01 () ;
+let fnStr_delDir = function ( pgp_params ) 
+{
+    let str_taskName = "del:" + pgp_params.str_name ;
+    pgp_gulp.task 
+    (
+        str_taskName ,
+        function ( callback )
+        {
+            pgp_gMod.fn_del 
+            (
+                pgp_params.ary_src ,
+                callback
+            ) ;
+
         }
     ) ;
-    let pm_a01 = new Promise 
-    (
-        function ( resolved , rejected )
-        {
-            setTimeout 
-            (
-                function ()
-                {
-                     resolved ( str_taskName ) ;
-
-                } ,
-                3000
-            ) ;
-        } 
-    ) ;
-    return {
-        str_sync    : str_taskName ,
-        pm_async    : pm_a01
-    }  ;
+    return str_taskName ;
 } ;
-console.log ( "fn:" , pgp_gMod.fn_sourceMaps ) ;
 
 let fnStr_revCollector = function ( pgp_params ) 
 {
@@ -271,133 +427,6 @@ let fnStr_revCollector = function ( pgp_params )
             (
                 pgp_gulp.dest ( pgp_params.str_dest ) 
             ) ;
-        }
-    ) ;
-    return str_taskName ;
-} ;
-
-let fnStr_fileInclude = function ( pgp_params ) 
-{
-    let str_taskName = "fileInclude:" + pgp_params.str_name ;
-    pgp_gulp.task
-    (
-        str_taskName ,
-        function ()
-        {
-            pgp_gulp.src ( pgp_params.ary_src )
-                .pipe 
-                ( 
-                    pgp_gMod.fn_fileInclude
-                    (
-                        {
-                            prefix : "@@" ,
-                            basepath : "@file"
-                        }
-                    )
-                )  
-                .pipe 
-                (
-                    pgp_gMod.fn_rename ( { suffix : ".combo" } )
-                )
-                .pipe
-                (
-                    pgp_gulp.dest
-                    (
-                        function ( pgp_f )
-                        {
-                            return pgp_f.base ;
-                        }  
-                    )
-                )
-            ;
-        }
-    ) ;
-    return str_taskName ;
-} ;
-
-let fnStr_compileFd = function ( pgp_params ) 
-{
-    let str_taskName = "conmpileFd：" + pgp_params.str_name ;
-    pgp_gulp.task
-    (
-        str_taskName ,
-        function ()
-        {
-            pgp_compileFd.fn_init 
-            ( 
-                pgp_params.compileFdParams 
-                
-
-            ) ;
-        }
-    ) ;
-    return str_taskName ;
-} ;
-
-
-
-let fnStr_copyDir = function ( pgp_params ) 
-{
-    let str_taskName = "copyDir:" + pgp_params.str_name ;
-    pgp_gulp.task 
-    (
-        str_taskName ,
-        function ( )
-        {
-            pgp_gulp
-            .src ( pgp_params.ary_src )
-            .pipe 
-            ( 
-                pgp_gMod.fn_rename 
-                ( 
-                    { suffix : ".copy" }
-                ) 
-            )
-            .pipe 
-            ( 
-                pgp_gulp.dest 
-                ( 
-                    pgp_params.dest ? pgp_params.dest :
-                    function ( pgp_f )
-                    {
-                        return pgp_f.base ; 
-                    } 
-                ) 
-            ) ;
-        } 
-    ) ;
-    return str_taskName ;
-} ;
-
-let fnStr_cleanDir = function ( pgp_params )
-{
-    let str_taskName = "clean:" + pgp_params.str_name ;
-    str_taskName ,
-    function ( )
-    {
-        pgp_gulp.src ( pgp_params.ary_src )
-            .pipe 
-            (
-                pgp_gMod.clean ( )
-            )
-    }
-    return str_taskName ;
-} ;
-
-let fnStr_delDir = function ( pgp_params ) 
-{
-    let str_taskName = "del:" + pgp_params.str_name ;
-    pgp_gulp.task 
-    (
-        str_taskName ,
-        function ( callback )
-        {
-            pgp_gMod.fn_del 
-            (
-                pgp_params.ary_src ,
-                callback
-            ) ;
-
         }
     ) ;
     return str_taskName ;
@@ -483,19 +512,52 @@ let fnStr_resetManifest = function ( pgp_params )
 } ;
 
 
+let fnStr_copyDir = function ( pgp_params ) 
+{
+    let str_taskName = "copyDir:" + pgp_params.str_name ;
+    pgp_gulp.task 
+    (
+        str_taskName ,
+        function ( )
+        {
+            pgp_gulp
+            .src ( pgp_params.ary_src )
+            .pipe 
+            ( 
+                pgp_gMod.fn_rename 
+                ( 
+                    { suffix : ".copy" }
+                ) 
+            )
+            .pipe 
+            ( 
+                pgp_gulp.dest 
+                ( 
+                    pgp_params.dest ? pgp_params.dest :
+                    function ( pgp_f )
+                    {
+                        return pgp_f.base ; 
+                    } 
+                ) 
+            ) ;
+        } 
+    ) ;
+    return str_taskName ;
+} ;
+
 module.exports = 
 {
     "pgp_indeEnv"           : pgp_indeEnv ,
     "pgp_depeEnv"           : pgp_depeEnv ,
     "pgp_gMod"              : pgp_gMod ,
-    "fnStr_rev"             : fnStr_rev ,
-    "fnStr_revCollector"    : fnStr_revCollector ,
-    "fnStr_copyDir"         : fnStr_copyDir ,
+    "fnPgp_fileInclude"     : fnPgp_fileInclude ,
+    "fnPgp_compileFd"       : fnPgp_compileFd ,
+    "fnStr_cvt2Css"         : fnStr_cvt2Css ,
+    "fnStr_rmConsole"       : fnStr_rmConsole ,
     "fnStr_cleanDir"        : fnStr_cleanDir ,
     "fnStr_delDir"          : fnStr_delDir ,
-    "fnStr_cvt2Css"         : fnStr_cvt2Css ,
-    "fnStr_fileInclude"     : fnStr_fileInclude ,
-    "fnStr_rmConsole"       : fnStr_rmConsole ,
-    "fnStr_compileFd"       : fnStr_compileFd ,
-    "fnStr_resetManifest"   : fnStr_resetManifest 
+    "fnStr_rev"             : fnStr_rev ,
+    "fnStr_revCollector"    : fnStr_revCollector ,
+    "fnStr_resetManifest"   : fnStr_resetManifest ,
+    "fnStr_copyDir"         : fnStr_copyDir ,
 } ;

@@ -30,25 +30,24 @@ let pgp_gMod = pgp_gulpLib.pgp_gMod ;
 /*pgpGMod.fileInclude = require ( "gulp-file-include" ) ;
 pgpGMod.revCollector = require ( "gulp-rev-collector" ) ;
 pgpGMod.through2 = require ( "through2" ) ;*/
-
-let str_rev_r = pgp_gulpLib.fnStr_rev 
+let pgp_fileInclude = pgp_gulpLib.fnPgp_fileInclude 
 ( 
     { 
-        str_name : "rev_js" , 
+        str_name : "" , 
+        ary_depeFn : [] ,
         ary_src : 
-        [ 
-            "./append_mls/js/*.js" , 
-            "./append_mls/images/*.jpg" , 
-            "./append_mls/css/*.css" 
-        ] , 
-        str_revDest : "./hashFiles/" , 
-        str_maniDest : "./manifest/" 
+        [
+            //  pgp_depeEnv.str_dir_append_mls + 
+             "./append_mls/*.dev.html"
+        ] 
     } 
 ) ;
-let str_compileFd_html = pgp_gulpLib.fnStr_compileFd 
+
+let pgp_compileFd_html = pgp_gulpLib.fnPgp_compileFd 
 (
     {
         str_name : "html" ,
+        ary_depeFn : [ pgp_fileInclude.str_sync ] ,
         compileFdParams : 
         {
             pgp_globParams : 
@@ -70,7 +69,7 @@ let str_compileFd_html = pgp_gulpLib.fnStr_compileFd
             str_srcVirPath : 2 ,
             "pgp_baseUri_ary" : 
             {
-                "^PH_baseUri%" : 
+                "^PH_baseUri1%" : 
                 [
                     "http://localhost-a:3000/1/" ,
                     "http://remote-a:1111/public/1/"
@@ -80,6 +79,11 @@ let str_compileFd_html = pgp_gulpLib.fnStr_compileFd
                     "http://127.0.0.1-b:8080/2/" ,
                     "http://remote-b:2222/public/2/"
                 ] ,
+                "^PH_baseUri3%" : 
+                [
+                    "http://127.0.0.1-c:8080/3/" ,
+                    "http://remote-c:3333/public/3/"
+                ] ,
             } ,
             str_outputDir : null ,
             str_injSrc : null
@@ -87,10 +91,11 @@ let str_compileFd_html = pgp_gulpLib.fnStr_compileFd
         }
     }
 ) ;
-let str_compileFd_less = pgp_gulpLib.fnStr_compileFd 
+let pgp_compileFd_less = pgp_gulpLib.fnPgp_compileFd 
 (
     {
         str_name : "less" ,
+        // ary_depeFn : [ pgp_fileInclude.str_sync ] ,
         compileFdParams : 
         {
             pgp_globParams : 
@@ -112,7 +117,7 @@ let str_compileFd_less = pgp_gulpLib.fnStr_compileFd
             str_srcVirPath : 2 ,
             "pgp_baseUri_ary" : 
             {
-                "^PH_baseUri%" : 
+                "^PH_baseUri1%" : 
                 [
                     "http://localhost-a:3000/1/" ,
                     "http://remote-a:1111/public/1/"
@@ -129,26 +134,22 @@ let str_compileFd_less = pgp_gulpLib.fnStr_compileFd
         }
     }
 ) ;
-let str_rmConsole = pgp_gulpLib.fnStr_rmConsole 
-(
-    {
-        str_name : "" ,
-        ary_src : [ pgp_libDepeEnv.laboRat + "/inputJs.dev.js" ] ,
-        str_dest : pgp_depeEnv.str_node_js + "/dist1"
-    }
-) ;
 
-let str_fileInclude = pgp_gulpLib.fnStr_fileInclude 
+let str_rev_r = pgp_gulpLib.fnStr_rev 
 ( 
     { 
-        str_name : "" , 
+        str_name : "rev_js" , 
         ary_src : 
-        [
-            //  pgp_depeEnv.str_dir_append_mls + 
-             "./append_mls/*.dev.html"
-        ] 
+        [ 
+            "./append_mls/js/*.js" , 
+            "./append_mls/images/*.jpg" , 
+            "./append_mls/css/*.css" 
+        ] , 
+        str_revDest : "./hashFiles/" , 
+        str_maniDest : "./manifest/" 
     } 
 ) ;
+
 
 let str_revCollector = pgp_gulpLib.fnStr_revCollector 
 (
@@ -174,7 +175,14 @@ let str_revCollector = pgp_gulpLib.fnStr_revCollector
         str_dest : "./append_mls/"
     }
 ) ;
-
+let str_rmConsole = pgp_gulpLib.fnStr_rmConsole 
+(
+    {
+        str_name : "" ,
+        ary_src : [ pgp_libDepeEnv.laboRat + "/inputJs.dev.js" ] ,
+        str_dest : pgp_depeEnv.str_node_js + "/dist1"
+    }
+) ;
 pgp_gulp.task
 (
     "bwsReload" ,
@@ -215,7 +223,7 @@ let pgp_less2Css = pgp_gulpLib.fnStr_cvt2Css
             // pgp_indeEnv.dir_tMall + "/**/css/*.less" 
             "./**/append_mls/css/*.res.less"
         ] ,
-        ary_depeFn : [ str_compileFd_less ]
+        ary_depeFn : [ pgp_compileFd_less.str_sync ]
     } 
 ) ;
 
@@ -245,11 +253,11 @@ let ary_defTask =
     
     
     
-    str_fileInclude
-    ,
-    str_compileFd_html
+    pgp_fileInclude.str_sync
+    /*,
+    pgp_compileFd_html.str_sync*/
     , 
-    str_compileFd_less
+    pgp_compileFd_less.str_sync
     /*,
     pgp_less2Css*/
     /*
@@ -266,7 +274,7 @@ pgp_gulp.task
     [] ,
     function ()
     {
-        pgp_gulpsync.start ( [ pgp_less2Css ] ) ;
+        pgp_gulpsync.start ( [ pgp_less2Css.str_sync ] ) ;
     } 
 ) ;
 
@@ -292,6 +300,18 @@ pgp_gulp
             } ,
             6000
         ) ;*/
+        pgp_compileFd_html.pm_async.then
+        (
+            function ( resolved )
+            {
+                pgp_gulp.start
+                (
+                    resolved
+                ) ;
+            } ,
+            function ( rejected )
+            {}
+        ) ;
         pgp_less2Css.pm_async.then
         (
             function ( resolved ) 
@@ -311,10 +331,24 @@ pgp_gulp
            
         pgp_gulp.watch 
         ( 
-            // pgp_libDepeEnv.str_laboRat + "/inputJs.dev.js" , 
-            "./**/*.html" ,
-            [ str_fileInclude ] 
+            "./**/*.dev.html" ,
+            [ pgp_fileInclude.str_sync ] 
         ) ;
+        pgp_gulp.watch 
+        ( 
+            "./**/*.dev.combo.html" ,
+            [ pgp_compileFd_html.str_sync ] 
+        ) ;
+        // pgp_gulp.watch 
+        // ( 
+        //     "./**/*.dev.less" ,
+        //     [ pgp_compileFd_less.str_sync ] 
+        // ) ;
+        // pgp_gulp.watch 
+        // ( 
+        //     "./**/*.res.less" ,
+        //     [ pgp_less2Css.str_sync ] 
+        // ) ;
     }
 ) ;
 
@@ -322,7 +356,7 @@ pgp_gulp
 let ary_revTask =
 [
     str_rev_r ,
-    // str_compileFd 
+    // pgp_compileFd 
     // str_manifest 
 ] ;
 
