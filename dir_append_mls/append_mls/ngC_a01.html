@@ -4,7 +4,9 @@
 <meta charset='utf-8' />
 <meta http-equiv='cache-control' content='no-cache' />
 <meta name='viewport' content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0 ,minimum-scale=1.0,maximum-scale=1.0' />
- 
+<script src= "js/append_mls.js" ></script>
+<script src= "js/append_mls.config.js" ></script>
+
 <script src= "js/angular-1.0.1.min.js" ></script>
 </head>
 <body >
@@ -84,8 +86,56 @@
     pgp_moduleA01.controller
     (
         "ctrA02" ,
-        function ( $scope )
+        function ( $scope , $http )
         {
+            /*$http
+            (
+                {
+                    method : "jsonp"  
+                    ,
+                    url : 'http://localhost:8080/mall_a01/malldata?scm=malldata&tbNamesStr=shoe,overcoat&jsonp=jsonp'  
+
+                }
+                
+            )*/
+            $http
+            .jsonp ( 'http://localhost:8080/mall_a01/malldata?scm=malldata&tbNamesStr=shoe,overcoat&jsonp=JSON_CALLBACK' )
+            .success
+            (
+                function ( data )
+                {
+                    console.log ( "data:" , data  ) ;
+                }
+            )
+            /*.then
+            (
+                function ( data )
+                {   
+                    console.log ( "data:" ,  data ) ;
+                } , 
+                function ()
+                {}
+            ) ;*/
+            /*var pgp_jsonp = $append_mls.invokeJsonp 
+            (
+                {
+                    str_url : 'http://localhost:8080/mall_a01/malldata?scm=malldata&tbNamesStr=shoe,overcoat&jsonp=asdfas' ,
+                    pgp_jsonCb : null ,
+                    fn_callBack : function ( data )
+                    {
+                        console.log ( "data:" , data ) ;
+                    }
+
+                }
+            ) ;
+            console.log ( "pgp_jsonp:" , pgp_jsonp ) ;
+            pgp_jsonp.then
+            (
+                function ( resolved )
+                {
+                    console.log ( "resolved:" , resolved ) ;
+                }
+            ) ;*/
             $scope.vm = 
             {
                 pgpA01 : {

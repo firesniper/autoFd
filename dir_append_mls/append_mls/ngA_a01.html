@@ -4,7 +4,9 @@
 <meta charset='utf-8' />
 <meta http-equiv='cache-control' content='no-cache' />
 <meta name='viewport' content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0 ,minimum-scale=1.0,maximum-scale=1.0' />
- 
+<script src= "js/append_mls.js" ></script>
+<script src= "js/append_mls.config.js" ></script>
+
 <script src= "js/angular-1.0.1.min.js" ></script>
 </head>
 <body ng-app= "">
@@ -14,6 +16,19 @@
     <ez-clock></ez-clock>
 </body>
 <script type= "text/javascript">
+    $http.get
+    (
+        'http://localhost:8080/mall_a01/malldata?scm=malldata&tbNamesStr=shoe,overcoat' , 
+        config
+    )
+    .then
+    (
+        function ( data )
+        {   
+            console.log ( "data:" ,   ) ;
+        } , 
+        errorCallback
+    ) ;
     var pgp_module = angular.module ( "moduleA01" , [] ) 
     console.log ( "pgp_module:" , pgp_module ) ;
     pgp_module.directive 

@@ -600,20 +600,20 @@ Object.defineProperties
 						 this && typeof this == "string" ?
 						 this :
 						 null ;
-				var url = unitsGroup ? unitsGroup : 
-							( document.url && document.url != "" ) ?
-							document.url : 
+				var str_url = unitsGroup ? unitsGroup : 
+							( document.str_url && document.str_url != "" ) ?
+							document.str_url : 
 							location.href ;
 
 				var fileName = "" ;
-				if ( url.charAt ( url.length - 1 ) == "/" 
-					&& url.lastIndexOf ( "/" ) == url.length - 1 )
+				if ( str_url.charAt ( str_url.length - 1 ) == "/" 
+					&& str_url.lastIndexOf ( "/" ) == str_url.length - 1 )
 				{
 					fileName = "index" ;
 				}
-				else if ( url.lastIndexOf ( "/" ) != -1 )
+				else if ( str_url.lastIndexOf ( "/" ) != -1 )
 				{
-					fileName = url.substr ( url.lastIndexOf ( "/" ) + 1 ) ;
+					fileName = str_url.substr ( str_url.lastIndexOf ( "/" ) + 1 ) ;
 				}  ;
 				return fileName ;
 			} 
@@ -1084,10 +1084,10 @@ var classPgp =
 		classPgp.scIns.prototype.inc = { a : 0 , b : 0, c : 0 } ;
 		classPgp.scIns.prototype.tmpv = { a : null } ;
 
-		classPgp.scIns.prototype.generateEle = function ( url , suffix , linkPaireGroup ) 
+		classPgp.scIns.prototype.generateEle = function ( str_url , suffix , linkPaireGroup ) 
 		{
 			var defLinkPaireGroup = {
-							"href" : url ,
+							"href" : str_url ,
 							"type" : "text/css" ,
 							"rel" : "stylesheet"
 						} ;
@@ -1096,7 +1096,7 @@ var classPgp =
 			{
 
 				case ".css" :
-					return url.crtTagEles(
+					return str_url.crtTagEles(
 						
 						linkPaireGroup ,
 						"link" 
@@ -1104,10 +1104,10 @@ var classPgp =
 				break ;
 
 				case ".js" :
-					return url.crtTagEles(
+					return str_url.crtTagEles(
 						
 						{
-							"src" : url ,
+							"src" : str_url ,
 							"type" : "text/javascript" ,
 						} ,
 						"script" 
@@ -1530,61 +1530,59 @@ var append_mls =
 		} ;
 
 	} ,
-	invokeJson : function ( url , jsonpCbPg , callBack , jsonpField ) 
+	invokeJsonp : function ( params ) 
 	{
-// 		if ( url.lastIndexOf( "/" ) != url.length - 1  
-// 			&& url[ url.length - 1 ] != "/" )
+// 		if ( str_url.lastIndexOf( "/" ) != str_url.length - 1  
+// 			&& str_url[ str_url.length - 1 ] != "/" )
 // 		{
-// 			url += "/" ;
+// 			str_url += "/" ;
 // 		} ;
-		if ( !url || url == null || url == undefined || url == "" ) throw new ReferenceError ( "url is null " ) ; 
-		var timeStamp = ( new Date() ).Format ( "yyyy_MM_dd_hh_mm_ss_S" ) 
+		var str_url 		= params.str_url ;
+		var pgp_jsonpCb 	= params.pgp_jsonpCb ;
+		var fn_callBack 	= params.fn_callBack ;
+		var jsonpField 	= params.jsonpField ;
+
+		if ( !str_url || str_url == null || str_url == undefined || str_url == "" ) throw new ReferenceError ( "url is null " ) ; 
+		var str_timeStamp = ( new Date() ).Format ( "yyyy_MM_dd_hh_mm_ss_S" ) 
 						+ parseInt ( Math.random( 9 ) * 10 ) ;
 
-		var defJsonpCbKey = "callback" , defJsonpCbVal = "jsonp" ;
-		var defJsonpCbPg = { "callback" : defJsonpCbVal } ;
-		var jsonpCbPg = jsonpCbPg ? jsonpCbPg : defJsonpCbPg ;
-		var optJsonpCbKey = 
-			(
-				function ()
-				{
-					for ( var key in jsonpCbPg ) 
-					{
-
-					} ;
-					var res = ( res = Object.keys( jsonpCbPg )[ 0 ] ) ? res : key ;
-					return res ;
-				}
-			)() ;
-		var jsonpCbKey = optJsonpCbKey ? optJsonpCbKey : defJsonpCbKey ;
+		var str_defJsonpCbKey = "jsonp" , str_defJsonpCbVal = "JSON_CALLBACK" ;
+		var pgp_defJsonpCb = { "jsonp" : "JSON_CALLBACK" } ;
+		var pgp_jsonpCb = pgp_jsonpCb ? pgp_jsonpCb : pgp_defJsonpCb ;
+		var str_jsonpCbKey = 
+		(
+			function ()
+			{
+				
+				var res = ( res = Object.keys( pgp_jsonpCb )[ 0 ] ) ? res : key ;
+				return res ;
+			}
+		)() ;
+		var str_jsonpCbKey = str_jsonpCbKey ? str_jsonpCbKey : str_defJsonpCbKey ;
 
 		var fnNameExp2 = /(?:\?|&)jsonp=?\w+/ ;
-		var urlJsonpCbPaireSecExp = new RegExp ( "(?:\\?|&)" + jsonpCbKey + "=?\\w{0,}" , "i" ) ;
+		var exp_urlJsonpCbPaireSec = new RegExp ( "(?:\\?|&)" + str_jsonpCbKey + "=?\\w{0,}" , "i" ) ;
 		
-		if ( urlJsonpCbPaireSecExp.test ( url ) ) 
+		if ( exp_urlJsonpCbPaireSec.test ( str_url ) ) 
 		{
-			var urlJsonpCbPaireSec = urlJsonpCbPaireSecExp.exec ( url )[ 0 ] ;
+			var urlJsonpCbPaireSec = exp_urlJsonpCbPaireSec.exec ( str_url )[ 0 ] ;
 
-			var	urlJsonpCbValExp = new RegExp ( "[^?&" + jsonpCbKey + "=]" , "ig" ) ;
-			var	urlJsonpCbVal = urlJsonpCbPaireSec.match ( urlJsonpCbValExp ) ;
-			urlJsonpCbVal = urlJsonpCbVal ? urlJsonpCbVal.join ( "" ) : jsonpCbKey ;
+			var	exp_urlJsonpCbVal = new RegExp ( "[^?&" + str_jsonpCbKey + "=]" , "ig" ) ;
+			var	str_urlJsonpCbVal = urlJsonpCbPaireSec.match ( exp_urlJsonpCbVal ) ;
+			str_urlJsonpCbVal = str_urlJsonpCbVal ? str_urlJsonpCbVal.join ( "" ) : str_jsonpCbKey ;
 		}
 		else
 		{
-			var	urlJsonpCbVal = defJsonpCbVal ;
+			var	str_urlJsonpCbVal = str_defJsonpCbVal ;
 		} ;
 		
 		
-		var optJsonpCbVal = 
+		var str_optJsonpCbVal = 
 		( 
 			function ()
 			{
-				for ( var key in jsonpCbPg ) 
-				{
-
-				} ;
-				var key = Object.keys ( jsonpCbPg ) [ 0 ] ;
-				var res = ( res = jsonpCbPg[ optJsonpCbKey ] ) ? res : jsonpCbPg[ key ] ;
+				var key = Object.keys ( pgp_jsonpCb ) [ 0 ] ;
+				var res = ( res = pgp_jsonpCb[ str_jsonpCbKey ] ) ? res : pgp_jsonpCb[ key ] ;
 				var val = typeof res == "string" && res.match ( /[\w\$]?/ig ) 
 							&& res.match ( /[\w$]?/ig ).join ( "" ) != "" ?
 							res.match ( /[\w$]?/ig ).join ( "" ) : 
@@ -1593,65 +1591,111 @@ var append_mls =
 				return val ;
 			}
 		)() ;
-		var	jsonpCbVal = optJsonpCbVal ? optJsonpCbVal : urlJsonpCbVal ? urlJsonpCbVal : defJsonpCbVal ;
-		var randomFnName = jsonpCbVal + timeStamp ;
-		if ( url.indexOf ( "?" ) == -1 ) 
+		var	str_jsonpCbVal = str_optJsonpCbVal ? str_optJsonpCbVal : str_urlJsonpCbVal ? str_urlJsonpCbVal : str_defJsonpCbVal ;
+		var str_randomFnName = str_jsonpCbVal + str_timeStamp ;
+		if ( str_url.indexOf ( "?" ) == -1 ) 
 		{
-			var repUrl = url += "?" + jsonpCbKey + "=" + randomFnName ;
+			var str_repUrl = str_url += "?" + str_jsonpCbKey + "=" + str_randomFnName ;
 		} 
 		else
 		{
-			if ( url.lastIndexOf ( "?" ) == url[ url.length - 1 ] ) 
+			if ( str_url.lastIndexOf ( "?" ) == str_url[ str_url.length - 1 ] ) 
 			{
-				var repUrl = url += jsonpCbKey + "=" + randomFnName ;
+				var str_repUrl = str_url += str_jsonpCbKey + "=" + str_randomFnName ;
 			}
-			else if ( url.indexOf ( jsonpCbKey ) == -1 ) 
+			else if ( str_url.indexOf ( str_jsonpCbKey ) == -1 ) 
 			{
-				var repUrl = url +=  ( "&" + jsonpCbKey + "=" + randomFnName ) ;
+				var str_repUrl = str_url +=  ( "&" + str_jsonpCbKey + "=" + str_randomFnName ) ;
 			}
-			else if ( url.indexOf ( jsonpCbKey + "=" ) != -1 ) 
+			else if ( str_url.indexOf ( str_jsonpCbKey + "=" ) != -1 ) 
 			{
-				var reg = new RegExp ( jsonpCbKey + "=\\w{0,}" , "i") 
-				var repUrl = url.replace ( reg , jsonpCbKey + "=" + randomFnName ) 
+				var reg = new RegExp ( str_jsonpCbKey + "=\\w{0,}" , "i") 
+				var str_repUrl = str_url.replace ( reg , str_jsonpCbKey + "=" + str_randomFnName ) 
 			}
 			else 
 			{
-				var reg = new RegExp ( jsonpCbKey + "\\w{0,}" , "i") ;
-				var repUrl = url.replace ( reg , jsonpCbKey + "=" + randomFnName ) ;
+				var reg = new RegExp ( str_jsonpCbKey + "\\w{0,}" , "i") ;
+				var str_repUrl = str_url.replace ( reg , str_jsonpCbKey + "=" + str_randomFnName ) ;
 			} ;
-			console.log( "repUrl:" ,repUrl[0] ) ; 
+			console.log( "str_repUrl:" ,str_repUrl[0] ) ; 
 		} ;
 
-		var randomTagId = "id_" + randomFnName ;
-		var scEleA2 = 
+		var str_randomTagId = "id_" + str_randomFnName ;
+		var dom_scEleA2 = 
 		"script".crtTagEles
 		( 
 			{ 
-				src : repUrl , 
-				id : randomTagId , 
+				src : str_repUrl , 
+				id : str_randomTagId , 
 				type : "text/javascript" , 
 				charset : "utf-8" 
 			} 
 		) ;
 		
-		$head.appendChild ( scEleA2 ) ;
+		$head.appendChild ( dom_scEleA2 ) ;
 		
-		var randomTagDom = document.getElementById ( randomTagId ) ;
-		// console.log("scEleA2:",scEleA2);
+		var dom_randomTag = document.getElementById ( str_randomTagId ) ;
+		// console.log("dom_scEleA2:",dom_scEleA2);
 
-
-		window[ randomFnName ] = function ( json ) 
+		var pgp_priJson = null ;
+		window[ str_randomFnName ] = function ( json ) 
 		{
 			// console.log("skdjfalsdfjkl:" ,json);
-			window.pubjson = json ;
+			window.pgp_pubJson = pgp_priJson = json ;
+
 			// console.log( "pubjson: " , window.pubjson ) ;
 			
-			var cbJson = callBack ( json ) ;
-			window[ randomFnName ] = undefined ;
-			randomTagDom.parentNode.removeChild ( randomTagDom ) ;
+			var cbJson = fn_callBack ( json ) ;
+			window[ str_randomFnName ] = undefined ;
+			dom_randomTag.parentNode.removeChild ( dom_randomTag ) ;
 			
-			return cbJson ;
+			return json ;
 		} ;
+		
+
+		var pm_a01 = new Promise 
+		(
+			function ( resolved , rejected )
+			{
+				/*setTimeout
+				(
+					function ()
+					{
+						resolved ( pgp_priJson ) ;
+						console.log ( "window.pgp_pubJson:" , pgp_pubJson ) ;
+						console.log ( "window.pgp_priJson:" , pgp_priJson ) ;
+					} ,
+					num_ms
+				) ;*/
+				var num_ms = 0 ;
+				var num_ms_inc = .1 ;
+				var numSiv_a01 = window.setInterval
+				(
+					function ()
+					{
+						num_ms += num_ms_inc ;
+						if ( pgp_priJson )
+						{
+							console.log ( "pgp_priJson:" , pgp_priJson ) ;
+							window.clearInterval ( numSiv_a01 ) ;
+							resolved ( pgp_priJson ) ;
+							console.log ( "num_ms1:" , num_ms ) ;	
+						} ;
+					} ,
+					num_ms_inc
+				) ;
+				// console.log ( "num_ms2:" , num_ms ) ;
+			} 
+
+		) ;
+		/*pm_a01.then
+		(
+			function ( resolved )
+			{
+				return resolved ;
+			}
+		) ;*/
+		return pm_a01 ;
 		// console.log( "rfjson:" , rfjson ) ;
 	} ,
 

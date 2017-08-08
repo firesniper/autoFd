@@ -135,6 +135,152 @@ let pgp_compileFd_less = pgp_gulpLib.fnPgp_compileFd
     }
 ) ;
 
+
+let pgp_less2Css = pgp_gulpLib.fnStr_cvt2Css 
+( 
+    { 
+        str_name : "fn_less" , 
+        ary_src : 
+        [ 
+            // pgp_indeEnv.dir_tMall + "/**/css/*.less" 
+            "./**/append_mls/css/*.res.less"
+        ] ,
+        ary_depeFn : [ pgp_compileFd_less.str_sync ]
+    } 
+) ;
+
+let pgp_sass2Css = pgp_gulpLib.fnStr_cvt2Css 
+( 
+    { 
+        str_name : "fn_sass" , 
+        ary_src : [ "./**/append_mls/css/*.scss" ] 
+    } 
+) ;
+// let scss2Css = cvt2Css ( { fn : "scss" , ary_src : [ "./append_mls/css/*.scss" ] , loadMaps : true } ) ;
+
+
+let str_rmConsole = pgp_gulpLib.fnStr_rmConsole 
+(
+    {
+        str_name : "" ,
+        ary_src : [ pgp_libDepeEnv.laboRat + "/inputJs.dev.js" ] ,
+        str_dest : pgp_depeEnv.str_node_js + "/dist1"
+    }
+) ;
+
+
+pgp_gulp.task
+(
+    "bwsReload" ,
+    function ()
+    {
+        // gulp.src ( cwr + "**/*.*" )
+        pgp_gMod.bwsReload.listen () ;
+        pgp_gulp.watch 
+        ( 
+            "./**/*.*" ,
+            function ( event )
+            {
+                bwsReload.change ( event.path ) ;
+            }
+        ) ;
+
+    }
+) ;
+
+let ary_defTask = 
+[ 
+    /*"rmConsole" 
+    ,*/
+    
+    
+    
+    pgp_fileInclude.str_sync
+    /*,
+    pgp_compileFd_html.str_sync*/
+    , 
+    pgp_compileFd_less.str_sync
+    /*,
+    pgp_less2Css.str_sync*/
+    /*
+    ,
+    str_rev_r*/
+    /*,
+    "revCollector"
+    ,*/
+    /*"bwsReload" */
+] ;
+pgp_gulp.task
+(
+    "less2Css" ,
+    [] ,
+    function ()
+    {
+        pgp_gulpsync.start ( [ pgp_less2Css.str_sync ] ) ;
+    } 
+) ;
+
+
+pgp_gulp
+.task
+(
+    "default" ,
+    ary_defTask ,
+    function ( )
+    {
+         
+        
+        pgp_compileFd_html.pm_async.then
+        (
+            function ( resolved )
+            {
+                pgp_gulp.start
+                (
+                    resolved
+                ) ;
+            } ,
+            function ( rejected )
+            {}
+        ) ;
+        pgp_less2Css.pm_async.then
+        (
+            function ( resolved ) 
+            {
+                pgp_gulp.start 
+                ( 
+                    [ 
+                        resolved
+                    ] 
+                ) 
+
+            } ,
+            function ( rejected )
+            {}
+        ) ;
+           
+        pgp_gulp.watch 
+        ( 
+            "./**/*.dev.html" ,
+            [ pgp_fileInclude.str_sync ] 
+        ) ;
+        pgp_gulp.watch 
+        ( 
+            "./**/*.dev.combo.html" ,
+            [ pgp_compileFd_html.str_sync ] 
+        ) ;
+        // pgp_gulp.watch 
+        // ( 
+        //     "./**/*.dev.less" ,
+        //     [ pgp_compileFd_less.str_sync ] 
+        // ) ;
+        // pgp_gulp.watch 
+        // ( 
+        //     "./**/*.res.less" ,
+        //     [ pgp_less2Css.str_sync ] 
+        // ) ;
+    }
+) ;
+
 let str_rev_r = pgp_gulpLib.fnStr_rev 
 ( 
     { 
@@ -175,66 +321,8 @@ let str_revCollector = pgp_gulpLib.fnStr_revCollector
         str_dest : "./append_mls/"
     }
 ) ;
-let str_rmConsole = pgp_gulpLib.fnStr_rmConsole 
-(
-    {
-        str_name : "" ,
-        ary_src : [ pgp_libDepeEnv.laboRat + "/inputJs.dev.js" ] ,
-        str_dest : pgp_depeEnv.str_node_js + "/dist1"
-    }
-) ;
-pgp_gulp.task
-(
-    "bwsReload" ,
-    function ()
-    {
-        // gulp.src ( cwr + "**/*.*" )
-        pgp_gMod.bwsReload.listen () ;
-        pgp_gulp.watch 
-        ( 
-            "./**/*.*" ,
-            function ( event )
-            {
-                bwsReload.change ( event.path ) ;
-            }
-        ) ;
-
-    }
-) ;
 
 
-let str_copyRevDest = pgp_gulpLib.fnStr_copyDir ( { str_name : "revDest" , ary_src : []  } ) ;
-
-
-let str_cleanRevDest = pgp_gulpLib.fnStr_cleanDir ( { str_name : "revDest" , ary_src : [] } ) ;
-
-
-let str_delRevDest = pgp_gulpLib.fnStr_delDir ( { str_name : "revDest" , ary_src : [] } ) ;
-
-
-
-
-let pgp_less2Css = pgp_gulpLib.fnStr_cvt2Css 
-( 
-    { 
-        str_name : "fn_less" , 
-        ary_src : 
-        [ 
-            // pgp_indeEnv.dir_tMall + "/**/css/*.less" 
-            "./**/append_mls/css/*.res.less"
-        ] ,
-        ary_depeFn : [ pgp_compileFd_less.str_sync ]
-    } 
-) ;
-
-let pgp_sass2Css = pgp_gulpLib.fnStr_cvt2Css 
-( 
-    { 
-        str_name : "fn_sass" , 
-        ary_src : [ "./**/append_mls/css/*.scss" ] 
-    } 
-) ;
-// let scss2Css = cvt2Css ( { fn : "scss" , ary_src : [ "./append_mls/css/*.scss" ] , loadMaps : true } ) ;
 
 let str_manifest = pgp_gulpLib.fnStr_resetManifest 
 (
@@ -244,114 +332,6 @@ let str_manifest = pgp_gulpLib.fnStr_resetManifest
         ary_src : [ "./manifest/*.json" ] 
     } 
 ) ;
-
-
-let ary_defTask = 
-[ 
-    /*"rmConsole" 
-    ,*/
-    
-    
-    
-    pgp_fileInclude.str_sync
-    /*,
-    pgp_compileFd_html.str_sync*/
-    , 
-    pgp_compileFd_less.str_sync
-    /*,
-    pgp_less2Css*/
-    /*
-    ,
-    str_rev_r*/
-    /*,
-    "revCollector"
-    ,*/
-    /*"bwsReload" */
-] ;
-pgp_gulp.task
-(
-    "less2Css" ,
-    [] ,
-    function ()
-    {
-        pgp_gulpsync.start ( [ pgp_less2Css.str_sync ] ) ;
-    } 
-) ;
-
-pgp_gulp
-.task
-(
-    "default" ,
-    ary_defTask ,
-    function ( )
-    {
-         
-        /*setTimeout 
-        (
-            function ()
-            {
-                pgp_gulp.start 
-                ( 
-                    [ 
-                        pgp_less2Css.str_sync
-                        , pgp_sass2Css 
-                    ] 
-                ) 
-            } ,
-            6000
-        ) ;*/
-        pgp_compileFd_html.pm_async.then
-        (
-            function ( resolved )
-            {
-                pgp_gulp.start
-                (
-                    resolved
-                ) ;
-            } ,
-            function ( rejected )
-            {}
-        ) ;
-        pgp_less2Css.pm_async.then
-        (
-            function ( resolved ) 
-            {
-                pgp_gulp.start 
-                ( 
-                    [ 
-                        resolved
-                        // , pgp_sass2Css 
-                    ] 
-                ) 
-
-            } ,
-            function ( rejected )
-            {}
-        ) ;
-           
-        pgp_gulp.watch 
-        ( 
-            "./**/*.dev.html" ,
-            [ pgp_fileInclude.str_sync ] 
-        ) ;
-        pgp_gulp.watch 
-        ( 
-            "./**/*.dev.combo.html" ,
-            [ pgp_compileFd_html.str_sync ] 
-        ) ;
-        // pgp_gulp.watch 
-        // ( 
-        //     "./**/*.dev.less" ,
-        //     [ pgp_compileFd_less.str_sync ] 
-        // ) ;
-        // pgp_gulp.watch 
-        // ( 
-        //     "./**/*.res.less" ,
-        //     [ pgp_less2Css.str_sync ] 
-        // ) ;
-    }
-) ;
-
 
 let ary_revTask =
 [
@@ -376,3 +356,13 @@ pgp_gulp.task
         ) ;*/
     }
 ) ;
+
+let str_copyRevDest = pgp_gulpLib.fnStr_copyDir ( { str_name : "revDest" , ary_src : []  } ) ;
+
+
+let str_cleanRevDest = pgp_gulpLib.fnStr_cleanDir ( { str_name : "revDest" , ary_src : [] } ) ;
+
+
+let str_delRevDest = pgp_gulpLib.fnStr_delDir ( { str_name : "revDest" , ary_src : [] } ) ;
+
+
