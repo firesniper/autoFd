@@ -144,7 +144,7 @@ let str_getResHTML = function ( str_srcData , str_injSrc , str_fileExt )
 
 let compileFd = 
 {
-    "watchLockA01" : false ,
+    "bol_watchLockA01" : false ,
     "pgp_fileState" : {
         uri : "" ,
 
@@ -272,15 +272,15 @@ let compileFd =
                                     "finish" ,
                                     function ()
                                     {
-                                        console.log ( "finish" ) ;
+                                        console.log ( "finish " + str_this.path  ) ;
                                     }
                                 ) ;
                                 let bol_watchLock = false ;
                                 let fn_fsWatchHandle = 
                                 function ( a , b , c ) 
                                 {
-                                    if ( $this.watchLockA01 ) return ;
-                                    $this.watchLockA01 = true ;
+                                    if ( $this.bol_watchLockA01 ) return ;
+                                    $this.bol_watchLockA01 = true ;
 
                                     //console.log ( "str_this.path:" , str_this.path ) ;
                                     /*pgp_fs.unwatchFile
@@ -295,20 +295,58 @@ let compileFd =
                                     
                                     compileFd.fn_init 
                                     ( pgp_params )  ;
-                                    let st01 = setTimeout 
+                                    /*let st01 = setTimeout 
                                     (
                                         function ()
                                         {
-                                            $this.watchLockA01 = false ;
+                                            $this.bol_watchLockA01 = false ;
                                         } ,
-                                        3000
-                                    ) ;
+                                        0
+                                    ) ;*/
                                     // clearTimeout ( st01 ) ;
                                     
 
                                     
                                 } ;
-                                let psWatchA01 = Promise.resolve
+                               
+                                let pm_a01 = new Promise 
+                                (
+                                    function ( resolved , rejected ) 
+                                    {
+                                        setTimeout
+                                        (
+                                            function ()
+                                            {
+                                                $this.bol_watchLockA01 = true ;
+                                                /*pgp_fs.unwatchFile
+                                                (
+                                                    str_this.path , 
+                                                    fn_fsWatchHandle
+                                                ) ;*/
+                                                resolved ( $this.bol_watchLockA01 ) ;
+
+                                            } ,
+                                            0
+                                        ) ;
+                                    }
+                                ) ;
+                                pm_a01.then 
+                                (
+                                    function ( resolved ) 
+                                    {
+                                        console.log ( "resolved:" , resolved ) ;
+                                        $this.bol_watchLockA01 = !resolved ;
+                                        console.log ( "$this.bol_watchLockA01:" , $this.bol_watchLockA01 ) ;
+                                        pgp_fs.watch 
+                                        ( 
+                                            str_this.path 
+                                            , 
+                                            fn_fsWatchHandle
+                                        ) ;
+                                        
+                                    }
+                                ) ;
+                                /*let psWatchA01 = Promise.resolve
                                 (
                                     pgp_fs.watch 
                                     ( 
@@ -340,7 +378,7 @@ let compileFd =
                                     {
 
                                     }
-                                ) ;
+                                ) ;*/
                                 
 
                             }

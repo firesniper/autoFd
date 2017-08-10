@@ -7,25 +7,43 @@
     <anchor-a01 >
 
     </anchor-a01>
-    <div class= "ctrA01" ng-controller= "ctrA01" >
+    <div class= "ctr_a01" ng-controller= "ctr_a01" >
         <input ng-model= "mde_a01" />
         <input ng-model= "mde_a02" />
-        <div >{{ exPh_a01 }}</div>
+        <div >{{ any_vm_a01 }}</div>
         
     </div>
-    <div class= "ctrA02" ng-controller= "ctrA02" >
+    <div class= "ctr_a02" ng-controller= "ctr_a02" >
         <input ng-model= "modelName1" />
-        <p >{{vm.pgpA01.name}}</p>
-        <p >{{vm.pgpA01.name2}}</p>
-        <p >{{vm.pgpA01.name3}}</p>
+        <p ng-repeat= "x in vm.pgp_a01" >{{ x }}</p>
+        <div ng-repeat= "ary_a in json_data">
+            <ul ng-repeat= "pgp_a in ary_a">
+                <!--<li ng-repeat= "any_key in pgp_a" ng-if= "any_key != link">{{ any_key }}</li>-->
+                <img ng-src= "{{ pgp_a.link }}" />
+            </ul>
+            
+
+        </div>
 
     </div>
 </body>
 <script type= "text/javascript">
-    var pgp_moduleA01 = angular.module ( "modA01" , [] ) ;
-    pgp_moduleA01.provider
+    var mdu_a01 = angular.module ( "mdu_a01" , [] ) ;
+    console.log ( "mdu_a01:" , mdu_a01 ) ;
+    mdu_a01.provider
     (
-        "providerA01" ,
+        "pvd_a01" ,
+        function ()
+        {
+            this.$get = function ()
+            {
+                return "" ;
+            }
+        } 
+    ) ;
+    mdu_a01.provider
+    (
+        "pvd_a02" ,
         function ()
         {
             this.$get = function ()
@@ -39,10 +57,10 @@
             } ;
         } 
     ) ;
-    var pgp_injectA01 = angular.injector ( [ "modA01" ] ) ;
-    var pgp_providerA01 = pgp_injectA01.get ( "providerA01" ) ;
-    
-    pgp_moduleA01.directive 
+    var inj_a01 = angular.injector ( [ "ng" , "mdu_a01" ] ) ;
+    var pvd_a02 = inj_a01.get ( "pvd_a02" ) ;
+    console.log ( "pvd_a02:" , pvd_a02.a () ) ;
+    mdu_a01.directive 
     ( 
         "anchorA01" , 
         function ()
@@ -58,28 +76,30 @@
             } ;
         } 
     ) ;
-    pgp_moduleA01.controller 
+    mdu_a01.controller 
     (
-        "ctrA01" ,
-        function ( $scope )
+        "ctr_a01" ,
+        function ( $scope , pvd_a02 )
         {
             console.log ( "scope:" , $scope ) ;
-            console.log ( "modelName:" , $scope.modelName ) ;
-            $scope.mde_a01 = "111" ;
-            console.log ( "model2:" , $scope.model2 ) ;
+            console.log ( "pvd_a02:" , pvd_a02 ) ;
+            console.log ( "ngMde1:" , $scope.ngMde1 ) ;
+            $scope.mde_a01 = "111111" ;
+            console.log ( "ngMde2:" , $scope.ngMde2 ) ;
             $scope.fn_mde_a02 = function ()
             {
                 $scope.mde_a02 = 2222 ;
             } ;
-            $scope.fn_exPh_a01 = function ()
+            $scope.fn_vm_a01 = function ()
             {
-                $scope.exPh_a01 = "exPh_a01" ;
+                $scope.any_vm_a01 = "vm_a01" ;
             } () ;
         }
     ) ;
-    pgp_moduleA01.controller
+    console.log ( "mdu_a01:" , mdu_a01 ) ;
+    mdu_a01.controller
     (
-        "ctrA02" ,
+        "ctr_a02" ,
         function ( $scope , $http )
         {
             /*$http
@@ -96,9 +116,10 @@
             .jsonp ( 'http://localhost:8080/mall_a01/malldata?scm=malldata&tbNamesStr=shoe,overcoat&jsonp=JSON_CALLBACK' )
             .success
             (
-                function ( data )
+                function ( json_data )
                 {
-                    console.log ( "data:" , data  ) ;
+                    console.log ( "json_data:" , json_data  ) ;
+                    $scope.json_data = json_data ;
                 }
             )
             /*.then
@@ -130,16 +151,16 @@
                     console.log ( "resolved:" , resolved ) ;
                 }
             ) ;*/
-            $scope.vm = 
+            $scope.pgp_vm = 
             {
-                pgpA01 : {
+                pgp_a01 : {
                     name : 111 ,
                     name2 : 222 ,
                 }
             } ;
-            $scope.fn_exPh_a02 = function ()
+            $scope.fn_vm_a02 = function ()
             {
-                $scope.vm.pgpA01.name3 = 333 ;
+                $scope.pgp_vm.pgp_a01.name3 = 333 ;
             } () ;
         }
     ) ;
@@ -148,7 +169,7 @@
     (
         function ( $ )
         {
-            angular.bootstrap ( document , [ "modA01" ] ) ;
+            angular.bootstrap ( document , [ "mdu_a01" ] ) ;
         }
     ) ;
 

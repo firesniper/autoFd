@@ -196,8 +196,8 @@ let ary_defTask =
     
     
     pgp_fileInclude.str_sync
-    /*,
-    pgp_compileFd_html.str_sync*/
+    ,
+    pgp_compileFd_html.str_sync
     , 
     pgp_compileFd_less.str_sync
     /*,
@@ -263,11 +263,11 @@ pgp_gulp
             "./**/*.dev.html" ,
             [ pgp_fileInclude.str_sync ] 
         ) ;
-        pgp_gulp.watch 
-        ( 
-            "./**/*.dev.combo.html" ,
-            [ pgp_compileFd_html.str_sync ] 
-        ) ;
+        // pgp_gulp.watch 
+        // ( 
+        //     "./**/*.dev.combo.html" ,
+        //     [ pgp_compileFd_html.str_sync ] 
+        // ) ;
         // pgp_gulp.watch 
         // ( 
         //     "./**/*.dev.less" ,

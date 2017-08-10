@@ -25,7 +25,7 @@ pgp_compileFd.fn_init
             // "str_cwd" : "E:/Repos_git/repo_tMall_d01_codes/tMall_brow_l7_d01_codes_dev/" ,
             "ary_regPatt" : 
             [ 
-                // './**/append_mls/*.combo.html' , 
+                './**/append_mls/*.dev.html' , 
                 './**/append_mls/css/*.dev.less' ,        
                 // dir_append_mls + '*.dev.js' , 
                 // dir_tMall + '/**/*.combo.html' ,
