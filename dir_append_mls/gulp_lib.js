@@ -114,7 +114,9 @@ let fnPgp_fileInclude = function ( pgp_params )
 let fnPgp_compileFd = function ( pgp_params ) 
 {
     let str_taskName = "conmpileFd：" + pgp_params.str_name ;
-    let ary_ms = [ 3000 , 3000 ] ;
+    let compileFdParams = pgp_params.compileFdParams ;
+    let ary_ms = pgp_params.ary_ms ;
+
     pgp_gulp.task
     (
         str_taskName ,
@@ -127,11 +129,9 @@ let fnPgp_compileFd = function ( pgp_params )
                 {
                     pgp_compileFd.fn_init 
                     ( 
-                        pgp_params.compileFdParams 
+                        compileFdParams 
                         
-
                     ) ;
-
                 } ,
                 ary_ms [ 0 ]
             ) ;

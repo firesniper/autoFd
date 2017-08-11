@@ -48,6 +48,7 @@ let pgp_compileFd_html = pgp_gulpLib.fnPgp_compileFd
     {
         str_name : "html" ,
         ary_depeFn : [ pgp_fileInclude.str_sync ] ,
+        ary_ms : [ 3000 , 3000 ] ,
         compileFdParams : 
         {
             pgp_globParams : 
@@ -96,6 +97,7 @@ let pgp_compileFd_less = pgp_gulpLib.fnPgp_compileFd
     {
         str_name : "less" ,
         // ary_depeFn : [ pgp_fileInclude.str_sync ] ,
+        ary_ms : [ 0 , 0 ] ,
         compileFdParams : 
         {
             pgp_globParams : 
@@ -197,8 +199,8 @@ let ary_defTask =
     
     pgp_fileInclude.str_sync
     ,
-    pgp_compileFd_html.str_sync
-    , 
+    /*pgp_compileFd_html.str_sync
+    , */
     pgp_compileFd_less.str_sync
     /*,
     pgp_less2Css.str_sync*/

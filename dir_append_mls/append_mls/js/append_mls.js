@@ -93,7 +93,7 @@ Object.defineProperties
 
 			} ,
 		} ,
-		"verifyType" :
+		"fnStr_verifyType" :
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -127,7 +127,7 @@ Object.defineProperties
 				return type ;
 			} ,
 		} ,
-		"thisIdx" : 
+		"fnNum_thisIdx" : 
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -147,7 +147,7 @@ Object.defineProperties
 				} ;
 			} 
 		} ,
-		"argsConvertAry" :
+		"fnPgp_argsCvtAry" :
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -159,54 +159,8 @@ Object.defineProperties
 				return paireGroup ;
 			} 
 		} ,
-		"setIndex" : 
-		{
-			enumerable : false ,
-			configurable : true ,
-			writable : true ,
-			value : function ( unitsGroup ) 
-			{
-				var args = Array.prototype.slice.call( arguments ) ;
-				unitsGroup = ( args.length == 1 && unitsGroup && unitsGroup != undefined && unitsGroup != null ) ? 
-						 unitsGroup = args[ args.length - 1 ] : 
-						 this ;
-				var Obj = {} ;
-				var idx = 0 ;
-				hfA01 : for ( var key in unitsGroup )
-				{
-					if ( !unitsGroup.hasOwnProperty ( key ) ) continue hfA01 ;
-					try
-					{  
-						if ( unitsGroup[ key ].constructor.name != "Object" ) 
-							// throw new TypeError( "key type must is Object" ) ;
-						console.log( "key type must is Object" ) ;
-						if ( unitsGroup[ key ].constructor.name == "Object" )
-							unitsGroup[ key ].index = ++idx 
-						else 
-							// unitsGroup[ key ].index ;
-							Object.defineProperties(
-								unitsGroup[ key ] ,
-								{
-									"index" : {
-										enumerable : true ,
-										configurable : true ,
-										writable : true ,
-										value : ++idx ,
-									} ,
-								} 
-							) ;
-							// unitsGroup[ key ].__proto__.index = idx++ ;
-						Obj[ key ] = unitsGroup[ key ] ;
-					} 
-					catch ( err ) 
-					{
-						console.log( "err:" , err ) ;
-					} ;
-				} ;
-				return Obj ;
-			} 
-		} ,
-		"getLength" :
+		
+		"fnNum_getLength" :
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -222,7 +176,7 @@ Object.defineProperties
 				return length ;
 			} 
 		} ,
-		"objConvertAry" :
+		"fnAry_pgpCvtAry" :
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -249,7 +203,7 @@ Object.defineProperties
 				return ary ;
 			} 
 		} ,
-		"objToAry" :
+		"fnAry_pgpToAry" :
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -258,9 +212,9 @@ Object.defineProperties
 			{
 				console.log("this:",this);
 				var ary = [] ;
-				if ( Object.prototype.verifyType ( paireGroup ) !== "Object" )
+				if ( Object.prototype.fnStr_verifyType ( paireGroup ) !== "Object" )
 				{
-					console.log("Object.prototype.verifyType(paireGroup):" , Object.prototype.verifyType (paireGroup) );
+					console.log("Object.prototype.fnStr_verifyType(paireGroup):" , Object.prototype.fnStr_verifyType (paireGroup) );
 					return ;
 				} ;
 
@@ -286,7 +240,7 @@ Object.defineProperties
 				if ( "callee" in paireGroup )
 				{
 					flag = true ;
-					callBackFn = Object.prototype.argsConvertAry ;
+					callBackFn = Object.prototype.fnPgp_argsCvtAry ;
 				}
 				else if 
 				(
@@ -294,7 +248,7 @@ Object.defineProperties
 				)
 				{
 					flag = false ;
-					callBackFn = Object.prototype.objConvertAry ;
+					callBackFn = Object.prototype.fnAry_pgpCvtAry ;
 				} ;
 				console.log("callBackFn",callBackFn);
 				return { flag : flag , callBackFn : callBackFn , } ;
@@ -335,7 +289,7 @@ Object.defineProperties
 				govern.insertBefore ( injection , refe.nextSibling ) ;
 			} 
 		} ,
-		"combineUgNestUg" :
+		"fnAry_combinePgpNestPgp" :
 		{
 			enumerable : false ,
 			configurable : true ,
@@ -347,7 +301,7 @@ Object.defineProperties
 							unitsGroup = args[ args.length - 1 ] : 
 							this ;
 				var interAry = null ;
-				var exterAry = unitsGroupB.getLength () - unitsGroupA.getLength () >= 0 
+				var exterAry = unitsGroupB.fnNum_getLength () - unitsGroupA.fnNum_getLength () >= 0 
 				?
 				(
 					function ()
@@ -424,9 +378,9 @@ Object.defineProperties
 				unitsGroup = ( args.length == 1 && unitsGroup && unitsGroup != undefined && unitsGroup != null ) ? 
 							unitsGroup = args[ args.length - 1 ] : 
 							this ;
-				var unitA = ( unitsGroup.verifyType () === "Object" ) ? 
+				var unitA = ( unitsGroup.fnStr_verifyType () === "Object" ) ? 
 							new Object () : 
-							( unitsGroup.verifyType () === "Array" ) ?
+							( unitsGroup.fnStr_verifyType () === "Array" ) ?
 							new Array () :
 							null ;
 				var unitB = null ;
@@ -455,7 +409,7 @@ Object.defineProperties
 						continue hfa01 ;
 					} ;
 					
-					switch ( unitsGroup[ indicatorA ].verifyType () )
+					switch ( unitsGroup[ indicatorA ].fnStr_verifyType () )
 					{
 						case "Object" :
 							unitB = new Object () ;
@@ -523,19 +477,19 @@ Object.defineProperties
 (
 	Array.prototype ,
 	{
-		"getLength" :
+		"fnNum_getLength" :
 		{
 			enumerable : false ,
 			configurable : true ,
 			writable : true ,
-			value : Object.prototype.getLength ,
+			value : Object.prototype.fnNum_getLength ,
 		} ,
-		"combineUgNestUg" :
+		"fnAry_combinePgpNestPgp" :
 		{
 			enumerable : false ,
 			configurable : true ,
 			writable : true ,
-			value : Object.prototype.combineUgNestUg ,
+			value : Object.prototype.fnAry_combinePgpNestPgp ,
 		} , 
 		"defFlag" :
 		{
@@ -544,73 +498,7 @@ Object.defineProperties
 			writable : true ,
 			value :  null ,
 		} ,
-		"JaSortByType" : 
-		{
-			enumerable : false ,
-			configurable : true , 
-			writable : true ,
-			value : function ( field , reverse , array ) 
-			{
-				console.log( "this:" , this ) ;
-				var args = Array.prototype.slice.call( arguments ) ;
-				array = ( args.length == 3 && array ) ? 
-						args[ args.length - 1 ] :
-						function( $this )
-						{
-							if 
-							( 
-								$this.constructor.name == "Array"
-								|| "length" in $this  
-							)
-							{
-								return $this ;
-							}
-							else 
-							{ 
-								// throw new TypeError( "args must be Type String" ) ;
-								console.log( "args must be Type String"  ) ;
-							} ;
-						}( this ) ;
-						
-				//数组长度小于2 或 没有指定排序字段 或 不是json格式数据
-				if( array.length < 2 || !field || typeof array[ 0 ] !== "object" ) return array ;
-				//数字类型排序
-// 					array[ 0 ][ field ].match(/[^\d]/ig) ;
-				if
-				( 
-					// typeof array[ 0 ][ field ] === "number" 
-					!/[^\d]/ig.test( array[ 0 ][ field ] )
-				) 
-				{
-					array.sort(
-						function( x , y ) 
-						{ 
-							return x[ field ] > y[ field ] ;
-						} 
-					) ;
-				} ;
-				//字符串类型排序
-				if
-				( 
-					// typeof array[ 0 ][ field ] === "string"
-					/[^\d]/ig.test( array[ 0 ][ field ] ) 
-				) 
-				{
-					array.sort( 
-						function( x , y ) 
-						{ 
-							return x[ field ].localeCompare( y[ field ] ) ;
-						}
-					) ;
-				} ;
-				//倒序
-				if( reverse ) 
-				{
-					array.reverse() ;
-				} ;
-				return array ;
-			} ,
-		} ,
+		
 	}
 	
 ) ;
@@ -619,41 +507,7 @@ Object.defineProperties
 (
 	String.prototype ,
 	{
-		"getSearch" : 
-		{
-			enumerable : false ,
-			configurable : true ,
-			writable : true ,
-			value : function ( urlStrOpt )
-			{
-				var args = Array.prototype.slice.call( arguments ) ;
-				urlStrOpt = ( args.length == 1 && urlStrOpt ) ? 
-						 urlStrOpt = args[ args.length - 1 ] : 
-						 typeof this === 'string' ?
-						 this :
-						 null ;
-				var urlStrDef = location.href ? location.href : document.URL ? document.URL : urlStrOpt ? urlStrOpt : this ;
-				
-				if ( typeof urlStrDef != "string" ) throw new TypeError( "urlStrDef must string " ) ;
-				var searchStr = window.location ? location.search : urlStrDef.match( /\?+.*$/ig )[ 0 ] ;
-				if( searchStr.indexOf( "?" ) == 0 ) 
-				{
-					var sliceRes = searchStr.slice(1) ; 
-					var etyAry = sliceRes.split( "&" ) ;
-					var obj = {} ;
-					for ( var i = 0 ; i < etyAry.length ; i++ )
-					{
-						var pgAry = etyAry[ i ].split( "=" ) ;
-						obj[ pgAry[ 0 ] ] = pgAry[ 1 ] ;
-					} ;
-				}
-				else
-				{
-					throw new RangeError( "none search" ) ;
-				} ;
-				return obj ;
-			} ,
-		} ,
+		
 		"getUrlFileName" : 
 		{
 			enumerable : false ,
@@ -928,7 +782,7 @@ Object.defineProperties
 
 				} ;
 
-				argsAry = Function.operateType.objToAry ( argsObj ) ;
+				argsAry = Function.operateType.fnAry_pgpToAry ( argsObj ) ;
 				// console.log("args:",argsAry);
 				return argsAry ;
 			}
@@ -1124,6 +978,7 @@ Object.defineProperties
 		}
 	}
 ) ;
+/* tMall_lib */
 
 }() ;
 
@@ -1191,7 +1046,7 @@ var classPgp =
 				throw new TypeError( "null point error" ) ;
 				// return false ;
 			} ;
-// 			urlPgp = urlPgp.objConvertAry() ;
+// 			urlPgp = urlPgp.fnAry_pgpCvtAry() ;
 			var cssEleObj = {} ;
 			var suffix = "" ;
 			var ele = null ;
@@ -1208,7 +1063,7 @@ var classPgp =
 					if ( urlPgp[ o ].hasOwnProperty( i ) !== true ) continue af02 ;
 					// console.log( urlPgp[ o ][ i ] );
 					var paireUnit = urlPgp[ o ][ i ] ;
-					switch ( paireUnit.verifyType(  ) ) 
+					switch ( paireUnit.fnStr_verifyType(  ) ) 
 					{
 						case "String" :
 							// console.log( "suffix:" , paireUnit.suffix(  ) );
@@ -1397,7 +1252,7 @@ var classPgp =
 		{
 			// console.log("arguments:" , arguments );
 			isAsyn = isAsyn && typeof isAsyn === "boolean" ? isAsyn : false ;
-			// if ( urlPgp.verifyType() == "Object" )  urlPgp = urlPgp.objConvertAry() ;
+			// if ( urlPgp.fnStr_verifyType() == "Object" )  urlPgp = urlPgp.fnAry_pgpCvtAry() ;
 			var urlPgp = classPgp.scIns.prototype.insObj.crtEleObj ( urlPgp , tagName ) ;
 
 			var mainCallBack = 
@@ -1496,9 +1351,9 @@ var append_mls =
 		function () 
 		{
 			if 
-			( !window.pgp_defUrl.script || window.pgp_defUrl.meta.getLength() == 0 ) 
+			( !window.pgp_defUrl.script || window.pgp_defUrl.meta.fnNum_getLength() == 0 ) 
 			return urlPgp.meta ;
-			resUrlObj = window.pgp_defUrl.meta.combineUgNestUg ( urlPgp.meta ) ;
+			resUrlObj = window.pgp_defUrl.meta.fnAry_combinePgpNestPgp ( urlPgp.meta ) ;
 			// resUrlObj = window.pgp_defUrl.meta.concat( urlPgp.meta ) ;
 			var nonp = resUrlObj.hasNullPointer () ;
 			return nonp.unit ;
@@ -1519,7 +1374,7 @@ var append_mls =
 				function () 
 				{
 					if 
-					( !window.pgp_defUrl.script || window.pgp_defUrl.link.getLength () == 0 ) 
+					( !window.pgp_defUrl.script || window.pgp_defUrl.link.fnNum_getLength () == 0 ) 
 					return urlPgp.link ;
 
 					var resUrlObj2 = window.pgp_defUrl.link.concat ( urlPgp.link ) ;
@@ -1545,7 +1400,7 @@ var append_mls =
 				function () 
 				{
 					if 
-					( !window.pgp_defUrl.script || window.pgp_defUrl.script.getLength == 0 ) 
+					( !window.pgp_defUrl.script || window.pgp_defUrl.script.fnNum_getLength == 0 ) 
 					return urlPgp.script ;
 					if ( "length" in window.pgp_defUrl.script || window.pgp_defUrl.script.constructor.name == "Array" )
 					{
