@@ -166,9 +166,13 @@ let fnStr_cvt2Css = function ( pgp_params )
 {
 
     console.log ( "pgp_params:" , pgp_params.str_name ) ;
+    let str_name = pgp_params.str_name ;
     let pgp_loadMaps = pgp_params.str_name == "sass" ? { loadMaps : true } : undefined ;
     let str_taskName = "cvt2Css:" + pgp_params.str_name ;
-    let ary_ms = [ 3000 , 3000 ] ;
+    let ary_ms = pgp_params.ary_ms ;
+    let ary_src = pgp_params.ary_src ;
+    let ary_depeFn = pgp_params.ary_depeFn ;
+
     let fnA01 = function ()
     {
         setTimeout 
@@ -176,9 +180,9 @@ let fnStr_cvt2Css = function ( pgp_params )
             function ()
             {
                 pgp_gulp
-                .src ( pgp_params.ary_src )
+                .src ( ary_src )
                 .pipe ( pgp_gMod.fn_sourceMaps.init ( pgp_loadMaps ) ) 
-                .pipe ( pgp_gMod [ pgp_params.str_name ] ( { outputStyle : "compressed" } ) )
+                .pipe ( pgp_gMod [ str_name ] ( { outputStyle : "compressed" } ) )
                 .pipe ( pgp_gMod.fn_miniCss () ) 
                 .pipe
                 (
@@ -223,7 +227,7 @@ let fnStr_cvt2Css = function ( pgp_params )
     pgp_gulp.task 
     ( 
         str_taskName , 
-        pgp_params.ary_depeFn ,
+        ary_depeFn ,
         function () 
         {
             /*return new Promise

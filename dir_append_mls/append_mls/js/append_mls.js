@@ -134,10 +134,6 @@ Object.defineProperties
 			writable : true ,
 			value : function ( htmlcol ) 
 			{
-				var args = Array.prototype.slice.call( arguments ) ;
-				htmlcol = ( args.length == 3 && htmlcol ) ? 
-						args[ args.length - 1 ] :
-						this ;
 				for ( var i = 0 ; i < htmlcol.length ; i++ ) 
 				{
 					if ( this == htmlcol[ i ] )
@@ -145,7 +141,7 @@ Object.defineProperties
 						return i ;
 					} ;
 				} ;
-			} 
+			} ,
 		} ,
 		"fnPgp_argsCvtAry" :
 		{
@@ -846,10 +842,10 @@ if ( "baseURI" in document == false )
 		} 
 	) ;
 } ;
-String.pgp_envOpt = {} ;
+Object.pgp_envOpt = {} ;
 Object.defineProperties
 (
-	String.pgp_envOpt ,
+	Object.pgp_envOpt ,
 	{
 		/*"dev" :
 		{
@@ -879,7 +875,7 @@ Object.defineProperties
 ) ;
 Object.defineProperties
 (
-	String ,
+	Object ,
 	{
 		"fn_envOpt" :
 		{
@@ -921,7 +917,7 @@ Object.defineProperties
 ) ;
 Object.defineProperties
 (
-	String ,
+	Object ,
 	{
 		
 		"fnPgp_getEnvState" :
@@ -1328,8 +1324,8 @@ var append_mls =
 		var pgp_defUrl	= pgp_params.pgp_defUrl ;
 		var num_virPath	= pgp_params.num_virPath ;
 		var pgp_envOpt	= pgp_params.pgp_envOpt ;
-		String.fn_envOpt ( { "pgp_envOpt" : pgp_envOpt } ) ;
-		String.fnPgp_getEnvState 
+		Object.fn_envOpt ( { "pgp_envOpt" : pgp_envOpt } ) ;
+		Object.fnPgp_getEnvState 
 		( 
 			{ 
 				"num_virPath" : num_virPath ,

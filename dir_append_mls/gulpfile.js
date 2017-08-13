@@ -142,6 +142,7 @@ let pgp_less2Css = pgp_gulpLib.fnStr_cvt2Css
 ( 
     { 
         str_name : "fn_less" , 
+        ary_ms  : [ 3000 , 3000 ] ,
         ary_src : 
         [ 
             // pgp_indeEnv.dir_tMall + "/**/css/*.less" 
@@ -155,6 +156,7 @@ let pgp_sass2Css = pgp_gulpLib.fnStr_cvt2Css
 ( 
     { 
         str_name : "fn_sass" , 
+        ary_ms  : [ 3000 , 3000 ] ,
         ary_src : [ "./**/append_mls/css/*.scss" ] 
     } 
 ) ;
