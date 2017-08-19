@@ -106,7 +106,7 @@
 								// throw new TypeError( "key type must is Object" ) ;
 							console.log( "key type must is Object" ) ;
 							if ( unitsGroup[ key ].constructor.name == "Object" )
-								unitsGroup[ key ].index = idx ++ 
+								unitsGroup[ key ].index = ++idx 
 							else 
 								// unitsGroup[ key ].index ;
 								Object.defineProperties(
@@ -116,7 +116,7 @@
 											enumerable : true ,
 											configurable : true ,
 											writable : true ,
-											value : idx ++ ,
+											value : ++idx ,
 										} ,
 									} 
 								) ;
@@ -131,7 +131,37 @@
 					return pgp ;
 				} 
 			} ,
-			
+			"fnStr_getAppParams" :
+			{
+				enumerable : false ,
+				configurable : true ,
+				writable : true ,
+				value : function ( params )
+				{
+					// var pgp_serh = params.pgp_serh ;
+					var _this = this ;
+					var pgp_serh = _this ;
+					var ary_governStrBuf = new Array () ;
+					ary_governStrBuf.push
+					( 
+						pgp_envState.pgp_envOpt.pgp_servBaseUrl 
+						+ pgp_serh [ "scm" ] 
+						+ "?" 
+					) ;
+					hfA01 : for ( var sechKey in pgp_serh )
+					{
+						if ( !pgp_serh.hasOwnProperty ( sechKey ) && sechKey == "scm" ) continue hfA01 ;
+						ary_governStrBuf.push (
+							sechKey
+							+ "="
+							+ pgp_serh [ sechKey ] 
+							+ "&"
+						) ;
+						
+					} ;
+					return ary_governStrBuf.join ( "" ) ;
+				} 
+			} ,
 		}
 	) ;
 	Object.defineProperties
@@ -224,7 +254,47 @@
 			} ,
 		}
 	) ;
-	
+	Object.defineProperties
+	(
+		String.prototype ,
+		{
+			"fnPgp_getDocSerh" : 
+			{
+				enumerable : false ,
+				configurable : true ,
+				writable : true ,
+				value : function ( urlStrOpt )
+				{
+					var args = Array.prototype.slice.call( arguments ) ;
+					urlStrOpt = ( args.length == 1 && urlStrOpt ) ? 
+							urlStrOpt = args[ args.length - 1 ] : 
+							typeof this === 'string' ?
+							this :
+							null ;
+					var urlStrDef = location.href ? location.href : document.URL ? document.URL : urlStrOpt ? urlStrOpt : this ;
+					
+					if ( typeof urlStrDef != "string" ) throw new TypeError( "urlStrDef must string " ) ;
+					var searchStr = window.location ? location.search : urlStrDef.match( /\?+.*$/ig )[ 0 ] ;
+					if( searchStr.indexOf( "?" ) == 0 ) 
+					{
+						var sliceRes = searchStr.slice(1) ; 
+						var etyAry = sliceRes.split( "&" ) ;
+						var obj = {} ;
+						for ( var i = 0 ; i < etyAry.length ; i++ )
+						{
+							var pgAry = etyAry[ i ].split( "=" ) ;
+							obj[ pgAry[ 0 ] ] = pgAry[ 1 ] ;
+						} ;
+					}
+					else
+					{
+						throw new RangeError( "none search" ) ;
+					} ;
+					return obj ;
+				} ,
+			} ,
+		}
+	) ;		
 
 	var fnStr_getDomTemp = function ( params ) 
 	{
@@ -232,7 +302,7 @@
 		var fnStr_getDomPatt			= params.fnStr_getDomPatt ;
 		/*var num_startIdx	= params.num_startIdx ;
 		var num_len			= params.num_len ;*/
-		// var str_pgKey		= params.str_pgKey ;
+		var str_pgKey		= params.str_pgKey ;
 		var ary_subRetData	= params.ary_subRetData ;
 		/*if ( !jary_data ) 
 		{ 
@@ -252,13 +322,13 @@
 		{
 			if ( !ary_subRetData.hasOwnProperty ( str_subRetDataKey ) ) continue hfA01 ;
 // 			var num_searchKey = num_reduceCount - Math.abs( ary_subRetData.num_len - str_subRetDataKey ) ;
-			// var num_searchKey = ary_subRetData[ str_subRetDataKey ][ "index" ] /*- 1*/ ;
+			var num_searchKey = ary_subRetData[ str_subRetDataKey ][ "index" ] - 1 ;
 			var str_domTemp = fnStr_getDomPatt 
 			( 
 				{
 					jary_data	: ary_subRetData , 
 					str_dataKey	: str_subRetDataKey , 
-					// str_pgKey	: num_searchKey 
+					str_pgKey	: num_searchKey 
 				}
 			) ;
 			arys_buffer_str.push ( str_domTemp ) ;
@@ -278,7 +348,7 @@
 		var dom_dom				= params.dom_dom ? params.dom_dom : $( "#page-infinite-scroll" ) ;
 		var qad_anchor			= params.qad_anchor ;
 		var fnStr_getDomPatt 	= params.fnStr_getDomPatt ;
-		// var str_pgKey			= params.str_pgKey ;
+		var str_pgKey			= params.str_pgKey ;
 
     	var loading = false ;
 
@@ -307,7 +377,7 @@
 								fnStr_getDomPatt			: fnStr_getDomPatt , 
 								/*num_startIdx	: 0 , 
 								num_len			: 4 , */
-								// str_pgKey		: str_pgKey ,
+								str_pgKey		: str_pgKey ,
 								ary_subRetData	: ary_subRetData
 
 							} 

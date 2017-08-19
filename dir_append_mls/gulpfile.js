@@ -61,7 +61,7 @@ let pgp_compileFd_html = pgp_gulpLib.fnPgp_compileFd
                     //  pgp_indeEnv.dir_tMall + "/**/*.combo.html" ,
                     //  pgp_indeEnv.dir_tMall + "/**/css/*.dev.less" ,  
                      "./**/*.combo.html" ,
-                     "./**/css/*.dev.less"   
+                    //  "./**/css/*.dev.less"   
  
                 ]
             } ,

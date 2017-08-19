@@ -11,10 +11,20 @@ let fnStr_getResLessSass = function ( str_srcData , str_fileExt )
 
     let str_lessSass = str_srcData.fnPgp_getCttWrap 
     ( 
-        pgp_reg.pgp_placeHolderTokenMap  
+        {
+            pgp_placeHolderTokenMap : pgp_reg.pgp_placeHolderTokenMap , 
+            pgp_parentTag_reg       : pgp_parentTag_reg
+
+        }
     ).ary_selectWrapCtt_str ;
     console.log ( "str_lessSass:" , str_lessSass ) ;
-    let str_lessSass2 = str_lessSass.fnStr_placeHolderToToken ( pgp_reg.pgp_placeHolderTokenMap ) ;
+    let str_lessSass2 = str_lessSass.fnStr_placeHolderToToken 
+    ( 
+        {
+            pgp_phTokenMap : pgp_reg.pgp_placeHolderTokenMap 
+
+        }
+    ) ;
     console.log ( "str_lessSass2:" , str_lessSass2 ) ;
 
     return str_lessSass2 ;
@@ -27,15 +37,25 @@ let fnStr_getResNonMakeUp = function ( str_srcData , str_fileExt )
     console.log ( "pgp_reg:" , pgp_reg ) ;
     let ary_selectWrapCtt_str = str_srcData.fnPgp_getCttWrap 
     ( 
-        pgp_reg.pgp_placeHolderTokenMap ,
-        pgp_reg.pgp_parentTag_reg 
+        {
+            pgp_placeHolderTokenMap : pgp_reg.pgp_placeHolderTokenMap ,
+            pgp_parentTag_reg       : pgp_reg.pgp_parentTag_reg 
+
+        }
     ).ary_selectWrapCtt_str ;
     console.log ( "ary_selectWrapCtt_str:" , str_srcData.fnPgp_getCttWrap 
     ( 
-        pgp_reg.pgp_placeHolderTokenMap  
+        {
+            pgp_placeHolderTokenMap : pgp_reg.pgp_placeHolderTokenMap  
+        }
     ) ) ;
 
-    let str_nmu = ary_selectWrapCtt_str.fnStr_placeHolderToToken ( pgp_reg.pgp_placeHolderTokenMap ) ;
+    let str_nmu = ary_selectWrapCtt_str.fnStr_placeHolderToToken 
+    ( 
+        {
+            pgp_phTokenMap  : pgp_reg.pgp_placeHolderTokenMap 
+        }
+    ) ;
     console.log ( "str_nmu:" , str_nmu ) ;
     
     return str_nmu ;
@@ -49,10 +69,18 @@ let fnStr_getResJsStr2 = function ( str_srcData , str_fileExt )
 
     let str_js = str_srcData.fnPgp_getCttWrap 
     ( 
-        pgp_reg.pgp_placeHolderTokenMap  
+        {
+            pgp_placeHolderTokenMap : pgp_reg.pgp_placeHolderTokenMap  
+        }
     ).ary_selectWrapCtt_str ;
     console.log ( "str_js:" , str_js ) ;
-    let str_js2 = str_js.fnStr_placeHolderToToken ( pgp_reg.pgp_placeHolderTokenMap ) ;
+    let str_js2 = str_js.fnStr_placeHolderToToken 
+    ( 
+        {
+            pgp_phTokenMap  : pgp_reg.pgp_placeHolderTokenMap 
+
+        }
+    ) ;
     console.log ( "str_js2:" , str_js2 ) ;
         
     return str_js2 ;
@@ -65,12 +93,20 @@ let str_getResHTML = function ( str_srcData , str_injSrc , str_fileExt )
     console.log ( "pgp_regHead:" , pgp_regHead ) ;
     let ary_targetA1 = str_srcData.fnPgp_getCttWrap 
     ( 
-        pgp_regHead.pgp_placeHolderTokenMap ,
-        pgp_regHead.pgp_parentTag_reg
+        {
+            pgp_placeHolderTokenMap : pgp_regHead.pgp_placeHolderTokenMap ,
+            pgp_parentTag_reg       : pgp_regHead.pgp_parentTag_reg
+        }
     ).ary_selectCtt ;
     console.log ( "ary_targetA1:" , ary_targetA1 ) ;
     
-    let str_resData = str_srcData.fnStr_tokenToPlaceHolder ( null , "global" ) ;
+    let str_resData = str_srcData.fnStr_tokenToPlaceHolder 
+    ( 
+        {
+            pgp_phTokenMap  : null , 
+            str_fileExt     : "global" 
+        }
+    ) ;
     // console.log ( "str_resData:" , str_resData.constructor.name ) ;
     console.log ( "str_resData:" , str_resData ) ;
     let str_resData2 = str_resData ;
@@ -83,8 +119,11 @@ let str_getResHTML = function ( str_srcData , str_injSrc , str_fileExt )
     {
         let pgp_sourceData = str_injSrc.fnPgp_getCttWrap 
         ( 
-            pgp_regHead.pgp_placeHolderTokenMap ,
-            pgp_regHead.pgp_parentTag_reg
+            {
+                pgp_placeHolderTokenMap : pgp_regHead.pgp_placeHolderTokenMap ,
+                pgp_parentTag_reg       : pgp_regHead.pgp_parentTag_reg
+
+            }
         ) ;
         console.log ( "pgp_sourceData.ary_selectCtt:" , pgp_sourceData.ary_selectCtt ) ;
 
@@ -124,17 +163,33 @@ let str_getResHTML = function ( str_srcData , str_injSrc , str_fileExt )
     console.log ( "pgp_regPgpBody.pgp_parentTag_reg:" , pgp_regPgpBody.pgp_parentTag_reg ) ;
     let str_body = str_srcData.fnPgp_getCttWrap 
     ( 
-        pgp_regPgpBody.pgp_placeHolderTokenMap ,
-        pgp_regPgpBody.pgp_parentTag_reg
+        {
+            pgp_placeHolderTokenMap : pgp_regPgpBody.pgp_placeHolderTokenMap ,
+            pgp_parentTag_reg       : pgp_regPgpBody.pgp_parentTag_reg
+
+        }
     ).ary_selectWrapCtt_str ;
 
     console.log ( "str_body:" , str_body ) ;
-    let str_body2 = str_body.fnStr_placeHolderToToken ( pgp_regPgpBody.pgp_placeHolderTokenMap ) ;
+    let str_body2 = str_body.fnStr_placeHolderToToken 
+    ( 
+        {
+            pgp_phTokenMap : pgp_regPgpBody.pgp_placeHolderTokenMap 
+
+        }
+    ) ;
     console.log ( "str_body2:" , str_body2 ) ;
     let str_resData3 = str_resData2.replace ( /<body.*>.*<\/body>/ig , str_body2 ) ;
     console.log ( "str_resData3:" , str_resData3 ) ;
 
-    let str_resData4 = str_resData3.fnStr_placeHolderToToken ( null , "global" ) ;
+    let str_resData4 = str_resData3.fnStr_placeHolderToToken 
+    (
+        {
+            pgp_phTokenMap  : null , 
+            str_fileExt     : "global" 
+
+        } 
+    ) ;
     console.log ( "str_resData4:" , str_resData4  ) ;
 
     return str_resData4 ;

@@ -845,8 +845,11 @@ let pgp_node_common_lib =
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( pgp_placeHolderTokenMap , pgp_parentTag_reg )
+                    value : function ( params /*pgp_placeHolderTokenMap , pgp_parentTag_reg*/ )
                     {
+                        let pgp_placeHolderTokenMap = params.pgp_placeHolderTokenMap ;
+                        let pgp_parentTag_reg       = params.pgp_parentTag_reg ;
+
                         let ary_args = Array.prototype.slice.call ( arguments ) ;
                         let str_this = this ;
                         // console.log ( "%this:" ,  this ) ;
@@ -862,7 +865,9 @@ let pgp_node_common_lib =
                         console.log ( "pgp_placeHolderTokenMap:" , pgp_placeHolderTokenMap ) ;
                         let str_all = str_this.fnStr_tokenToPlaceHolder 
                         ( 
-                            pgp_placeHolderTokenMap 
+                            {
+                                pgp_phTokenMap  : pgp_placeHolderTokenMap 
+                            }
                         ) ;
                         console.log ( "str_all:" , str_all ) ;
 
@@ -905,7 +910,10 @@ let pgp_node_common_lib =
                             // let selectWrapCttStr3 = str_selectCtt.split ( "\n" ) ; 
                             let str_selectCtt2 = str_selectCtt.fnStr_placeHolderToToken 
                             ( 
-                                pgp_placeHolderTokenMap 
+                                {
+                                    pgp_phTokenMap  : pgp_placeHolderTokenMap ,
+                                    str_fileExt     : null ,
+                                }
                             ) ;
                             console.log ( "str_selectCtt2:" , str_selectCtt2 ) ;
                             let ary_selectCtt = str_selectCtt2.split ( "\n" ) ; 
@@ -926,8 +934,11 @@ let pgp_node_common_lib =
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( pgp_phTokenMap , str_fileExt )
+                    value : function ( params /*pgp_phTokenMap , str_fileExt*/ )
                     {
+                        let pgp_phTokenMap  = params.pgp_phTokenMap ;
+                        let str_fileExt     = params.str_fileExt ;
+
                         console.log ( "str_fileExt:" , str_fileExt ) ;
                         let ary_args = Array.prototype.slice.call ( arguments ) ;
                         let str_this = this ;
@@ -959,8 +970,11 @@ let pgp_node_common_lib =
                     enumerable : false ,
                     configurable : true ,
                     writable : true ,
-                    value : function ( pgp_phTokenMap , str_fileExt )
+                    value : function ( params /*pgp_phTokenMap , str_fileExt*/ )
                     {
+                        let pgp_phTokenMap  = params.pgp_phTokenMap ;
+                        let str_fileExt     = params.str_fileExt ;
+                        
                         let ary_args = Array.prototype.slice.call ( arguments ) ;
                         let str_this = this ;
                         // console.log ( "this:" , this ) ;
