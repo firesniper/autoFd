@@ -1170,7 +1170,9 @@ Object.defineProperties
 				var str_emerDir    =   params && params.str_emerDir ? 
 										params.str_emerDir : 
 										pgp_envState.pgp_envOpt.str_emerDir ;
-				var str_tb = pgp_docSerh [ "tbNamesStr" ].split ( "," ).join ( "_" ) ;
+				var str_tb = pgp_docSerh [ "tbNamesStr" ] ? 
+							 pgp_docSerh [ "tbNamesStr" ].split ( "," ).join ( "_" ) :
+							 "" ;
 				var str_servEmerUrl = pgp_envState.str_baseUrl 
 								+ str_emerDir 
 								+ "/" 

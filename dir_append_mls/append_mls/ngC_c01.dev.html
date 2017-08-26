@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset='utf-8' />
+<meta http-equiv='cache-control' content='no-cache' />
+<meta name='viewport' content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0 ,minimum-scale=1.0,maximum-scale=1.0' />
+<meta charset='utf-8' />
+<meta http-equiv='cache-control' content='no-cache' />
+<meta name='viewport' content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0 ,minimum-scale=1.0,maximum-scale=1.0' />
+<script src= "js/append_mls.js" ></script>
+<script src= "js/append_mls.config.js" ></script>
+
+<script src= "js/angular-1.0.1.min.js" ></script>
+</head>
+<body></body>
+<script type='text/javascript'>
+function doCalc(){
+	var injector = angular.injector(["ezstuff"]),
+		mycalculator = injector.get("ezCalculator"),
+		ret = mycalculator.add(3,4);
+
+	document.querySelector("#result").textContent = ret;
+}
+
+angular.module("ezstuff",[])
+	.provider("ezCalculator",function(){
+		var currency = "$";
+		this.setLocal = function(l){
+			var repo = {
+				"CN":"¥",
+				"US":"$",
+				"JP":"¥",
+				"EN":"€"
+			};
+			if(repo[l]) currency = repo[l];
+		};
+		this.$get = function(){
+			return {
+				add : function(a,b){return currency + (a+b);},
+				subtract : function(a,b){return currency + (a-b);},
+				multiply : function(a,b){return currency + (a*b);},
+				divide: function(a,b){return currency + (a/b);}
+			}
+		};
+	})
+	.config(function(ezCalculatorProvider){
+		ezCalculatorProvider.setLocal("CN");
+	});
+
+</script>
+</html>
+

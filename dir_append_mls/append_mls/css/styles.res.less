@@ -2,14 +2,14 @@
 @ssurl: url("http://PH_host:8080/abc/def/123.png") ;
 body{
   background : purple           ;
-  background-image : url( http://localhost:3000/public//aaa.png );
+  background-image : url( @url^/aaa.png );
 }
 nav {
   ul {
     margin: 0;
     padding: @padding + @padding;
     list-style: none;
-    background-image : url( http://localhost:3000/public//bbb.png );
+    background-image : url( @url^/bbb.png );
   }
 
   li { display: inline-block; }

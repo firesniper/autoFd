@@ -21,7 +21,7 @@ let pgp_gulp                = require ( "gulp" ) ;
 let pgp_gulpsync            = require ( "gulp-sync" ) ( pgp_gulp ) ;
 
 let pgp_commonLib           = require ( pgp_depeEnv.str_node_common_lib + "/node_common_lib" ) ;
-pgp_commonLib.fn_init () ;
+// pgp_commonLib.fn_init () ;
 
 let pgp_compileFd = require ( pgp_depeEnv.str_autoFdRoot + "/node_component/compileFd" ) ;
 
@@ -111,23 +111,24 @@ let fnPgp_fileInclude = function ( pgp_params )
     } ;
 } ;
 
-let fnPgp_compileFd = function ( pgp_params ) 
+let fnPgp_compileFd = function ( params ) 
 {
-    let str_taskName = "conmpileFd：" + pgp_params.str_name ;
-    let compileFdParams = pgp_params.compileFdParams ;
-    let ary_ms = pgp_params.ary_ms ;
+    this.params = params ;
+    let str_taskName = "conmpileFd：" + params.str_name ;
+    let compileFdParams = params.compileFdParams ;
+    let ary_ms = params.ary_ms ;
 
     pgp_gulp.task
     (
         str_taskName ,
-        pgp_params.ary_depeFn ,
+        params.ary_depeFn ,
         function ()
         {
             setTimeout
             (
                 function ()
                 {
-                    pgp_compileFd.fn_init 
+                    new pgp_compileFd.fn_init 
                     ( 
                         compileFdParams 
                         

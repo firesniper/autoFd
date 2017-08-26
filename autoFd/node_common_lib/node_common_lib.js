@@ -4,26 +4,29 @@ let pgp_fs = require ( "fs" ) ;
 let pgp_node_common_lib = 
 {
     
-    fn_init : function ( pgp_params )
+    fn_init : function ( params )
     {
-        pgp_params = pgp_params ? pgp_params :
+        params = params ? params : 
         {
-            str_srcBaseUri : "" ,
-            str_destBaseUri : "" ,
-            str_srcVirPath : 0 
+            
         } ;
+        /*var initParams = function ( params )
+        {
+            arguments.callee.prototype.params = params ;
+        } ; 
+        var params = new initParams ( this.params ).params ;*/
         let $this = this ;
 
-        let str_srcBaseUri  = pgp_params.str_srcBaseUri ;
+        let str_srcBaseUri  = params.str_srcBaseUri ;
         console.log ( "str_srcBaseUri2:" , str_srcBaseUri ) ;
 
-        let str_destBaseUri = pgp_params.str_destBaseUri ;
+        let str_destBaseUri = params.str_destBaseUri ;
         console.log ( "str_destBaseUri2:" , str_destBaseUri ) ;
 
-        let str_srcVirPath = pgp_params.str_srcVirPath ? pgp_params.str_srcVirPath : 0 ;
+        let str_srcVirPath = params.str_srcVirPath ? params.str_srcVirPath : 0 ;
         // console.log ( "str_srcVirPath:" , str_srcVirPath ) ;
 
-        let pgp_baseUri_ary = pgp_params.pgp_baseUri_ary ;
+        let pgp_baseUri_ary = params.pgp_baseUri_ary ;
         console.log ( "pgp_baseUri_ary:" , pgp_baseUri_ary ) ;
         Object.defineProperties
         (
@@ -127,7 +130,35 @@ let pgp_node_common_lib =
                             ] ,*/
                              "^PH_ssUrl2%" :
                             [
-                                /(?:(?:@|\$)ssurl\^)/gi , 
+                                 
+                                /*str_srcBaseUri === undefined 
+                                ?
+                                /(?:(?:@|\$)ssurl\^)/gi 
+                                : */
+                                new RegExp 
+                                ( 
+                                    str_srcBaseUri === undefined 
+                                    // console.log ("less str_srcBaseUri :" ,str_srcBaseUri )
+                                    ?
+                                    ( 
+                                        "(?:(?:@|\\$)" 
+                                        + 
+                                        "ssurl" 
+                                        + 
+                                        "\\^)" 
+                                    )
+                                    :
+                                    (
+                                        "(?:(?:@|\\$)" 
+                                        + 
+                                        str_srcBaseUri 
+                                        + 
+                                        "\\^)" 
+                                    )
+                                    , 
+                                    "gi" 
+                                )
+                                , 
                                 /*`ssurl:` 
                                 + */
                                 str_destBaseUri 
@@ -155,7 +186,7 @@ let pgp_node_common_lib =
                             //     "*/"
                             // ] ,
                             
-                            "^PH_reglationA1" :
+                            "^PH_regulationA1" :
                             [
                                 /\\\/\//ig  , 
                                 "\\//" 
@@ -215,10 +246,16 @@ let pgp_node_common_lib =
                             [ 
                                 new RegExp 
                                 ( 
-                                    str_srcBaseUri == undefined ?
+                                    str_srcBaseUri === undefined ?
                                     `(?:http|https)?:?\\/\\/[^:]+:?\\d*(?:\\\\|\\/)?([\\w-]+(?:\\/|\\\\)?){` + 0 + `,` + str_srcVirPath + `}` 
                                     :
-                                    str_srcBaseUri 
+                                    (
+                                        "(?:(?:@|\\$)" 
+                                        + 
+                                        str_srcBaseUri 
+                                        + 
+                                        "\\^)"  
+                                    )
                                     , 
                                     `ig` 
                                 ) 

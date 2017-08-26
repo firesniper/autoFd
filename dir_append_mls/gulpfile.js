@@ -65,7 +65,7 @@ let pgp_compileFd_html = pgp_gulpLib.fnPgp_compileFd
  
                 ]
             } ,
-            str_srcBaseUri : "http://PH_host:8080/abc/" ,
+            str_srcBaseUri : "vurl" ,
             str_destBaseUri : "http://localhost:3000/public/" ,
             str_srcVirPath : 2 ,
             "pgp_baseUri_ary" : 
@@ -114,8 +114,12 @@ let pgp_compileFd_less = pgp_gulpLib.fnPgp_compileFd
  
                 ]
             } ,
-            str_srcBaseUri : "http://PH_host:8080/abc/" ,
-            str_destBaseUri : "http://localhost:3000/public/" ,
+            str_srcBaseUri : 
+                // "http://PH_host:8080/abc/" 
+                "url"
+                // undefined
+                ,
+            str_destBaseUri : "http://127.0.0.4:3000/public/" ,
             str_srcVirPath : 2 ,
             "pgp_baseUri_ary" : 
             {

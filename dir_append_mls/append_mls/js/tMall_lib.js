@@ -4,7 +4,7 @@
 	(
 		Object ,
 		{
-			"pgp_jaTypeSerhMap" :
+			"pgp_jaToSortTypeMap" :
 			{
 				enumerable : false ,
 				configurable : true ,
@@ -12,7 +12,7 @@
 				value :
 				{
 					""		: "title" ,
-					"bid"	: "price_integer" ,
+					"bid"	: "id" ,
 					// "_bid"	: [ "price_integer" , true ]
 
 				}
@@ -25,7 +25,7 @@
 	(
 		Object ,
 		{
-			"fnAry_jaTypeSerhMapFn" :
+			"pgp_jaToSortTypeMapFn" :
 			{
 				enumerable : false ,
 				configurable : true ,
@@ -52,8 +52,8 @@
 						 
 					} ; 
 					// console.log ( "pgp_new:" , pgp_new ) ;
-					Object.pgp_jaTypeSerhMap = pgp_new ;
-				} ( Object.pgp_jaTypeSerhMap ) 
+					Object.pgp_jaToSortTypeMap = pgp_new ;
+				} ( Object.pgp_jaToSortTypeMap ) 
 			}
 			
 
@@ -139,7 +139,7 @@
 		Array.prototype ,
 		{
 			
-			"fn_JaSortByType" : 
+			"fnJary_sortJaByType" : 
 			{
 				enumerable : false ,
 				configurable : true , 
@@ -148,7 +148,7 @@
 				{
 					console.log( "this:" , this ) ;
 					var args = Array.prototype.slice.call( arguments ) ;
-					/*ary = ( args.length == 3 && ary ) ? 
+					/*jary = ( args.length == 3 && jary ) ? 
 							args[ args.length - 1 ] :
 							function( _this )
 							{
@@ -169,32 +169,37 @@
 					var _this		= this ;		
 					var str_field	= params.str_field ;		
 					var bol_reverse	= params.bol_reverse ;
-					var ary			= params.ary ? params.ary : this ;
+					var jary			= params.jary ? params.jary : this ;
 					//数组长度小于2 或 没有指定排序字段 或 不是json格式数据
-					if( ary.length < 2 || !str_field || typeof ary[ 0 ] !== "object" ) return ary ;
+					if( jary.length < 2 || !str_field || typeof jary[ 0 ] !== "object" ) return jary ;
 					//数字类型排序
-	// 					ary[ 0 ][ str_field ].match(/[^\d]/ig) ;
+	// 					jary[ 0 ][ str_field ].match(/[^\d]/ig) ;
 					if
 					( 
-						// typeof ary[ 0 ][ str_field ] === "number" 
-						!/[^\d]/ig.test( ary[ 0 ][ str_field ] )
+						// typeof jary[ 0 ][ str_field ] === "number" 
+						!/[^\d]/ig.test ( jary[ 0 ] [ str_field ] )
 					) 
 					{
-						ary.sort(
-							function( x , y ) 
+						jary.sort
+						(
+							function ( x , y ) 
 							{ 
-								return x[ str_field ] > y[ str_field ] ;
+								return (
+									Math.floor ( x [ str_field ] ) 
+									> 
+									Math.floor ( y [ str_field ] ) 
+								) ;
 							} 
 						) ;
 					} ;
 					//字符串类型排序
 					if
 					( 
-						// typeof ary[ 0 ][ str_field ] === "string"
-						/[^\d]/ig.test( ary[ 0 ][ str_field ] ) 
+						// typeof jary[ 0 ][ str_field ] === "string"
+						/[^\d]/ig.test( jary[ 0 ][ str_field ] ) 
 					) 
 					{
-						ary.sort( 
+						jary.sort( 
 							function( x , y ) 
 							{ 
 								return x[ str_field ].localeCompare( y[ str_field ] ) ;
@@ -204,11 +209,11 @@
 					//倒序
 					if( bol_reverse ) 
 					{
-						ary.reverse() ;
+						jary.reverse() ;
 					} ;
 					Object.defineProperties
 					(
-						ary ,
+						jary ,
 						{
 							"mem1" :
 							{
@@ -219,7 +224,7 @@
 							}
 						}
 					) ;
-					return ary ;
+					return jary ;
 				} ,
 			} ,
 		}
@@ -233,7 +238,7 @@
 		/*var num_startIdx	= params.num_startIdx ;
 		var num_len			= params.num_len ;*/
 		// var str_pgKey		= params.str_pgKey ;
-		var ary_subRetData	= params.ary_subRetData ;
+		var ary_selectSubData	= params.ary_selectSubData ;
 		/*if ( !jary_data ) 
 		{ 
 			$.toast( "暂无数据" ) ;
@@ -241,23 +246,23 @@
 // 			return ;
 		} ;*/
 		/*jary_data.fnPgp_setIndex () ;
-		var ary_subRetData = jary_data.splice ( num_startIdx , num_len ) ;
-		console.log( "ary_subRetData:" , ary_subRetData.length ) ;*/
+		var ary_selectSubData = jary_data.splice ( num_startIdx , num_len ) ;
+		console.log( "ary_selectSubData:" , ary_selectSubData.length ) ;*/
 // 		num_reduceCount = num_reduceCount == 0 ? num_len : num_reduceCount ;
-		// num_reduceCount += ary_subRetData.length ;
+		// num_reduceCount += ary_selectSubData.length ;
 		
 		var arys_buffer_str = [] ;
 		
-		hfA01 : for ( var str_subRetDataKey in ary_subRetData )
+		hfA01 : for ( var str_selectSubDataKey in ary_selectSubData )
 		{
-			if ( !ary_subRetData.hasOwnProperty ( str_subRetDataKey ) ) continue hfA01 ;
-// 			var num_searchKey = num_reduceCount - Math.abs( ary_subRetData.num_len - str_subRetDataKey ) ;
-			// var num_searchKey = ary_subRetData[ str_subRetDataKey ][ "index" ] /*- 1*/ ;
+			if ( !ary_selectSubData.hasOwnProperty ( str_selectSubDataKey ) ) continue hfA01 ;
+// 			var num_searchKey = num_reduceCount - Math.abs( ary_selectSubData.num_len - str_selectSubDataKey ) ;
+			// var num_searchKey = ary_selectSubData[ str_selectSubDataKey ][ "index" ] /*- 1*/ ;
 			var str_domTemp = fnStr_getDomPatt 
 			( 
 				{
-					jary_data	: ary_subRetData , 
-					str_dataKey	: str_subRetDataKey , 
+					jary_data	: ary_selectSubData , 
+					str_dataKey	: str_selectSubDataKey , 
 					// str_pgKey	: num_searchKey 
 				}
 			) ;
@@ -278,7 +283,9 @@
 		var dom_dom				= params.dom_dom ? params.dom_dom : $( "#page-infinite-scroll" ) ;
 		var qad_anchor			= params.qad_anchor ;
 		var fnStr_getDomPatt 	= params.fnStr_getDomPatt ;
-		// var str_pgKey			= params.str_pgKey ;
+		var num_deadLineInc		= params.num_deadLineInc ? 
+									params.num_deadLineInc :
+									4 ;
 
     	var loading = false ;
 
@@ -298,8 +305,13 @@
                         loading = false ;
 
 						// jary_reduceData.fnPgp_setIndex () ;
-						var ary_subRetData = jary_reduceData.splice ( 0 , 4 ) ;
-						console.log( "ary_subRetData:" , ary_subRetData.length ) ;
+						var ary_selectSubData = jary_reduceData.splice 
+						(
+							 0 , 
+							//  4
+							 num_deadLineInc 
+						) ;
+						console.log( "ary_selectSubData:" , ary_selectSubData.length ) ;
                         var str_domTemp = $tMallCompo.fnStr_getDomTemp
 						(
 							{
@@ -307,8 +319,7 @@
 								fnStr_getDomPatt			: fnStr_getDomPatt , 
 								/*num_startIdx	: 0 , 
 								num_len			: 4 , */
-								// str_pgKey		: str_pgKey ,
-								ary_subRetData	: ary_subRetData
+								ary_selectSubData	: ary_selectSubData
 
 							} 
 						) ;
@@ -320,6 +331,15 @@
         ) ;
       
 	} ;
+	var fnStr_cvtPostage = function ( ) 
+    {
+        return function ( postage )
+        {
+            // console.log ( "fnStr_cvtPostage" ) ;
+            var postage = ( postage == 0 ) ? "免运费" : postage ;
+            return postage ;
+        } ;
+    }
 
 	var tMallCompo = 
 	{

@@ -136,7 +136,7 @@ let node_common_lib =
                             //     "*/"
                             // ] ,
                             
-                            "$PH_reglationA1" :
+                            "$PH_regulationA1" :
                             [
                                 /\\\/\//ig  , 
                                 "\\//" 
@@ -464,7 +464,7 @@ let node_common_lib =
                         //console.log ( "_this:" ,  _this.toString ()   ) ;
                         let data = fs.readFileSync (  _this.toString() ,"utf-8" ) ;
                         let isEmpty = data ? true : false ;
-                        let fileExt = _this.resolveUri () .ext ;
+                        let fileExt = _this.resolveUri ().ext ;
                         let isMarkUpExt = 
                         ( 
                             new RegExp 

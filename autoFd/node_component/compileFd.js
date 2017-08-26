@@ -204,31 +204,32 @@ let compileFd =
         uri : "" ,
 
     } ,
-    fn_init : function ( pgp_params ) 
+    fn_init : function ( params ) 
     {
-        let pgp_globParams     = pgp_params.pgp_globParams ;
+        arguments.callee.prototype.params = params ;
+        let pgp_globParams     = params.pgp_globParams ;
         let ary_regPatt  = 
-        pgp_params.pgp_globParams.ary_regPatt ? 
+        params.pgp_globParams.ary_regPatt ? 
         function ( )
         {
-            pgp_params.pgp_globParams.ary_regPatt.push ( "" ) ;
-            return pgp_params.pgp_globParams.ary_regPatt ;
+            params.pgp_globParams.ary_regPatt.push ( "" ) ;
+            return params.pgp_globParams.ary_regPatt ;
         } () 
-        : pgp_params.pgp_globParams.ary_regPatt ;
-        let str_cwd         = pgp_params.pgp_globParams.str_cwd ? pgp_params.pgp_globParams.str_cwd : "./" ;
-        let str_outputDir   = pgp_params.str_outputDir ;
-        let str_injSrc   = pgp_params.str_injSrc ;
+        : params.pgp_globParams.ary_regPatt ;
+        let str_cwd         = params.pgp_globParams.str_cwd ? params.pgp_globParams.str_cwd : "./" ;
+        let str_outputDir   = params.str_outputDir ;
+        let str_injSrc   = params.str_injSrc ;
         
-        let str_srcBaseUri  = pgp_params.str_srcBaseUri ;
+        let str_srcBaseUri  = params.str_srcBaseUri ;
         console.log ( "str_srcBaseUri:" , str_srcBaseUri ) ;
 
-        let str_destBaseUri = pgp_params.str_destBaseUri ;
+        let str_destBaseUri = params.str_destBaseUri ;
         console.log ( "str_destBaseUri:" , str_destBaseUri ) ;
  
-        let pgp_baseUri_ary = pgp_params.pgp_baseUri_ary ;
+        let pgp_baseUri_ary = params.pgp_baseUri_ary ;
         console.log ( "pgp_baseUri_ary1:" , pgp_baseUri_ary ) ;
 
-        let str_srcVirPath = pgp_params.str_srcVirPath ;
+        let str_srcVirPath = params.str_srcVirPath ;
         pgp_nodeCommonLib.fn_init 
         ( 
             {
@@ -244,7 +245,7 @@ let compileFd =
         // let inputUri = putPath.inputUri ;
         //console.log ( "pgp_nodeCommonLib:" , pgp_nodeCommonLib ) ;
 
-        //console.log ( "pgp_params.str_outputDir:" , pgp_params.str_outputDir ) ;
+        //console.log ( "params.str_outputDir:" , params.str_outputDir ) ;
 
         let promiseA01 = Promise.resolve 
         (
@@ -343,13 +344,13 @@ let compileFd =
                                         str_this.path , 
                                         fn_fsWatchHandle
                                     ) ;*/
-                                    pgp_params.fn_glob = {
+                                    params.fn_glob = {
                                         "cwd" : "./" ,
                                         "ary_regPatt" : [ str_this.path , "" ]
                                     } ;
                                     
                                     compileFd.fn_init 
-                                    ( pgp_params )  ;
+                                    ( params )  ;
                                     /*let st01 = setTimeout 
                                     (
                                         function ()
